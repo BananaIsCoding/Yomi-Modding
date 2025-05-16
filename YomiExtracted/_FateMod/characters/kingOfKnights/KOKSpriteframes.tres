@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=24 format=2]
+[gd_resource type="SpriteFrames" load_steps=53 format=2]
 
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKKnockedDown.png" type="Texture" id=1]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKWallSlam.png" type="Texture" id=2]
@@ -9,8 +9,10 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKBackDash.png" type="Texture" id=7]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKForwardDash.png" type="Texture" id=8]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKJump.png" type="Texture" id=9]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKSlashUpSS.png" type="Texture" id=10]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtGroundedMid.png" type="Texture" id=11]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrow1.png" type="Texture" id=12]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKSlashDownSS.png" type="Texture" id=13]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrow0.png" type="Texture" id=14]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGrab0.png" type="Texture" id=15]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGetUp.png" type="Texture" id=16]
@@ -18,11 +20,110 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGrabbed.png" type="Texture" id=18]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtGroundedLow.png" type="Texture" id=19]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKJumpBack.png" type="Texture" id=20]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKStabSS.png" type="Texture" id=21]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKLanding.png" type="Texture" id=22]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHighBlock.png" type="Texture" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKLowBlock.png" type="Texture" id=24]
-[ext_resource path="res://characters/stickman/sprites/stickman38.png" type="Texture" id=36]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrustSS.png" type="Texture" id=25]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHeavySS.png" type="Texture" id=26]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHoriStrikeSS.png" type="Texture" id=27]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=71]
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 26 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 26 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 26 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 27 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 27 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 27 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 10 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 13 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 13 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 13 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 13 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 10 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 10 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 10 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 10 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 21 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 21 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 21 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 21 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 25 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 25 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 25 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 25 )
+region = Rect2( 384, 0, 128, 128 )
 
 [resource]
 animations = [ {
@@ -66,6 +167,16 @@ animations = [ {
 "name": "Grabbed",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 19 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 21 ), SubResource( 21 ) ],
+"loop": true,
+"name": "HeavyAttack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "HoriStrike",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
 "name": "HurtAerial",
@@ -86,7 +197,7 @@ animations = [ {
 "name": "HurtGroundedMid",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 36 ) ],
+"frames": [ SubResource( 18 ) ],
 "loop": true,
 "name": "InstantCancel",
 "speed": 5.0
@@ -131,9 +242,29 @@ animations = [ {
 "name": "RollForward",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ) ],
+"loop": true,
+"name": "SlashDown",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "SlashUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 12 ), SubResource( 12 ), SubResource( 12 ), SubResource( 12 ), SubResource( 13 ), SubResource( 13 ), SubResource( 13 ) ],
+"loop": true,
+"name": "Stab",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 71 ) ],
 "loop": true,
 "name": "ThrowTech",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 16 ), SubResource( 16 ), SubResource( 17 ), SubResource( 17 ), SubResource( 17 ), SubResource( 17 ), SubResource( 17 ), SubResource( 17 ), SubResource( 17 ) ],
+"loop": true,
+"name": "Thrust",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 3 ) ],

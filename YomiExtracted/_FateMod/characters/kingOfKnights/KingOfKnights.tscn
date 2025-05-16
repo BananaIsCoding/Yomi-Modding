@@ -1,8 +1,16 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKSpriteframes.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashUp.png" type="Texture" id=4]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/states/UpSlashState.gd" type="Script" id=5]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashDown.png" type="Texture" id=6]
+[ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=7]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Stab.png" type="Texture" id=8]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Thrust.png" type="Texture" id=9]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Heavy.png" type="Texture" id=10]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/HorizontalStrike.png" type="Texture" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -24,3 +32,275 @@ shader_param/outline_color = Color( 0, 0, 0, 1 )
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 frames = ExtResource( 3 )
+animation = "HoriStrike"
+frame = 2
+
+[node name="SlashUp" type="Node2D" parent="StateMachine" index="57"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "SlashUp"
+anim_length = 10
+sprite_anim_length = 5
+ticks_per_frame = 2
+enter_force_dir_x = "1"
+enter_force_speed = "3"
+title = "Up Slash"
+type = 1
+button_texture = ExtResource( 4 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/SlashUp" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 12
+y = -16
+width = 13
+height = -16
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_x = "0.2"
+knockback = "5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 6
+active_ticks = 2
+
+[node name="Stab" type="Node2D" parent="StateMachine" index="58"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "Stab"
+anim_length = 20
+sprite_anim_length = 10
+ticks_per_frame = 2
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Stab"
+type = 1
+button_texture = ExtResource( 8 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Stab" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 21
+y = -20
+width = 13
+height = 4
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 14
+active_ticks = 6
+
+[node name="HoriStrike" type="Node2D" parent="StateMachine" index="59"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "HoriStrike"
+anim_length = 6
+sprite_anim_length = 3
+ticks_per_frame = 2
+enter_force_dir_x = "1"
+enter_force_speed = "3"
+title = "Horizontal Slash"
+type = 1
+button_texture = ExtResource( 11 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/HoriStrike" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 6
+y = -16
+width = 10
+height = 7
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 6
+active_ticks = 1
+
+[node name="Heavy" type="Node2D" parent="StateMachine" index="60"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "HeavyAttack"
+anim_length = 12
+sprite_anim_length = 6
+ticks_per_frame = 2
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 8
+title = "Heavy Slash"
+type = 1
+button_texture = ExtResource( 10 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Heavy" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 18
+y = -25
+width = 13
+height = 15
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 10
+active_ticks = 2
+
+[node name="Hitbox2" type="Node2D" parent="StateMachine/Heavy" index="1"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 13
+y = -50
+width = 18
+height = 10
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 10
+active_ticks = 2
+
+[node name="Thrust" type="Node2D" parent="StateMachine" index="61"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "Thrust"
+anim_length = 24
+sprite_anim_length = 12
+ticks_per_frame = 2
+force_dir_x = "1"
+force_speed = "15"
+force_tick = 10
+enter_force_dir_x = "0"
+enter_force_speed = "0"
+title = "Thrust"
+type = 1
+button_texture = ExtResource( 9 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Thrust" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 18
+y = -15
+width = 13
+height = 4
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "2"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 10
+active_ticks = 12
+
+[node name="SlashDown" type="Node2D" parent="StateMachine" index="62"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+reset_momentum = true
+sprite_animation = "Slash Down"
+anim_length = 16
+sprite_anim_length = 8
+ticks_per_frame = 2
+enter_force_dir_x = "0.25"
+enter_force_dir_y = "1"
+enter_force_speed = "4"
+title = "DownSlash"
+type = 1
+button_texture = ExtResource( 6 )
+air_type = 1
+land_cancel = true
+interrupt_from_string = "Aerial"
+interrupt_into_string = "Aerial
+Grounded"
+hit_cancel_into_string = "Aerial
+GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/SlashDown" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 18
+y = -16
+width = 13
+height = 12
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_x = "0.2"
+knockback = "5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 8
+active_ticks = 8
