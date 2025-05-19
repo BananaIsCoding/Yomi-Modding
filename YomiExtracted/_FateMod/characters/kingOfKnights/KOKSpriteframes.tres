@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=53 format=2]
+[gd_resource type="SpriteFrames" load_steps=57 format=2]
 
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKKnockedDown.png" type="Texture" id=1]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKWallSlam.png" type="Texture" id=2]
@@ -27,6 +27,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrustSS.png" type="Texture" id=25]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHeavySS.png" type="Texture" id=26]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHoriStrikeSS.png" type="Texture" id=27]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKShirouHealSS.png" type="Texture" id=28]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=71]
 
 [sub_resource type="AtlasTexture" id=19]
@@ -56,6 +57,18 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 10 )
 region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 28 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 28 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 28 )
+region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 13 )
@@ -240,6 +253,11 @@ animations = [ {
 "frames": [ null, null, null, null ],
 "loop": true,
 "name": "RollForward",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ), SubResource( 27 ) ],
+"loop": true,
+"name": "ShirouHeal",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ) ],

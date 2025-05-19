@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -11,6 +11,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Thrust.png" type="Texture" id=9]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Heavy.png" type="Texture" id=10]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/HorizontalStrike.png" type="Texture" id=11]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/Shirou(KOK).tscn" type="PackedScene" id=12]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/SummonShirouMelee.gd" type="Script" id=13]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Melee).png" type="Texture" id=14]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KingOfKnightsIdle.png" type="Texture" id=15]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/ShirouHealScript.gd" type="Script" id=16]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Heal).png" type="Texture" id=17]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -28,6 +34,7 @@ shader_param/use_outline = false
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
 [node name="King Of Knights" instance=ExtResource( 1 )]
+character_portrait = ExtResource( 15 )
 
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
@@ -304,3 +311,38 @@ launch_reversible = true
 grounded_hit_state = "HurtAerial"
 start_tick = 8
 active_ticks = 8
+
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="63"]
+script = ExtResource( 13 )
+projectile_scene = ExtResource( 12 )
+projectile_pos_y = 3
+title = "Strike Assist (WIP)"
+type = 2
+button_texture = ExtResource( 14 )
+air_type = 2
+interrupt_from_string = "Grounded
+Aerial
+"
+interrupt_into_string = "Grounded
+Aerial
+"
+hit_cancel_into_string = "Aerial
+GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="64"]
+script = ExtResource( 16 )
+reset_momentum = true
+sprite_animation = "ShirouHeal"
+anim_length = 80
+sprite_anim_length = 10
+ticks_per_frame = 8
+title = "Heal Assist"
+type = 2
+button_texture = ExtResource( 17 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
