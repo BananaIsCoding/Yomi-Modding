@@ -59,7 +59,6 @@ character_portrait = ExtResource( 15 )
 material = SubResource( 1 )
 frames = ExtResource( 3 )
 animation = "ShirouComboStart"
-frame = 3
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
@@ -159,8 +158,9 @@ apply_fric = true
 apply_grav = true
 reset_momentum = true
 sprite_animation = "ShirouComboStart"
-anim_length = 7
+anim_length = 14
 sprite_anim_length = 7
+ticks_per_frame = 2
 enter_force_dir_x = "1"
 enter_force_speed = "10"
 title = "Combo Assist"
@@ -194,7 +194,7 @@ knockback = "5"
 launch_reversible = true
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 6
+start_tick = 12
 active_ticks = 2
 
 [node name="Shirou(Combo)" type="Node2D" parent="StateMachine" index="60"]
@@ -203,12 +203,13 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 reset_momentum = true
+sprite_animation = "ShirouCombo"
 anim_length = 50
-sprite_anim_length = 10
-ticks_per_frame = 5
+sprite_anim_length = 25
+ticks_per_frame = 2
 force_dir_x = "1"
 force_speed = "20"
-force_tick = 40
+force_tick = 34
 type = 2
 button_texture = ExtResource( 21 )
 selectable = false
@@ -217,8 +218,8 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-no_collision_start_frame = 40
-no_collision_end_frame = 50
+no_collision_start_frame = 34
+no_collision_end_frame = 44
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Shirou(Combo)" index="0"]
 z_index = 1000
@@ -241,7 +242,7 @@ knockback = "5"
 launch_reversible = true
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 12
+start_tick = 6
 active_ticks = 2
 
 [node name="Hitbox3" type="Node2D" parent="StateMachine/Shirou(Combo)" index="1"]
@@ -266,7 +267,7 @@ launch_reversible = true
 vacuum = true
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 19
+start_tick = 13
 active_ticks = 21
 looping = true
 loop_inactive_ticks = 5
@@ -290,7 +291,7 @@ dir_x = "0"
 dir_y = "0"
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 40
+start_tick = 34
 active_ticks = 2
 
 [node name="Hitbox5" type="Node2D" parent="StateMachine/Shirou(Combo)" index="3"]
@@ -308,7 +309,7 @@ dir_x = "0"
 knockback = "5"
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 48
+start_tick = 42
 active_ticks = 2
 
 [node name="ManaBurst" type="Node2D" parent="StateMachine" index="61"]
