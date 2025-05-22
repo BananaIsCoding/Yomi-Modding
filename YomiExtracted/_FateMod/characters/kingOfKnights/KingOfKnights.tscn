@@ -58,7 +58,8 @@ character_portrait = ExtResource( 15 )
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 frames = ExtResource( 3 )
-animation = "ShirouComboStart"
+animation = "ShirouCombo"
+frame = 11
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
@@ -204,12 +205,12 @@ apply_fric = true
 apply_grav = true
 reset_momentum = true
 sprite_animation = "ShirouCombo"
-anim_length = 50
-sprite_anim_length = 25
+anim_length = 70
+sprite_anim_length = 35
 ticks_per_frame = 2
 force_dir_x = "1"
 force_speed = "20"
-force_tick = 34
+force_tick = 37
 type = 2
 button_texture = ExtResource( 21 )
 selectable = false
@@ -268,9 +269,9 @@ vacuum = true
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
 start_tick = 13
-active_ticks = 21
+active_ticks = 24
 looping = true
-loop_inactive_ticks = 5
+loop_inactive_ticks = 6
 
 [node name="Hitbox4" type="Node2D" parent="StateMachine/Shirou(Combo)" index="2"]
 z_index = 1000
@@ -291,7 +292,7 @@ dir_x = "0"
 dir_y = "0"
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 34
+start_tick = 37
 active_ticks = 2
 
 [node name="Hitbox5" type="Node2D" parent="StateMachine/Shirou(Combo)" index="3"]
@@ -300,7 +301,7 @@ script = ExtResource( 7 )
 x = -30
 y = -20
 height = -16
-hitstun_ticks = 23
+hitstun_ticks = 50
 victim_hitlag = 4
 cancellable = false
 can_counter_hit = false
@@ -309,7 +310,7 @@ dir_x = "0"
 knockback = "5"
 pushback_x = "0"
 grounded_hit_state = "HurtAerial"
-start_tick = 42
+start_tick = 45
 active_ticks = 2
 
 [node name="ManaBurst" type="Node2D" parent="StateMachine" index="61"]
