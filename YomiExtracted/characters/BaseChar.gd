@@ -20,19 +20,6 @@ signal predicted(freeze_ticks)
 var MAX_HEALTH = 1500
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 const MAX_STALES = 15
 const MIN_STALE_MODIFIER = "0.2"
 

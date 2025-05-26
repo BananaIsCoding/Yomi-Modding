@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -17,10 +17,13 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KingOfKnightsIdle.png" type="Texture" id=15]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouHealScript.gd" type="Script" id=16]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Heal).png" type="Texture" id=17]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/ManaBurstParticle.tscn" type="PackedScene" id=18]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ManaBurstParticle.tscn" type="PackedScene" id=18]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/ManaBurst.png" type="Texture" id=19]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/KOKTaunt.gd" type="Script" id=20]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Combo).png" type="Texture" id=21]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/ShirouComboScript.gd" type="Script" id=23]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -53,6 +56,10 @@ shader_param/use_outline = false
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
 [node name="King Of Knights" instance=ExtResource( 1 )]
+script = ExtResource( 24 )
+__meta__ = {
+"_editor_description_": ""
+}
 character_portrait = ExtResource( 15 )
 
 [node name="Sprite" parent="Flip" index="0"]
@@ -153,7 +160,7 @@ active_ticks = 6
 
 [node name="Shirou(ComboStart)" type="Node2D" parent="StateMachine" index="59"]
 position = Vector2( 0, 2 )
-script = ExtResource( 5 )
+script = ExtResource( 23 )
 apply_forces = true
 apply_fric = true
 apply_grav = true
@@ -162,18 +169,16 @@ sprite_animation = "ShirouComboStart"
 anim_length = 14
 sprite_anim_length = 7
 ticks_per_frame = 2
-enter_force_dir_x = "1"
+enter_force_dir_x = "1.0"
 enter_force_speed = "10"
 title = "Combo Assist"
-type = 1
+type = 2
 button_texture = ExtResource( 21 )
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-no_collision_start_frame = 46
-no_collision_end_frame = 56
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Shirou(ComboStart)" index="0"]
 z_index = 1000
@@ -306,6 +311,8 @@ victim_hitlag = 4
 cancellable = false
 can_counter_hit = false
 group = 4
+hit_particle = ExtResource( 22 )
+replace_hit_particle = true
 dir_x = "0"
 knockback = "5"
 pushback_x = "0"
