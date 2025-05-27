@@ -22,9 +22,6 @@ shader_param/outline_color = Color( 0, 0, 0, 1 )
 
 [node name="Shirou(KOK)" instance=ExtResource( 1 )]
 script = ExtResource( 4 )
-gravity = "0.8"
-max_air_speed = "10"
-max_fall_speed = "15"
 immunity_susceptible = true
 deletes_other_projectiles = true
 fizzle_on_ceiling = false
@@ -36,9 +33,7 @@ free_cancel_on_hit = false
 apply_hitlag_when_hit_by_melee = true
 projectile_immune = false
 hitlag_modifier = "1.0"
-character_portrait = null
-player_info_scene = null
-player_extra_params_scene = null
+enable_extra_aesthetic_hitstop = true
 
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
