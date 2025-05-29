@@ -20,6 +20,7 @@ shader_param/use_outline = false
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="CanvasItemMaterial" id=2]
+render_priority = 1
 particles_animation = true
 particles_anim_h_frames = 6
 particles_anim_v_frames = 4

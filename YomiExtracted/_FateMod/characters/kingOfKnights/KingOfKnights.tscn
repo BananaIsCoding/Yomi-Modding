@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -24,25 +24,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/ShirouComboScript.gd" type="Script" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Excalibur.png" type="Texture" id=25]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/ExcaliburChargeUpScript.gd" type="Script" id=25]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburBeam.tscn" type="PackedScene" id=26]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffect.tscn" type="PackedScene" id=27]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Excalibur.png" type="Texture" id=28]
 
 [sub_resource type="ShaderMaterial" id=1]
-resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/use_extra_color_1 = false
-shader_param/use_extra_color_2 = false
-shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
-shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
-shader_param/color = Color( 1, 1, 1, 1 )
-shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
-shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
-shader_param/max_color_distance = 0.01
-shader_param/super_dim = false
-shader_param/use_outline = false
-shader_param/outline_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = ExtResource( 2 )
 shader_param/use_extra_color_1 = false
@@ -389,26 +376,21 @@ looping = true
 loop_active_ticks = 1
 loop_inactive_ticks = 1
 
-[node name="ManaBurstParticle" parent="StateMachine/ManaBurst" index="2" instance=ExtResource( 18 )]
-visible = false
-material = SubResource( 2 )
-position = Vector2( 99, -21 )
-
-[node name="Excalibur" type="Node2D" parent="StateMachine" index="62"]
-script = ExtResource( 5 )
+[node name="ExcaliburChargeUp" type="Node2D" parent="StateMachine" index="62"]
+script = ExtResource( 25 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
-sprite_animation = "Excalibur"
-anim_length = 68
-sprite_anim_length = 34
-ticks_per_frame = 2
-timed_particle_scene = ExtResource( 26 )
-timed_particle_position = Vector2( 0, -5 )
-timed_spawn_particle_tick = 32
+sprite_animation = "ExcaliburChargeUp"
+anim_length = 300
+sprite_anim_length = 1
+timed_particle_scene = ExtResource( 27 )
 title = "Excalibur!!!"
 type = 3
-button_texture = ExtResource( 25 )
+button_texture = ExtResource( 28 )
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
@@ -417,33 +399,32 @@ GroundedSuper"
 apply_pushback = false
 no_collision_start_frame = 0
 
-[node name="Hitbox" type="Node2D" parent="StateMachine/Excalibur" index="0"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 21
-y = -20
-width = 13
-height = 4
-damage = 40
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-sdi_modifier = "0.0"
-dir_y = "0"
-knockback = "1.5"
-launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 20
-active_ticks = 6
+[node name="Excalibur" type="Node2D" parent="StateMachine" index="63"]
+script = ExtResource( 5 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "Excalibur"
+anim_length = 66
+sprite_anim_length = 18
+timed_particle_scene = ExtResource( 26 )
+timed_particle_position = Vector2( 0, -18 )
+show_in_menu = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+apply_pushback = false
+no_collision_start_frame = 0
 
-[node name="Hitbox2" type="Node2D" parent="StateMachine/Excalibur" index="1"]
+[node name="Hitbox2" type="Node2D" parent="StateMachine/Excalibur" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 99
+x = 259
 y = -19
-width = 65
-height = 11
+width = 245
+height = 13
 damage = 10
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -451,8 +432,8 @@ cancellable = false
 can_counter_hit = false
 sdi_modifier = "0.0"
 dir_y = "0"
-knockback = "1.5"
-launch_reversible = true
+knockback = "5.0"
+pushback_x = "0"
 grounded_hit_state = "HurtAerial"
 start_tick = 20
 active_ticks = 20
@@ -460,12 +441,7 @@ looping = true
 loop_active_ticks = 1
 loop_inactive_ticks = 1
 
-[node name="ManaBurstParticle" parent="StateMachine/Excalibur" index="2" instance=ExtResource( 18 )]
-visible = false
-material = SubResource( 2 )
-position = Vector2( 99, -21 )
-
-[node name="HoriStrike" type="Node2D" parent="StateMachine" index="63"]
+[node name="HoriStrike" type="Node2D" parent="StateMachine" index="64"]
 script = ExtResource( 5 )
 apply_forces = true
 apply_fric = true
@@ -505,7 +481,7 @@ grounded_hit_state = "HurtAerial"
 start_tick = 6
 active_ticks = 1
 
-[node name="Heavy" type="Node2D" parent="StateMachine" index="64"]
+[node name="Heavy" type="Node2D" parent="StateMachine" index="65"]
 script = ExtResource( 5 )
 apply_forces = true
 apply_fric = true
@@ -566,7 +542,7 @@ grounded_hit_state = "HurtAerial"
 start_tick = 10
 active_ticks = 2
 
-[node name="Thrust" type="Node2D" parent="StateMachine" index="65"]
+[node name="Thrust" type="Node2D" parent="StateMachine" index="66"]
 script = ExtResource( 5 )
 apply_forces = true
 apply_fric = true
@@ -608,7 +584,7 @@ grounded_hit_state = "HurtAerial"
 start_tick = 10
 active_ticks = 12
 
-[node name="SlashDown" type="Node2D" parent="StateMachine" index="66"]
+[node name="SlashDown" type="Node2D" parent="StateMachine" index="67"]
 script = ExtResource( 5 )
 apply_forces = true
 apply_fric = true
@@ -654,7 +630,7 @@ grounded_hit_state = "HurtAerial"
 start_tick = 8
 active_ticks = 8
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="67"]
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="68"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -673,7 +649,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="68"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="69"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
