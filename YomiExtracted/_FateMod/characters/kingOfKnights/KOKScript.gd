@@ -2,9 +2,19 @@ extends Fighter
 
 # adding variable to storing combo cd timer
 var comboAttackCD = 0
+var currentExcalCharge = 0
 
 func tick():
 	.tick()
 	# Decrement cd timer
 	if comboAttackCD > 0:
 		 comboAttackCD -= 1
+
+func getExcalCharge():
+	return currentExcalCharge
+
+func chargeExcal():
+	currentExcalCharge += 1
+
+func resetExcalCharge():
+	currentExcalCharge = 0

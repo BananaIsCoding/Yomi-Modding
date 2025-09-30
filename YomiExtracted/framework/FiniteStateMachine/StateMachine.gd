@@ -185,18 +185,6 @@ func _change_state(state_name: String, data = null, enter = true, exit = true) -
 	state.set_physics_process(true)
 	state.set_process(true)
 
-	
-
-
-
-
-
-
-
-
-
-
-
 	state.data = data
 
 	if enter:
