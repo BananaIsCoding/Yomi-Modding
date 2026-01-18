@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fx/ParticleEffect.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Splash.png" type="Texture" id=2]
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+
+[sub_resource type="CanvasItemMaterial" id=3]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 6
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="ParticleEffect" instance=ExtResource( 1 )]
+material = SubResource( 2 )
+z_index = 4096
+free = false
+one_shot = false
+lifetime = 99999.0
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." index="1"]
+material = SubResource( 3 )
+position = Vector2( 0, -2 )
+z_index = 4096
+amount = 100
+lifetime = 0.5
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1200, 0 )
+direction = Vector2( 0, 0 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+angle = 15.6
+angle_random = 1.0
+scale_amount_random = 1.0
+color = Color( 1, 0.788235, 0.788235, 1 )
+anim_speed = 2.0
+anim_speed_random = 0.37

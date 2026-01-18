@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Spark1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Projectile1.png" type="Texture" id=2]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Projectilefloor.png" type="Texture" id=3]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/CPUParticles2D2.gd" type="Script" id=4]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+
+[sub_resource type="CanvasItemMaterial" id=2]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=3]
+particles_animation = true
+particles_anim_h_frames = 24
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=4]
+particles_animation = true
+particles_anim_h_frames = 26
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="ParticleEffect" instance=ExtResource( 1 )]
+material = SubResource( 1 )
+z_index = 60
+
+[node name="CPUParticles2D" parent="." index="1"]
+visible = false
+material = SubResource( 2 )
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="." index="2"]
+material = SubResource( 3 )
+position = Vector2( 0, -15.263 )
+z_index = 60
+emitting = false
+amount = 20
+lifetime = 3.0
+one_shot = true
+explosiveness = 0.89
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 70, 1 )
+direction = Vector2( 0, -20 )
+spread = 9.44
+gravity = Vector2( 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 0.43
+angle = 17.8
+angle_random = 1.0
+scale_amount = 0.5
+scale_amount_random = 1.0
+anim_speed = 4.0
+script = ExtResource( 4 )
+
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="." index="3"]
+material = SubResource( 4 )
+position = Vector2( 0, -15.263 )
+z_index = 60
+emitting = false
+amount = 40
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.89
+texture = ExtResource( 3 )
+emission_shape = 2
+emission_rect_extents = Vector2( 70, 1 )
+gravity = Vector2( 0, 0 )
+scale_amount = 0.5
+scale_amount_random = 1.0
+anim_speed = 4.0

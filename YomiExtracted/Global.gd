@@ -50,8 +50,11 @@ var name_paths = {
 	"Wizard": "res://characters/wizard/Wizard.tscn", 
 	"Robot": "res://characters/robo/Robot.tscn", 
 	"Mutant": "res://characters/mutant/Mutant.tscn", 
-	"King Of Knights": "res://_FateMod/characters/kingOfKnights/KingOfKnights.tscn", 
-
+	
+	"Cataclysm": "res://Cataclysm/characters/Cataclysm/Cataclysm.tscn",
+	
+	"King Of Knights": "res://_FateMod/characters/kingOfKnights/KingOfKnights.tscn"
+	
 }
 
 var songs = {

@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Dust.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Ulti.png" type="Texture" id=2]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="ParticleEffect" instance=ExtResource( 1 )]
+material = SubResource( 1 )
+
+[node name="CPUParticles2D" parent="." index="1"]
+visible = false
+emitting = false
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="." index="2"]
+material = SubResource( 2 )
+position = Vector2( 30, -15 )
+amount = 1
+texture = ExtResource( 2 )
+gravity = Vector2( 0, 0 )
+anim_speed = 1.0
+
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="." index="3"]
+position = Vector2( 48, 0 )
+emitting = false
+amount = 80
+one_shot = true
+emission_shape = 2
+emission_rect_extents = Vector2( 20, 1 )
+direction = Vector2( 30, -20 )
+gravity = Vector2( 0, 200 )
+initial_velocity = 300.0
+scale_amount = 3.0
+scale_amount_random = 1.0
+color = Color( 0.776471, 0.180392, 0.360784, 1 )
+
+[node name="CPUParticles2D4" type="CPUParticles2D" parent="." index="4"]
+position = Vector2( 12, 0 )
+emitting = false
+amount = 80
+one_shot = true
+emission_shape = 2
+emission_rect_extents = Vector2( -20, 1 )
+direction = Vector2( -30, -20 )
+gravity = Vector2( 0, 200 )
+initial_velocity = 300.0
+scale_amount = 3.0
+scale_amount_random = 1.0
+color = Color( 0.776471, 0.180392, 0.360784, 1 )

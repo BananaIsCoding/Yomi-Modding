@@ -1,15 +1,15 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKSpriteframes.tres" type="SpriteFrames" id=3]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashUp.png" type="Texture" id=4]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/states/UpSlashState.gd" type="Script" id=5]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UpSlashState.gd" type="Script" id=5]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashDown.png" type="Texture" id=6]
 [ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=7]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Stab.png" type="Texture" id=8]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Thrust.png" type="Texture" id=9]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Heavy.png" type="Texture" id=10]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Jab.png" type="Texture" id=8]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ThrustScript.gd" type="Script" id=9]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/HeavyGroundAttack.gd" type="Script" id=10]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/HorizontalStrike.png" type="Texture" id=11]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/Shirou(KOK).tscn" type="PackedScene" id=12]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/SummonShirouMelee.gd" type="Script" id=13]
@@ -24,11 +24,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/ShirouComboScript.gd" type="Script" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/states/ExcaliburChargeUpScript.gd" type="Script" id=25]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburBeam.tscn" type="PackedScene" id=26]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Excalibur.png" type="Texture" id=27]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ExcaliburChargeOffScript.gd" type="Script" id=28]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ManaBurstScript.gd" type="Script" id=25]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/NormalAttacksScript.gd" type="Script" id=26]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Heavy.png" type="Texture" id=27]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Thrust.png" type="Texture" id=28]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffect.tscn" type="PackedScene" id=29]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Stab.png" type="Texture" id=30]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -69,9 +70,9 @@ character_portrait = ExtResource( 15 )
 
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
+use_parent_material = true
 frames = ExtResource( 3 )
-animation = "Excalibur"
-frame = 14
+animation = "ManaBurst"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -126,19 +127,23 @@ grounded_hit_state = "HurtAerial"
 start_tick = 6
 active_ticks = 2
 
-[node name="Stab" type="Node2D" parent="StateMachine" index="58"]
-script = ExtResource( 5 )
+[node name="QuickJab" type="Node2D" parent="StateMachine" index="58"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
-sprite_animation = "Stab"
-anim_length = 20
-sprite_anim_length = 10
-ticks_per_frame = 2
+sprite_animation = "QuickStab"
+anim_length = 7
+sprite_anim_length = 7
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
-title = "Stab"
+enter_force_dir_x = "1"
+enter_force_speed = "0.5"
+title = "Jab"
 type = 1
 button_texture = ExtResource( 8 )
 interrupt_from_string = "Grounded"
@@ -147,13 +152,13 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Hitbox" type="Node2D" parent="StateMachine/Stab" index="0"]
+[node name="Hitbox" type="Node2D" parent="StateMachine/QuickJab" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
 x = 21
-y = -20
-width = 13
-height = 4
+y = -21
+width = 15
+height = 5
 damage = 40
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -164,10 +169,53 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 14
-active_ticks = 6
+start_tick = 4
+active_ticks = 3
 
-[node name="Shirou(ComboStart)" type="Node2D" parent="StateMachine" index="59"]
+[node name="Stab" type="Node2D" parent="StateMachine" index="59"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "Stab"
+anim_length = 10
+sprite_anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 7
+title = "Stab"
+type = 1
+button_texture = ExtResource( 30 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Stab" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 27
+y = -21
+width = 15
+height = 5
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 8
+active_ticks = 2
+
+[node name="Shirou(ComboStart)" type="Node2D" parent="StateMachine" index="60"]
 position = Vector2( 0, 2 )
 script = ExtResource( 23 )
 apply_forces = true
@@ -212,8 +260,11 @@ grounded_hit_state = "HurtAerial"
 start_tick = 12
 active_ticks = 2
 
-[node name="Shirou(Combo)" type="Node2D" parent="StateMachine" index="60"]
-script = ExtResource( 5 )
+[node name="Shirou(Combo)" type="Node2D" parent="StateMachine" index="61"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
@@ -329,20 +380,20 @@ grounded_hit_state = "HurtAerial"
 start_tick = 45
 active_ticks = 2
 
-[node name="ManaBurst" type="Node2D" parent="StateMachine" index="61"]
-script = ExtResource( 5 )
-apply_forces = true
-apply_fric = true
-apply_grav = true
+[node name="ManaBurst" type="Node2D" parent="StateMachine" index="62"]
+script = ExtResource( 25 )
+__meta__ = {
+"_editor_description_": ""
+}
 sprite_animation = "ManaBurst"
 anim_length = 40
-sprite_anim_length = 20
-ticks_per_frame = 2
+sprite_anim_length = 24
+refresh_loop = false
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
 timed_particle_scene = ExtResource( 18 )
-timed_particle_position = Vector2( 105, -21 )
+timed_particle_position = Vector2( 100, -23 )
 timed_spawn_particle_tick = 20
 title = "Mana Burst"
 type = 2
@@ -357,7 +408,7 @@ GroundedSuper"
 z_index = 1000
 script = ExtResource( 7 )
 x = 21
-y = -20
+y = -22
 width = 13
 height = 4
 damage = 40
@@ -377,7 +428,7 @@ active_ticks = 6
 z_index = 1000
 script = ExtResource( 7 )
 x = 99
-y = -19
+y = -21
 width = 65
 height = 11
 damage = 10
@@ -396,126 +447,19 @@ looping = true
 loop_active_ticks = 1
 loop_inactive_ticks = 1
 
-[node name="ExcaliburChargeUpMove" type="Node2D" parent="StateMachine" index="62"]
-script = ExtResource( 25 )
+[node name="HoriStrike" type="Node2D" parent="StateMachine" index="63"]
+script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
 }
-apply_forces = true
-apply_fric = true
-apply_grav = true
-fallback_state = "ExcaliburChargeTransition"
-sprite_animation = "ExcaliburChargeUp"
-anim_length = 300
-sprite_anim_length = 1
-title = "Excalibur"
-type = 3
-button_texture = ExtResource( 27 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-apply_pushback = false
-no_collision_start_frame = 0
-
-[node name="Excalibur" type="Node2D" parent="StateMachine" index="63"]
-script = ExtResource( 5 )
-__meta__ = {
-"_editor_description_": ""
-}
-apply_forces = true
-apply_fric = true
-apply_grav = true
-sprite_animation = "Excalibur"
-anim_length = 66
-sprite_anim_length = 18
-timed_particle_scene = ExtResource( 26 )
-timed_particle_position = Vector2( 0, -18 )
-show_in_menu = false
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-apply_pushback = false
-no_collision_start_frame = 0
-
-[node name="Hitbox2" type="Node2D" parent="StateMachine/Excalibur" index="0"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 259
-y = -19
-width = 245
-height = 13
-damage = 10
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-sdi_modifier = "0.0"
-dir_y = "0"
-knockback = "5.0"
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 20
-active_ticks = 20
-looping = true
-loop_active_ticks = 1
-loop_inactive_ticks = 1
-
-[node name="ExcaliburChargeTransition" type="Node2D" parent="StateMachine" index="64"]
-script = ExtResource( 28 )
-__meta__ = {
-"_editor_description_": ""
-}
-apply_forces = true
-apply_fric = true
-apply_grav = true
-fallback_state = "Excalibur"
-show_in_menu = false
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-apply_pushback = false
-no_collision_start_frame = 0
-
-[node name="Hitbox2" type="Node2D" parent="StateMachine/ExcaliburChargeTransition" index="0"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 259
-y = -19
-width = 245
-height = 13
-damage = 10
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-sdi_modifier = "0.0"
-dir_y = "0"
-knockback = "5.0"
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 20
-active_ticks = 20
-looping = true
-loop_active_ticks = 1
-loop_inactive_ticks = 1
-
-[node name="HoriStrike" type="Node2D" parent="StateMachine" index="65"]
-script = ExtResource( 5 )
 apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "HoriStrike"
-anim_length = 6
-sprite_anim_length = 3
-ticks_per_frame = 2
+anim_length = 7
+sprite_anim_length = 7
 enter_force_dir_x = "1"
-enter_force_speed = "3"
+enter_force_speed = "0.5"
 title = "Horizontal Slash"
 type = 1
 button_texture = ExtResource( 11 )
@@ -528,10 +472,10 @@ GroundedSuper"
 [node name="Hitbox" type="Node2D" parent="StateMachine/HoriStrike" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 6
-y = -16
-width = 10
-height = 7
+x = 5
+y = -18
+width = 18
+height = 9
 damage = 40
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -542,24 +486,70 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 6
-active_ticks = 1
+start_tick = 4
+active_ticks = 3
 
-[node name="Heavy" type="Node2D" parent="StateMachine" index="66"]
-script = ExtResource( 5 )
+[node name="VertStrike" type="Node2D" parent="StateMachine" index="64"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "HoriStrike"
+anim_length = 7
+sprite_anim_length = 7
+enter_force_dir_x = "1"
+enter_force_speed = "0.5"
+title = "Vertical Slash"
+type = 1
+button_texture = ExtResource( 11 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/VertStrike" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 5
+y = -18
+width = 18
+height = 9
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 4
+active_ticks = 3
+
+[node name="Heavy" type="Node2D" parent="StateMachine" index="65"]
+script = ExtResource( 10 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "HeavyAttack"
-anim_length = 12
-sprite_anim_length = 6
-ticks_per_frame = 2
+anim_length = 14
+sprite_anim_length = 14
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 8
 title = "Heavy Slash"
 type = 1
-button_texture = ExtResource( 10 )
+button_texture = ExtResource( 27 )
+self_hit_cancellable = false
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
@@ -569,9 +559,9 @@ GroundedSuper"
 [node name="Hitbox" type="Node2D" parent="StateMachine/Heavy" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 18
+x = 21
 y = -25
-width = 13
+width = 14
 height = 15
 damage = 100
 hitstun_ticks = 23
@@ -583,15 +573,15 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 10
-active_ticks = 2
+start_tick = 11
+active_ticks = 3
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Heavy" index="1"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 13
+x = 12
 y = -50
-width = 18
+width = 21
 height = 10
 damage = 100
 hitstun_ticks = 23
@@ -603,28 +593,33 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 10
-active_ticks = 2
+start_tick = 11
+active_ticks = 3
 
-[node name="Thrust" type="Node2D" parent="StateMachine" index="67"]
-script = ExtResource( 5 )
+[node name="Thrust" type="Node2D" parent="StateMachine" index="66"]
+script = ExtResource( 9 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
+reset_momentum = true
 sprite_animation = "Thrust"
-anim_length = 24
-sprite_anim_length = 12
-ticks_per_frame = 2
+anim_length = 15
+sprite_anim_length = 15
 force_dir_x = "1"
 force_speed = "15"
-force_tick = 10
+force_tick = 9
 enter_force_dir_x = "0"
 enter_force_speed = "0"
 title = "Thrust"
 type = 1
-button_texture = ExtResource( 9 )
+button_texture = ExtResource( 28 )
+self_hit_cancellable = false
 interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
+interrupt_into_string = "Grounded
+"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
@@ -632,10 +627,10 @@ GroundedSuper"
 [node name="Hitbox" type="Node2D" parent="StateMachine/Thrust" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 18
-y = -15
-width = 13
-height = 4
+x = 27
+y = -18
+width = 15
+height = 5
 damage = 40
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -646,10 +641,13 @@ knockback = "2"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
 start_tick = 10
-active_ticks = 12
+active_ticks = 6
 
-[node name="SlashDown" type="Node2D" parent="StateMachine" index="68"]
-script = ExtResource( 5 )
+[node name="SlashDown" type="Node2D" parent="StateMachine" index="67"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
@@ -694,7 +692,7 @@ grounded_hit_state = "HurtAerial"
 start_tick = 8
 active_ticks = 8
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="69"]
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="68"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -713,7 +711,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="70"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="69"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"

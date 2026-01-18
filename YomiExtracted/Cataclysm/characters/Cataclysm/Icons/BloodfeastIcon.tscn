@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://characters/PlayerInfo.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/BloodfeastIcon.png" type="Texture" id=2]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Icons/BloodfeastIcon2.gd" type="Script" id=3]
+
+[node name="PlayerInfo" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." index="0"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" index="0"]
+margin_right = 32.0
+margin_bottom = 40.0
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="HBoxContainer/TextureRect" index="0"]
+margin_left = 32.0
+margin_top = 9.0
+margin_right = 47.0
+margin_bottom = 23.0

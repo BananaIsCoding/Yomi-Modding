@@ -1,0 +1,121 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Cut7.png" type="Texture" id=2]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/boombleh.png" type="Texture" id=3]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Dust1.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/Thunder.png" type="Texture" id=5]
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/use_extra_color_1 = false
+shader_param/use_extra_color_2 = false
+shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
+shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
+shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
+shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
+shader_param/max_color_distance = 0.01
+shader_param/super_dim = false
+shader_param/use_outline = false
+shader_param/outline_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CanvasItemMaterial" id=3]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=4]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CanvasItemMaterial" id=6]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="ParticleEffect" instance=ExtResource( 4 )]
+material = SubResource( 5 )
+
+[node name="CPUParticles2D" parent="." index="1"]
+visible = false
+emitting = false
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="." index="2"]
+material = SubResource( 3 )
+position = Vector2( -140, -20 )
+amount = 32
+texture = ExtResource( 3 )
+emission_shape = 2
+emission_rect_extents = Vector2( 50, 20 )
+direction = Vector2( -400, 0 )
+gravity = Vector2( -200, 0 )
+initial_velocity = 100.0
+angular_velocity = -248.89
+orbit_velocity = 0.2
+orbit_velocity_random = 1.0
+angle = 720.0
+angle_random = 0.31
+scale_amount = 0.01
+scale_amount_random = 0.13
+anim_speed = 4.0
+anim_speed_random = 0.64
+
+[node name="CPUParticles2D3" type="CPUParticles2D" parent="." index="3"]
+material = SubResource( 4 )
+position = Vector2( -140, -20 )
+amount = 128
+lifetime = 2.0
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 100, 1 )
+gravity = Vector2( 0, 0 )
+angle = 450.0
+angle_random = 1.0
+scale_amount = 0.2
+scale_amount_random = 0.48
+anim_speed = 6.0
+anim_speed_random = 0.37
+
+[node name="CPUParticles2D4" type="CPUParticles2D" parent="." index="4"]
+material = SubResource( 2 )
+position = Vector2( -130, -20 )
+amount = 20
+lifetime_randomness = 0.62
+texture = ExtResource( 5 )
+emission_shape = 1
+emission_sphere_radius = 67.36
+gravity = Vector2( 0, 0 )
+angle = 720.0
+angle_random = 1.0
+scale_amount = 0.1
+scale_amount_random = 0.27
+anim_speed = 4.0
+
+[node name="CPUParticles2D5" type="CPUParticles2D" parent="." index="5"]
+material = SubResource( 6 )
+position = Vector2( -140, -20 )
+amount = 20
+lifetime_randomness = 0.62
+texture = ExtResource( 3 )
+emission_shape = 1
+emission_sphere_radius = 67.36
+gravity = Vector2( 0, 0 )
+angle = 720.0
+angle_random = 1.0
+scale_amount = 0.1
+anim_speed = 3.0

@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Cataclysm/characters/Cataclysm/ProjectileParticle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Cataclysm/characters/Cataclysm/Sprites/ProjectileBoom.png" type="Texture" id=2]
+[ext_resource path="res://addons/export_categories/ec_category_material.tres" type="Material" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+
+[node name="ParticleEffect" instance=ExtResource( 1 )]
+material = SubResource( 1 )
+
+[node name="CPUParticles2D2" parent="." index="2"]
+visible = false
+
+[node name="CPUParticles2D3" parent="." index="3"]
+visible = false
+
+[node name="CPUParticles2D4" type="CPUParticles2D" parent="." index="4"]
+material = ExtResource( 3 )
+position = Vector2( 0, -18 )
+amount = 1
+lifetime = 200.0
+texture = ExtResource( 2 )
+gravity = Vector2( 0, 0 )
+anim_speed = 999.0

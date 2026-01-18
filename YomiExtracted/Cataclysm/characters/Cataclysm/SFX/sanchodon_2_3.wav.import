@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sanchodon_2_3.wav-cba0b887f0ad719863326102b516075d.sample"
+
+[deps]
+
+source_file="res://Cataclysm/characters/Cataclysm/SFX/sanchodon_2_3.wav"
+dest_files=[ "res://.import/sanchodon_2_3.wav-cba0b887f0ad719863326102b516075d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

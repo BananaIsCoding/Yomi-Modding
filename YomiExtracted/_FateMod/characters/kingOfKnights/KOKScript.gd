@@ -9,12 +9,3 @@ func tick():
 	# Decrement cd timer
 	if comboAttackCD > 0:
 		 comboAttackCD -= 1
-
-func getExcalCharge():
-	return currentExcalCharge
-
-func chargeExcal():
-	currentExcalCharge += 1
-
-func resetExcalCharge():
-	currentExcalCharge = 0
