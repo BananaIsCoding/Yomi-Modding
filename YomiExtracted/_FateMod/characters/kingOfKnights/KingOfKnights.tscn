@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=2]
+[gd_scene load_steps=205 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -79,6 +79,9 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKAirDashStrike.png" type="Texture" id=77]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/AirDashAttack.png" type="Texture" id=78]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/AirDashEffect.tscn" type="PackedScene" id=79]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/GaleBladeScript.gd" type="Script" id=80]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeNormalSS.png" type="Texture" id=81]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/SlashProjectile.tscn" type="PackedScene" id=82]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -126,6 +129,22 @@ region = Rect2( 640, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=81]
 atlas = ExtResource( 65 )
 region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=143]
+atlas = ExtResource( 81 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=144]
+atlas = ExtResource( 81 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=145]
+atlas = ExtResource( 81 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=146]
+atlas = ExtResource( 81 )
+region = Rect2( 384, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=139]
 atlas = ExtResource( 74 )
@@ -602,6 +621,11 @@ animations = [ {
 "name": "ForwardThrow",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 144 ), SubResource( 143 ), SubResource( 144 ), SubResource( 146 ), SubResource( 146 ) ],
+"loop": true,
+"name": "GaleBlade(Normal)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 51 ) ],
 "loop": true,
 "name": "Getup",
@@ -809,7 +833,7 @@ character_portrait = ExtResource( 15 )
 material = SubResource( 1 )
 use_parent_material = true
 frames = SubResource( 136 )
-animation = "AirDashAttack"
+animation = "GaleBlade(Normal)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -1507,7 +1531,6 @@ reset_momentum = true
 sprite_animation = "ManaBurst"
 anim_length = 40
 sprite_anim_length = 24
-refresh_loop = false
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
@@ -1567,7 +1590,29 @@ looping = true
 loop_active_ticks = 1
 loop_inactive_ticks = 1
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="71"]
+[node name="AirBlade" type="Node2D" parent="StateMachine" index="71"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 8
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+button_texture = ExtResource( 19 )
+air_type = 2
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="72"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -1586,7 +1631,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="72"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="73"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -1602,7 +1647,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="73"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="74"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -1643,7 +1688,7 @@ hit_sound = ExtResource( 36 )
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="74"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="75"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -1681,7 +1726,7 @@ knockback = "4"
 ground_bounce = false
 hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="75"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="76"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
@@ -1694,13 +1739,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 10,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"

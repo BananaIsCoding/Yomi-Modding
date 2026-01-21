@@ -9,3 +9,4 @@ func tick():
 	# Decrement cd timer
 	if comboAttackCD > 0:
 		 comboAttackCD -= 1
+

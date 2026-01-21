@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=147 format=2]
+[gd_resource type="SpriteFrames" load_steps=155 format=2]
 
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKKnockedDown.png" type="Texture" id=1]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKWallSlam.png" type="Texture" id=2]
@@ -35,7 +35,22 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKManaBurstSS.png" type="Texture" id=33]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKVertSlash.png" type="Texture" id=34]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKStabDownSS.png" type="Texture" id=35]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHeavyAirSlashSS.png" type="Texture" id=36]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKAirDashStrike.png" type="Texture" id=37]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKAirSlashSS.png" type="Texture" id=38]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=71]
+
+[sub_resource type="AtlasTexture" id=142]
+atlas = ExtResource( 37 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=137]
+atlas = ExtResource( 38 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=138]
+atlas = ExtResource( 38 )
+region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=82]
 atlas = ExtResource( 31 )
@@ -56,6 +71,18 @@ region = Rect2( 640, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=81]
 atlas = ExtResource( 31 )
 region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=139]
+atlas = ExtResource( 36 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=140]
+atlas = ExtResource( 36 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=141]
+atlas = ExtResource( 36 )
+region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 26 )
@@ -361,7 +388,7 @@ region = Rect2( 384, 0, 128, 128 )
 atlas = ExtResource( 13 )
 region = Rect2( 512, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="AtlasTexture" id=133]
 atlas = ExtResource( 10 )
 region = Rect2( 0, 0, 128, 128 )
 
@@ -376,10 +403,6 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 10 )
 region = Rect2( 384, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 10 )
-region = Rect2( 512, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=93]
 atlas = ExtResource( 21 )
@@ -479,6 +502,16 @@ region = Rect2( 256, 0, 128, 128 )
 
 [resource]
 animations = [ {
+"frames": [ SubResource( 142 ) ],
+"loop": true,
+"name": "AirDashAttack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 137 ), SubResource( 137 ), SubResource( 137 ), SubResource( 138 ) ],
+"loop": true,
+"name": "AirSlash",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
 "name": "Burst",
@@ -527,6 +560,11 @@ animations = [ {
 "frames": [ ExtResource( 18 ) ],
 "loop": true,
 "name": "Grabbed",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 141 ) ],
+"loop": true,
+"name": "HeavyAirSlash",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 21 ), SubResource( 21 ), SubResource( 92 ) ],
@@ -634,7 +672,7 @@ animations = [ {
 "name": "SlashDown",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"frames": [ SubResource( 133 ), SubResource( 133 ), SubResource( 2 ), SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ), SubResource( 4 ) ],
 "loop": true,
 "name": "SlashUp",
 "speed": 10.0
@@ -644,12 +682,12 @@ animations = [ {
 "name": "Stab",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 127 ), SubResource( 128 ) ],
+"frames": [ SubResource( 127 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ) ],
 "loop": true,
 "name": "StabDown",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 132 ) ],
+"frames": [ SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ) ],
 "loop": true,
 "name": "StabDownEnd",
 "speed": 5.0
