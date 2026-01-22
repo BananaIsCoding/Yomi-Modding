@@ -1,4 +1,4 @@
-[gd_scene load_steps=205 format=2]
+[gd_scene load_steps=207 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -82,6 +82,8 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/GaleBladeScript.gd" type="Script" id=80]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeNormalSS.png" type="Texture" id=81]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/SlashProjectile.tscn" type="PackedScene" id=82]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1595,15 +1597,16 @@ script = ExtResource( 80 )
 __meta__ = {
 "_editor_description_": ""
 }
+reset_momentum = true
 sprite_animation = "GaleBlade(Normal)"
-anim_length = 8
+anim_length = 10
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
 title = "Gale Blade"
 type = 2
+data_ui_scene = ExtResource( 83 )
 button_texture = ExtResource( 19 )
-air_type = 2
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
@@ -1611,8 +1614,154 @@ GroundedSpecial
 GroundedSuper"
 SlashProjectile = ExtResource( 82 )
 projPosX = 20
+projPosY = -28
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="72"]
+[node name="GaleBladeDirUp" type="Node2D" parent="StateMachine" index="72"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 83 )
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="GaleBladeDirDown" type="Node2D" parent="StateMachine" index="73"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 83 )
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="GaleBladeDirDown2" type="Node2D" parent="StateMachine" index="74"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 83 )
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="GaleBladeDiaDown" type="Node2D" parent="StateMachine" index="75"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 83 )
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="GaleBladeDiaUp" type="Node2D" parent="StateMachine" index="76"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 83 )
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="77"]
+script = ExtResource( 80 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+force_dir_x = "1"
+force_speed = "1.5"
+force_tick = 14
+title = "Gale Blade"
+type = 2
+data_ui_scene = ExtResource( 84 )
+button_texture = ExtResource( 19 )
+air_type = 1
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+SlashProjectile = ExtResource( 82 )
+projPosX = 20
+projPosY = -28
+
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -1631,7 +1780,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="73"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="79"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -1647,7 +1796,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="74"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="80"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -1688,7 +1837,7 @@ hit_sound = ExtResource( 36 )
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="75"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="81"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -1726,7 +1875,7 @@ knockback = "4"
 ground_bounce = false
 hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="76"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="82"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""

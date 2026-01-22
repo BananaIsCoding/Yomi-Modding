@@ -6,4 +6,11 @@
 [node name="ActionUIData" instance=ExtResource( 1 )]
 
 [node name="8Way" parent="." index="0" instance=ExtResource( 2 )]
-margin_bottom = 62.0
+unique_name_in_owner = true
+margin_bottom = 44.0
+NW = false
+W = false
+Neutral = false
+SW = false
+S = false
+SE = false

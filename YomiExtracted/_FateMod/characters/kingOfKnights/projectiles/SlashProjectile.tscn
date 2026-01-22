@@ -71,10 +71,8 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 20
-active_ticks = 6
-loop_active_ticks = 1
-loop_inactive_ticks = 1
+start_tick = 1
+active_ticks = 1
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Default" index="1"]
 z_index = 1000
@@ -92,6 +90,6 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 20
-active_ticks = 6
+start_tick = 2
+active_ticks = 27
 loop_inactive_ticks = 27

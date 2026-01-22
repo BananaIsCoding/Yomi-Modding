@@ -11,7 +11,6 @@ func _tick():
 		host.move_directly(8 * host.get_facing_int(),0)
 		
 func _frame_30():
-	print("30 gone by and now u are old")
 	hit_something = true
 	host.disable()
 	
