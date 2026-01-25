@@ -55,6 +55,7 @@ __meta__ = {
 }
 anim_length = 30
 endless = false
+projSpeed = 5
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Default" index="0"]
 z_index = 1000

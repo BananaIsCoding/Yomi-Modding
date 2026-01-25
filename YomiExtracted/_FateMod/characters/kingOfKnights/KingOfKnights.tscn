@@ -1,4 +1,4 @@
-[gd_scene load_steps=207 format=2]
+[gd_scene load_steps=224 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -22,7 +22,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/KOKTaunt.gd" type="Script" id=20]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Combo).png" type="Texture" id=21]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/ShirouComboScript.gd" type="Script" id=23]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouComboScript.gd" type="Script" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ManaBurstScript.gd" type="Script" id=25]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/NormalAttacksScript.gd" type="Script" id=26]
@@ -84,6 +84,10 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/SlashProjectile.tscn" type="PackedScene" id=82]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDirUpSS.png" type="Texture" id=85]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaUpSS.png" type="Texture" id=86]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaDownSS.png" type="Texture" id=87]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UseSkillScript.gd" type="Script" id=88]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -131,6 +135,58 @@ region = Rect2( 640, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=81]
 atlas = ExtResource( 65 )
 region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=156]
+atlas = ExtResource( 87 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=157]
+atlas = ExtResource( 87 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=158]
+atlas = ExtResource( 87 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=159]
+atlas = ExtResource( 87 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=152]
+atlas = ExtResource( 86 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=153]
+atlas = ExtResource( 86 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=154]
+atlas = ExtResource( 86 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=155]
+atlas = ExtResource( 86 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=147]
+atlas = ExtResource( 85 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=148]
+atlas = ExtResource( 85 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=149]
+atlas = ExtResource( 85 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=150]
+atlas = ExtResource( 85 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=151]
+atlas = ExtResource( 85 )
+region = Rect2( 384, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=143]
 atlas = ExtResource( 81 )
@@ -623,6 +679,21 @@ animations = [ {
 "name": "ForwardThrow",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 156 ), SubResource( 157 ), SubResource( 158 ), SubResource( 157 ), SubResource( 156 ), SubResource( 157 ), SubResource( 159 ), SubResource( 159 ) ],
+"loop": true,
+"name": "GaleBlade(DiaDown)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 152 ), SubResource( 153 ), SubResource( 154 ), SubResource( 153 ), SubResource( 152 ), SubResource( 153 ), SubResource( 155 ), SubResource( 155 ) ],
+"loop": true,
+"name": "GaleBlade(DiaUp)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 147 ), SubResource( 148 ), SubResource( 149 ), SubResource( 150 ), SubResource( 149 ), SubResource( 150 ), SubResource( 151 ), SubResource( 151 ) ],
+"loop": true,
+"name": "GaleBlade(DirUp)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 144 ), SubResource( 143 ), SubResource( 144 ), SubResource( 146 ), SubResource( 146 ) ],
 "loop": true,
 "name": "GaleBlade(Normal)",
@@ -835,7 +906,7 @@ character_portrait = ExtResource( 15 )
 material = SubResource( 1 )
 use_parent_material = true
 frames = SubResource( 136 )
-animation = "GaleBlade(Normal)"
+animation = "GaleBlade(DiaDown)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -1613,130 +1684,14 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
+projPosX = 22
+projPosY = -25
+diagonalUpAnimName = "GaleBlade(DiaUp)"
+diagonalDownAnimName = "GaleBlade(DiaDown)"
+directlyUpAnimName = "GaleBlade(DirUp)"
+directlyDownAnimName = "GaleBlade(DirDown)"
 
-[node name="GaleBladeDirUp" type="Node2D" parent="StateMachine" index="72"]
-script = ExtResource( 80 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
-force_dir_x = "1"
-force_speed = "1.5"
-force_tick = 14
-title = "Gale Blade"
-type = 2
-data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
-
-[node name="GaleBladeDirDown" type="Node2D" parent="StateMachine" index="73"]
-script = ExtResource( 80 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
-force_dir_x = "1"
-force_speed = "1.5"
-force_tick = 14
-title = "Gale Blade"
-type = 2
-data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
-
-[node name="GaleBladeDirDown2" type="Node2D" parent="StateMachine" index="74"]
-script = ExtResource( 80 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
-force_dir_x = "1"
-force_speed = "1.5"
-force_tick = 14
-title = "Gale Blade"
-type = 2
-data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
-
-[node name="GaleBladeDiaDown" type="Node2D" parent="StateMachine" index="75"]
-script = ExtResource( 80 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
-force_dir_x = "1"
-force_speed = "1.5"
-force_tick = 14
-title = "Gale Blade"
-type = 2
-data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
-
-[node name="GaleBladeDiaUp" type="Node2D" parent="StateMachine" index="76"]
-script = ExtResource( 80 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
-force_dir_x = "1"
-force_speed = "1.5"
-force_tick = 14
-title = "Gale Blade"
-type = 2
-data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
-
-[node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="77"]
+[node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="72"]
 script = ExtResource( 80 )
 __meta__ = {
 "_editor_description_": ""
@@ -1758,10 +1713,30 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 SlashProjectile = ExtResource( 82 )
-projPosX = 20
-projPosY = -28
+projPosX = 22
+projPosY = -25
+diagonalUpAnimName = "GaleBlade(DiaUp)"
+diagonalDownAnimName = "GaleBlade(DiaDown)"
+directlyUpAnimName = "GaleBlade(DirUp)"
+directlyDownAnimName = "GaleBlade(DirDown)"
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="78"]
+[node name="UseSkill" type="Node2D" parent="StateMachine" index="73"]
+script = ExtResource( 88 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "GaleBlade(Normal)"
+anim_length = 10
+title = "Skill"
+type = 2
+button_texture = ExtResource( 19 )
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="74"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -1780,7 +1755,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="79"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="75"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -1796,7 +1771,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="80"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="76"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -1837,7 +1812,7 @@ hit_sound = ExtResource( 36 )
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="81"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="77"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -1875,7 +1850,7 @@ knockback = "4"
 ground_bounce = false
 hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="82"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""

@@ -1,14 +1,56 @@
 extends ObjectState
 
+export var projSpeed = 5
 var hit_something = false
+var projDirX = 0
+var projDirY = 0
 
 func _frame_0():
+	print(host.rotation_degrees)
+	
+	var twoDirMult = sqrt(projSpeed * projSpeed)
+	
+	if host.rotation_degrees == 0:
+		projDirX = host.get_facing_int() * projSpeed
+	elif host.rotation_degrees == -45:
+		projDirX = host.get_facing_int() * projSpeed
+		projDirY = -projSpeed
+		# doesnt support float
+#		var magnitude = sqrt((projDirX * projDirX) + (projDirY * projDirY))
+#		projDirX = projDirX / magnitude
+#		projDirY = projDirY / magnitude
+	elif host.rotation_degrees == 45:
+		projDirX = host.get_facing_int()
+		projDirY = projSpeed
+#		var magnitude = sqrt((projDirX * projDirX) + (projDirY * projDirY))
+#		projDirX /= magnitude
+#		projDirY /= magnitude
+	elif host.rotation_degrees == -90:
+		projDirY = -projSpeed
+	elif host.rotation_degrees == 90:
+		projDirY = projSpeed
+#	match host.rotation_degrees:
+#		0:
+#			print("its " + host.get_facing_int())
+#			projDirX = host.get_facing_int()
+#		-45:
+#			projDirX = host.get_facing_int()
+#			projDirY = -1
+#		45:
+#			projDirX = host.get_facing_int()
+#			projDirY = 1
+#		-90:
+#			projDirY = -1
+#		90:
+#			projDirY = 1
+#		_:
+#			print ("lol")
 	if host.get_facing_int() == -1:
 		host.sprite.flip_h = true
 
 func _tick():
 	if not hit_something:
-		host.move_directly(8 * host.get_facing_int(),0)
+		host.move_directly(projDirX, projDirY)
 		
 func _frame_30():
 	hit_something = true
