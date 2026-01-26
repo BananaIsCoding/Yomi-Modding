@@ -1,4 +1,4 @@
-[gd_scene load_steps=224 format=2]
+[gd_scene load_steps=225 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -88,6 +88,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaUpSS.png" type="Texture" id=86]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaDownSS.png" type="Texture" id=87]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UseSkillScript.gd" type="Script" id=88]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/GaleBlade.png" type="Texture" id=89]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1677,7 +1678,7 @@ force_tick = 14
 title = "Gale Blade"
 type = 2
 data_ui_scene = ExtResource( 83 )
-button_texture = ExtResource( 19 )
+button_texture = ExtResource( 89 )
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
@@ -1696,7 +1697,8 @@ script = ExtResource( 80 )
 __meta__ = {
 "_editor_description_": ""
 }
-reset_momentum = true
+apply_forces = true
+apply_grav = true
 sprite_animation = "GaleBlade(Normal)"
 anim_length = 10
 force_dir_x = "1"
@@ -1705,7 +1707,7 @@ force_tick = 14
 title = "Gale Blade"
 type = 2
 data_ui_scene = ExtResource( 84 )
-button_texture = ExtResource( 19 )
+button_texture = ExtResource( 89 )
 air_type = 1
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
