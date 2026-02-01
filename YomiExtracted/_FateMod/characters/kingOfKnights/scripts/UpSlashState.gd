@@ -1,1 +1,3 @@
-extends CharacterState
+extends KokNormalAttackState
+
+

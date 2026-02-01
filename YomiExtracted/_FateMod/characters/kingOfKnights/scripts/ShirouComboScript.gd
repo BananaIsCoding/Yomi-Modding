@@ -1,4 +1,4 @@
-extends CharacterState
+extends KokNormalAttackState
 
 func _enter():
 	._enter() 
