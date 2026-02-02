@@ -12,6 +12,9 @@ func _enter():
 		host.change_state("Skill2")
 	elif num == 2:
 		host.change_state("Skill3")
+	print(host.current_tick)
+	print( ReplayManager.frames[host.id][host.current_tick]["action"])
+	print(ReplayManager.frames)
 
 func is_usable():
 	return .is_usable() and host.skillCd == 0

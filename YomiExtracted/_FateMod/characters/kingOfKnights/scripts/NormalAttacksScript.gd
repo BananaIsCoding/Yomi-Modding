@@ -45,16 +45,9 @@ func setup_hitboxes():
 		earliest_hitbox = earliest
 
 func _enter():
-#	for start_frame in hitbox_start_frames:
-#		var items = hitbox_start_frames[start_frame]
-#		for hitbox in items:
-#			if hitbox is Hitbox:
-#				hitbox.damage = 0
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
-			print(hitbox.damage)
-			hitbox.damage += hitbox.damage * 0.3
-			print(hitbox.damage)
+			hitbox.damage += hitbox.damage * host.dmgBoost
 			
 func _exit():
 	var index = 0
