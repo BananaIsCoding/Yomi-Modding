@@ -15,6 +15,9 @@ var damageReduction = 0.0
 
 var tween
 
+var Emoting = false
+var EmoteTimer = 0
+
 
 func tick():
 	.tick()
@@ -23,6 +26,7 @@ func tick():
 		 comboAttackCD -= 1
 	if skillCd > 0:
 		skillCd -= 1
+	EmoteHandler()
 
 # 100% my functions I think (why is there no region in godot)
 func CalcCritChance():
@@ -84,9 +88,41 @@ func set_camera_zoom(value):
 		tween.kill()
 	var game = Global.current_game
 	game.camera_zoom = value
-	emit_signal("zoom_changed")
+	#emit_signal("zoom_changed")
 	game.update_camera_limits()
 	
+# emote/text functions from guide 
+func emote(message):
+	ReplayManager.emote(message, id, current_tick)
+	$EmoteLabel.clear()
+	$EmoteLabel.append_bbcode("[center]" + message)
+	$EmoteLabel.visible_characters = 0
+	$EmoteLabel.percent_visible = 0
+	$EmoteLabel.show()
+	$EmoteLabel.modulate.a = 1.0
+	Emoting = true
+	EmoteTimer = 0
+
+func EmoteHandler():
+	if $EmoteLabel.bbcode_text != "":
+		Emoting = true
+	if Emoting:
+		if $EmoteLabel.percent_visible < 1.0:
+			if current_tick % 3 == 0:
+				$EmoteLabel.visible_characters += randi_range(1, 2)
+				#play_sound("Dialogue")
+		else:
+			EmoteTimer += 1
+		if EmoteTimer >= 40:
+			$EmoteLabel.modulate.a = lerp($EmoteLabel.modulate.a, 0.0, 0.12)
+		if EmoteTimer > 90:
+			$EmoteLabel.percent_visible = 0.0
+			$EmoteLabel.visible_characters = 0
+			$EmoteLabel.hide()
+			$EmoteLabel.bbcode_text = ""
+			Emoting = false
+			EmoteTimer = 0
+
 # overriding to support damage reduction
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0"):
 	

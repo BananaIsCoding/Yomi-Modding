@@ -19,6 +19,7 @@ func setup(replay_map, key):
 
 
 func show_data():
+	print ("REPLAY!!")
 	var match_data = ReplayManager.load_replay(path)
 	if not ("version" in match_data):
 		return
