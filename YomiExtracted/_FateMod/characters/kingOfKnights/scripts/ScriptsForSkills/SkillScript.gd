@@ -20,7 +20,7 @@ func _exit():
 	host.set_camera_zoom(0.40)
 	host.tween_camera_zoom(0.40, 0.99, 2, Tween.TRANS_QUART, Tween.EASE_OUT)
 	cutscene = false
-	
+	host.opponent.hitlag_ticks = prevHitLag
 	#host.skillCd = 300
 	
 func _tick():

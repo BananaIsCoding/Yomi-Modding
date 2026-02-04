@@ -23,11 +23,13 @@ var CritStartUi = null
 var dmgBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalAttackUp.png")
 var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/SpecialAttackUp.png")
 var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
+var BoostToRemove = []
 
 class BoostData:
 	var boostType
 	var instance
 	var tickRemaining : int
+	var strength
 
 func tick():
 	.tick()
@@ -37,18 +39,35 @@ func tick():
 	if skillCd > 0:
 		skillCd -= 1
 	
-	if (!BoostQueue.empty()):
-		for index in range(BoostQueue.size()):
-			BoostQueue[index].tickRemaining -= 1
-			if BoostQueue[index].tickRemaining <= 0:
-				if id == 2:
-					BoostInfoUiInstance.RemoveBoost(BoostQueue[index].instance)
-				elif id == 1:
-					BoostQueue[index].instance.disable()
-					#BoostQueue[index].instance.queue_free()
-				BoostQueue.remove(index)
-				index -= 1
-			
+	if not is_ghost:
+		if (!BoostQueue.empty()):
+			for index in range(BoostQueue.size()):
+				BoostQueue[index].tickRemaining -= 1
+				if BoostQueue[index].tickRemaining <= 0:
+					
+					if BoostQueue[index].boostType == BoostType.DmgBoost:
+						dmgBoost -= BoostQueue[index].strength
+					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
+						specialBoost -= BoostQueue[index].strength
+					
+					if id == 2:
+						BoostInfoUiInstance.RemoveBoost(BoostQueue[index].instance)
+					else:
+						BoostQueue[index].instance.queue_free()
+						#BoostQueue[index].instance.disable()
+					BoostToRemove.append(index)
+				else:
+					if BoostQueue[index].boostType == BoostType.DmgBoost:
+						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
+						BoostQueue[index].instance.hint_tooltip = newToolTip
+					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
+						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Special Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
+						BoostQueue[index].instance.hint_tooltip = newToolTip
+						
+			for i in range(BoostToRemove.size()):
+				BoostQueue.remove(BoostToRemove[i])
+			BoostToRemove.clear()
+	
 	EmoteHandler()
 
 # 100% my functions I think (why is there no region in godot)
@@ -57,26 +76,25 @@ func CalcCritChance():
 	
 func AddDamageBoost(percentage, duration):
 	# will add if statement for alter form
-	dmgBoost = percentage
+	dmgBoost += percentage
 	
 	var newItem = BoostData.new()
 	newItem.boostType = BoostType.DmgBoost
 	newItem.tickRemaining = duration
-	
+	newItem.strength = percentage
 	var newToolTip = "+" + str(percentage * 100) + "% Damage Boost ( " + str(duration) + " ticks )"
 	newItem.instance = BoostInfoUiInstance.AddBoost(dmgBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
 	
-	
 func AddSpecialBoost(percentage, duration):
-	specialBoost = percentage
+	specialBoost += percentage
 	
 	var newItem = BoostData.new()
 	newItem.boostType = BoostType.SpecialBoost
 	newItem.tickRemaining = duration
-	
-	var newToolTip = "+" + str(specialBoost * 100) + "% Damage Boost ( " + str(duration) + " ticks )"
+	newItem.strength = percentage
+	var newToolTip = "+" + str(specialBoost * 100) + "% Special Damage Boost ( " + str(duration) + " ticks )"
 	newItem.instance = BoostInfoUiInstance.AddBoost(specialBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
@@ -92,7 +110,6 @@ func ApplyInstinctSkill():
 
 func ToggleArmorMode():
 	armorOn = !armorOn
-	print("Script acknowledge the armor change")
 	if armorOn:
 		damageReduction = 0.1
 	else:

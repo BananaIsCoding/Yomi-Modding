@@ -18,8 +18,6 @@ func _ready():
 	
 	if is_instance_valid(fighter):
 		
-			
-			
 		mainBuffSlot = BoostInfoScene.instance()
 		listOfBoostInstance.append(mainBuffSlot)
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")
@@ -36,14 +34,14 @@ func _ready():
 			listOfBoostInstance.append(secondBox)
 			var firstBox = BoostInfoScene.instance()
 			listOfBoostInstance.append(firstBox)
-			
+
 			boostBoxContainer.add_child(firstBox)
 			boostBoxContainer.add_child(secondBox)
 			boostBoxContainer.add_child(thirdBox)
 			boostBoxContainer.add_child(forthBox)
-			
+
 			createdRows = 1
-			
+
 		boostBoxContainer.add_child(mainBuffSlot)	
 
 func _process(delta):
@@ -51,7 +49,6 @@ func _process(delta):
 		pass
 	
 func ChangeMainBuff():
-	
 	var currentStance = fighter.stance
 	if currentStance == "Normal":
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")

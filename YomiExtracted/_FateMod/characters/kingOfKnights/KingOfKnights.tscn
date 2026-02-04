@@ -1,4 +1,4 @@
-[gd_scene load_steps=265 format=2]
+[gd_scene load_steps=266 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -96,6 +96,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ScriptsForSkills/ManaBurstSkillScript.gd" type="Script" id=94]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ArmorScript.gd" type="Script" id=95]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/UI/KokBoostContainer.tscn" type="PackedScene" id=96]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/ArmorOn.png" type="Texture" id=97]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1072,6 +1073,10 @@ material = SubResource( 135 )
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
 
+[node name="Roll" parent="StateMachine" index="7"]
+allowed_stances_string = "Normal
+Normal(Armored)"
+
 [node name="Taunt" parent="StateMachine" index="55"]
 script = ExtResource( 20 )
 anim_length = 90
@@ -1953,7 +1958,7 @@ sprite_animation = "Skill3"
 anim_length = 24
 title = "Armor On"
 type = 2
-button_texture = ExtResource( 90 )
+button_texture = ExtResource( 97 )
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
@@ -2088,13 +2093,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 127 ): {
-"x": 10,
-"y": 23
-},
 SubResource( 131 ): {
 "x": 9,
 "y": 18
+},
+SubResource( 127 ): {
+"x": 10,
+"y": 23
 }
 }
 title = "Stab Down"

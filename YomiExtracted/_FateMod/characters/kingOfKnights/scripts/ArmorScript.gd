@@ -1,4 +1,5 @@
 extends CharacterState
 
 func _enter():
-	host.ToggleArmorMode()
+	if not host.is_ghost:
+		host.ToggleArmorMode()
