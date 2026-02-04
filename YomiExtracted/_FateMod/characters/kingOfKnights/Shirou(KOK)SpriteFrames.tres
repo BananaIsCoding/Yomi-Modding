@@ -77,8 +77,9 @@
 [ext_resource path="res://characters/stickman/sprites/stickman60.png" type="Texture" id=75]
 [ext_resource path="res://characters/stickman/sprites/chuk_jump2.png" type="Texture" id=76]
 [ext_resource path="res://characters/stickman/sprites/chuk_spin3.png" type="Texture" id=77]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/Shirou(KOK)Idle.png" type="Texture" id=78]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Shirou(KOK)Idle.png" type="Texture" id=78]
 [ext_resource path="res://characters/stickman/sprites/wall_slam.png" type="Texture" id=79]
+
 
 [resource]
 animations = [ {

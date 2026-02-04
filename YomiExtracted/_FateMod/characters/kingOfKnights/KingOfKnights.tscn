@@ -1,101 +1,101 @@
-[gd_scene load_steps=264 format=2]
+[gd_scene load_steps=265 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=3]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashUp.png" type="Texture" id=4]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashUp.png" type="Texture" id=4]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UpSlashState.gd" type="Script" id=5]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/SlashDown.png" type="Texture" id=6]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashDown.png" type="Texture" id=6]
 [ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=7]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Jab.png" type="Texture" id=8]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Jab.png" type="Texture" id=8]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ThrustScript.gd" type="Script" id=9]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/HeavyGroundAttack.gd" type="Script" id=10]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/HorizontalStrike.png" type="Texture" id=11]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/HorizontalStrike.png" type="Texture" id=11]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/Shirou(KOK).tscn" type="PackedScene" id=12]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/SummonShirouMelee.gd" type="Script" id=13]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Melee).png" type="Texture" id=14]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KingOfKnightsIdle.png" type="Texture" id=15]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Melee).png" type="Texture" id=14]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KingOfKnightsIdle.png" type="Texture" id=15]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouHealScript.gd" type="Script" id=16]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Heal).png" type="Texture" id=17]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Heal).png" type="Texture" id=17]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ManaBurstParticle.tscn" type="PackedScene" id=18]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/ManaBurst.png" type="Texture" id=19]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/ManaBurst.png" type="Texture" id=19]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/KOKTaunt.gd" type="Script" id=20]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Shirou(Combo).png" type="Texture" id=21]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Combo).png" type="Texture" id=21]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouComboScript.gd" type="Script" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ManaBurstScript.gd" type="Script" id=25]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/NormalAttacksScript.gd" type="Script" id=26]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Heavy.png" type="Texture" id=27]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Thrust.png" type="Texture" id=28]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Heavy.png" type="Texture" id=27]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Thrust.png" type="Texture" id=28]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffect.tscn" type="PackedScene" id=29]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Stab.png" type="Texture" id=30]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/VerticalStrike.png" type="Texture" id=31]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Stab.png" type="Texture" id=30]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/VerticalStrike.png" type="Texture" id=31]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/DashEffect.tscn" type="PackedScene" id=32]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/StabDownScript.gd" type="Script" id=33]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/StabDown.png" type="Texture" id=34]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/StabDown.png" type="Texture" id=34]
 [ext_resource path="res://characters/ThrowBox.gd" type="Script" id=35]
 [ext_resource path="res://sound/common/catch.wav" type="AudioStream" id=36]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KingOfKnightsBurst.png" type="Texture" id=37]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKForwardDash.png" type="Texture" id=38]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtAerial.png" type="Texture" id=39]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtGroundedMid.png" type="Texture" id=40]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKSlashUpSS.png" type="Texture" id=41]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrustSS.png" type="Texture" id=42]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKLowBlock.png" type="Texture" id=43]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKShirouHealSS.png" type="Texture" id=44]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKWallSlam.png" type="Texture" id=45]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtGroundedHigh.png" type="Texture" id=46]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrow1.png" type="Texture" id=47]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKSlashDownSS.png" type="Texture" id=48]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHurtGroundedLow.png" type="Texture" id=49]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKJump.png" type="Texture" id=50]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGetUp.png" type="Texture" id=51]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKKnockedDown.png" type="Texture" id=52]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKBackDash.png" type="Texture" id=53]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKThrow0.png" type="Texture" id=54]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKJumpBack.png" type="Texture" id=55]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGrab1.png" type="Texture" id=56]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKStabSS.png" type="Texture" id=57]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKLanding.png" type="Texture" id=58]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGrabbed.png" type="Texture" id=59]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGrab0.png" type="Texture" id=60]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHighBlock.png" type="Texture" id=61]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHeavySS.png" type="Texture" id=62]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHoriStrikeSS.png" type="Texture" id=63]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHustle.png" type="Texture" id=64]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKExcalibur.png" type="Texture" id=65]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKVertSlash.png" type="Texture" id=66]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKStabDownSS.png" type="Texture" id=67]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKManaBurstSS.png" type="Texture" id=68]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKShirou(Combo)SS.png" type="Texture" id=69]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKJabSS.png" type="Texture" id=70]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KingOfKnightsBurst.png" type="Texture" id=37]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKForwardDash.png" type="Texture" id=38]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHurtAerial.png" type="Texture" id=39]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHurtGroundedMid.png" type="Texture" id=40]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKSlashUpSS.png" type="Texture" id=41]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKThrustSS.png" type="Texture" id=42]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKLowBlock.png" type="Texture" id=43]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKShirouHealSS.png" type="Texture" id=44]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKWallSlam.png" type="Texture" id=45]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHurtGroundedHigh.png" type="Texture" id=46]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKThrow1.png" type="Texture" id=47]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKSlashDownSS.png" type="Texture" id=48]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHurtGroundedLow.png" type="Texture" id=49]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKJump.png" type="Texture" id=50]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGetUp.png" type="Texture" id=51]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKKnockedDown.png" type="Texture" id=52]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKBackDash.png" type="Texture" id=53]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKThrow0.png" type="Texture" id=54]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKJumpBack.png" type="Texture" id=55]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGrab1.png" type="Texture" id=56]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKStabSS.png" type="Texture" id=57]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKLanding.png" type="Texture" id=58]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGrabbed.png" type="Texture" id=59]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGrab0.png" type="Texture" id=60]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHighBlock.png" type="Texture" id=61]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHeavySS.png" type="Texture" id=62]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHoriStrikeSS.png" type="Texture" id=63]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHustle.png" type="Texture" id=64]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcalibur.png" type="Texture" id=65]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKVertSlash.png" type="Texture" id=66]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKStabDownSS.png" type="Texture" id=67]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKManaBurstSS.png" type="Texture" id=68]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKShirou(Combo)SS.png" type="Texture" id=69]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKJabSS.png" type="Texture" id=70]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/GroundSlamEffect.tscn" type="PackedScene" id=71]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/StabDownEndScript.gd" type="Script" id=72]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKAirSlashSS.png" type="Texture" id=73]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKHeavyAirSlashSS.png" type="Texture" id=74]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/AirSlash.png" type="Texture" id=75]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/HeavyAirSlash.png" type="Texture" id=76]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKAirDashStrike.png" type="Texture" id=77]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/AirDashAttack.png" type="Texture" id=78]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKAirSlashSS.png" type="Texture" id=73]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHeavyAirSlashSS.png" type="Texture" id=74]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/AirSlash.png" type="Texture" id=75]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/HeavyAirSlash.png" type="Texture" id=76]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKAirDashStrike.png" type="Texture" id=77]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/AirDashAttack.png" type="Texture" id=78]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/AirDashEffect.tscn" type="PackedScene" id=79]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/GaleBladeScript.gd" type="Script" id=80]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeNormalSS.png" type="Texture" id=81]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeNormalSS.png" type="Texture" id=81]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/SlashProjectile.tscn" type="PackedScene" id=82]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/UIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDirUpSS.png" type="Texture" id=85]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaUpSS.png" type="Texture" id=86]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKGaleBladeDiaDownSS.png" type="Texture" id=87]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/UIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/UIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDirUpSS.png" type="Texture" id=85]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDiaUpSS.png" type="Texture" id=86]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDiaDownSS.png" type="Texture" id=87]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ScriptsForSkills/UseSkillScript.gd" type="Script" id=88]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/GaleBlade.png" type="Texture" id=89]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/icons/Skill.png" type="Texture" id=90]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKSkillAnimationSS.png" type="Texture" id=91]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/GaleBlade.png" type="Texture" id=89]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Skill.png" type="Texture" id=90]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKSkillAnimationSS.png" type="Texture" id=91]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ScriptsForSkills/InstinctSkillScript.gd" type="Script" id=92]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ScriptsForSkills/CharismaSkillScript.gd" type="Script" id=93]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ScriptsForSkills/ManaBurstSkillScript.gd" type="Script" id=94]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ArmorScript.gd" type="Script" id=95]
-[ext_resource path="res://characters/states/CharState.gd" type="Script" id=96]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/KokBoostContainer.tscn" type="PackedScene" id=96]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -636,6 +636,10 @@ region = Rect2( 256, 768, 128, 128 )
 atlas = ExtResource( 91 )
 region = Rect2( 384, 768, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=192]
+atlas = ExtResource( 91 )
+region = Rect2( 512, 768, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 48 )
 region = Rect2( 0, 0, 128, 128 )
@@ -965,7 +969,7 @@ animations = [ {
 "name": "Skill2",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 180 ), SubResource( 180 ), SubResource( 181 ), SubResource( 181 ), SubResource( 182 ), SubResource( 182 ), SubResource( 183 ), SubResource( 183 ), SubResource( 184 ), SubResource( 184 ), SubResource( 185 ), SubResource( 185 ), SubResource( 186 ), SubResource( 186 ), SubResource( 187 ), SubResource( 187 ), SubResource( 188 ), SubResource( 188 ), SubResource( 189 ), SubResource( 189 ), SubResource( 190 ), SubResource( 191 ), SubResource( 190 ), SubResource( 191 ) ],
+"frames": [ SubResource( 180 ), SubResource( 180 ), SubResource( 181 ), SubResource( 181 ), SubResource( 182 ), SubResource( 182 ), SubResource( 183 ), SubResource( 183 ), SubResource( 184 ), SubResource( 184 ), SubResource( 185 ), SubResource( 185 ), SubResource( 186 ), SubResource( 186 ), SubResource( 187 ), SubResource( 187 ), SubResource( 188 ), SubResource( 188 ), SubResource( 189 ), SubResource( 189 ), SubResource( 190 ), SubResource( 190 ), SubResource( 191 ), SubResource( 192 ) ],
 "loop": true,
 "name": "Skill3",
 "speed": 5.0
@@ -1052,12 +1056,14 @@ __meta__ = {
 "_editor_description_": ""
 }
 character_portrait = ExtResource( 15 )
+player_info_scene = ExtResource( 96 )
 
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 use_parent_material = true
 frames = SubResource( 136 )
-animation = "Skill1"
+animation = "Skill3"
+frame = 23
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -1886,22 +1892,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="FakeUseSkill" type="Node2D" parent="StateMachine" index="74"]
-script = ExtResource( 96 )
-__meta__ = {
-"_editor_description_": ""
-}
-title = "FakeSkillUse"
-show_in_menu = false
-type = 2
-button_texture = ExtResource( 90 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-
-[node name="Skill1" type="Node2D" parent="StateMachine" index="75"]
+[node name="Skill1" type="Node2D" parent="StateMachine" index="74"]
 script = ExtResource( 93 )
 __meta__ = {
 "_editor_description_": ""
@@ -1918,7 +1909,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Skill2" type="Node2D" parent="StateMachine" index="76"]
+[node name="Skill2" type="Node2D" parent="StateMachine" index="75"]
 script = ExtResource( 94 )
 __meta__ = {
 "_editor_description_": ""
@@ -1935,7 +1926,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Skill3" type="Node2D" parent="StateMachine" index="77"]
+[node name="Skill3" type="Node2D" parent="StateMachine" index="76"]
 script = ExtResource( 92 )
 __meta__ = {
 "_editor_description_": ""
@@ -1952,7 +1943,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="ArmorOn" type="Node2D" parent="StateMachine" index="78"]
+[node name="ArmorOn" type="Node2D" parent="StateMachine" index="77"]
 script = ExtResource( 95 )
 __meta__ = {
 "_editor_description_": ""
@@ -1970,7 +1961,7 @@ GroundedSpecial
 GroundedSuper"
 change_stance_to = "Normal(Armored)"
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="79"]
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -1989,7 +1980,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="80"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="79"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -2005,7 +1996,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="81"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="80"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -2046,7 +2037,7 @@ hit_sound = ExtResource( 36 )
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="82"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="81"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -2084,7 +2075,7 @@ knockback = "4"
 ground_bounce = false
 hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="83"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="82"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
@@ -2097,13 +2088,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 10,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"

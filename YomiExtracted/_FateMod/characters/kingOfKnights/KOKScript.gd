@@ -1,5 +1,6 @@
 extends Fighter
 
+enum BoostType {DmgBoost, SpecialBoost}
 # adding variable to storing combo cd timer
 var comboAttackCD = 0
 var currentExcalCharge = 0
@@ -7,9 +8,7 @@ var skillCd = 0
 var critChance = 0
 var critStar = 0
 var dmgBoost = 0
-var dmgBoostDuration = 0
 var specialBoost = 0
-var specialBoostDuration = 0
 var armorOn = false
 var damageReduction = 0.0
 
@@ -18,6 +17,17 @@ var tween
 var Emoting = false
 var EmoteTimer = 0
 
+var BoostInfoUiInstance
+var BoostQueue = []
+var CritStartUi = null
+var dmgBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalAttackUp.png")
+var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/SpecialAttackUp.png")
+var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
+
+class BoostData:
+	var boostType
+	var instance
+	var tickRemaining : int
 
 func tick():
 	.tick()
@@ -26,6 +36,19 @@ func tick():
 		 comboAttackCD -= 1
 	if skillCd > 0:
 		skillCd -= 1
+	
+	if (!BoostQueue.empty()):
+		for index in range(BoostQueue.size()):
+			BoostQueue[index].tickRemaining -= 1
+			if BoostQueue[index].tickRemaining <= 0:
+				if id == 2:
+					BoostInfoUiInstance.RemoveBoost(BoostQueue[index].instance)
+				elif id == 1:
+					BoostQueue[index].instance.disable()
+					#BoostQueue[index].instance.queue_free()
+				BoostQueue.remove(index)
+				index -= 1
+			
 	EmoteHandler()
 
 # 100% my functions I think (why is there no region in godot)
@@ -35,23 +58,46 @@ func CalcCritChance():
 func AddDamageBoost(percentage, duration):
 	# will add if statement for alter form
 	dmgBoost = percentage
-	dmgBoostDuration = duration
+	
+	var newItem = BoostData.new()
+	newItem.boostType = BoostType.DmgBoost
+	newItem.tickRemaining = duration
+	
+	var newToolTip = "+" + str(percentage * 100) + "% Damage Boost ( " + str(duration) + " ticks )"
+	newItem.instance = BoostInfoUiInstance.AddBoost(dmgBoostPng, newToolTip)
+	
+	BoostQueue.append(newItem)
+	
 	
 func AddSpecialBoost(percentage, duration):
 	specialBoost = percentage
-	specialBoostDuration = duration
+	
+	var newItem = BoostData.new()
+	newItem.boostType = BoostType.SpecialBoost
+	newItem.tickRemaining = duration
+	
+	var newToolTip = "+" + str(specialBoost * 100) + "% Damage Boost ( " + str(duration) + " ticks )"
+	newItem.instance = BoostInfoUiInstance.AddBoost(specialBoostPng, newToolTip)
+	
+	BoostQueue.append(newItem)
 	
 func ApplyInstinctSkill():
 	critStar += 15;
 	gain_super_meter_raw(MAX_SUPER_METER)
+	var newToolTip = str(critStar) + " crit Stars"
+	if CritStartUi == null:
+		CritStartUi = BoostInfoUiInstance.AddBoost(critStarPng, newToolTip)
+	else:
+		CritStartUi.hint_tooltip = newToolTip
 
 func ToggleArmorMode():
 	armorOn = !armorOn
 	print("Script acknowledge the armor change")
 	if armorOn:
-		damageReduction = 0.2
+		damageReduction = 0.1
 	else:
 		damageReduction = 0.0
+	BoostInfoUiInstance.ChangeMainBuff()
 
 # camera controls functions from guide 
 func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease_type):

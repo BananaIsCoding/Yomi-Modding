@@ -54,3 +54,8 @@ func _exit():
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage = originalHbDmg[index]
+
+func _frame_1():
+	if host.stance == "Normal":
+		current_real_tick -= 1
+		host.state_tick()

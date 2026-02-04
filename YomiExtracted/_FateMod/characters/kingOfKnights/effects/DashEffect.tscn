@@ -2,7 +2,7 @@
 
 [ext_resource path="res://fx/ParticleEffect.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/KOKDashDust.png" type="Texture" id=3]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKDashDust.png" type="Texture" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true

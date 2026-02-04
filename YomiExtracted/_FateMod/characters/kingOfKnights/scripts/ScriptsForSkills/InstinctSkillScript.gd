@@ -2,5 +2,6 @@ extends SkillState
 
 func _exit():
 	._exit()
-	host.ApplyInstinctSkill()
-	host.emote("+15 Crit Stars")
+	if !host.is_ghost:
+		host.ApplyInstinctSkill()
+		host.emote("+ Crit Stars")
