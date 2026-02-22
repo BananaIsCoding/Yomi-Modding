@@ -1948,26 +1948,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Excalibur" type="Node2D" parent="StateMachine" index="77"]
-script = ExtResource( 99 )
-__meta__ = {
-"_editor_description_": ""
-}
-reset_momentum = true
-sprite_animation = "ExcaliburChargeUp"
-anim_length = 93
-projectile_scene = ExtResource( 101 )
-projectile_pos_y = -17
-title = "Excalibur"
-type = 3
-button_texture = ExtResource( 98 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-
-[node name="ArmorOn" type="Node2D" parent="StateMachine" index="78"]
+[node name="ArmorOn" type="Node2D" parent="StateMachine" index="77"]
 script = ExtResource( 95 )
 __meta__ = {
 "_editor_description_": ""
@@ -1985,7 +1966,7 @@ GroundedSpecial
 GroundedSuper"
 change_stance_to = "Normal(Armored)"
 
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="79"]
+[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 13 )
 projectile_scene = ExtResource( 12 )
 projectile_pos_y = 3
@@ -2004,7 +1985,7 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="80"]
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="79"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -2020,7 +2001,7 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="81"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="80"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -2061,7 +2042,7 @@ hit_sound = ExtResource( 36 )
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="82"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="81"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -2099,7 +2080,7 @@ knockback = "4"
 ground_bounce = false
 hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="83"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="82"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
@@ -2133,3 +2114,152 @@ interrupt_from_string = "Grounded
 Aerial"
 interrupt_into_string = "Grounded
 Aerial"
+
+[node name="Excalibur" type="Node2D" parent="StateMachine" index="83"]
+script = ExtResource( 99 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "ExcaliburChargeUp"
+anim_length = 120
+projectile_scene = ExtResource( 101 )
+projectile_pos_y = -17
+title = "Excalibur"
+type = 3
+button_texture = ExtResource( 98 )
+can_feint_if_possible = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="84"]
+script = ExtResource( 10 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "HeavyAttack"
+anim_length = 180
+sprite_anim_length = 14
+title = "Heavy Slash"
+show_in_menu = false
+type = 1
+button_texture = ExtResource( 27 )
+self_hit_cancellable = false
+self_interruptable = false
+can_feint_if_possible = false
+selectable = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 21
+y = -25
+width = 14
+height = 15
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 12
+active_ticks = 2
+
+[node name="Hitbox2" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="1"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 12
+y = -50
+width = 21
+height = 10
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 12
+active_ticks = 2
+
+[node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="85"]
+script = ExtResource( 10 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "HeavyAttack"
+anim_length = 180
+sprite_anim_length = 14
+title = "Heavy Slash"
+type = 1
+button_texture = ExtResource( 27 )
+self_hit_cancellable = false
+self_interruptable = false
+can_feint_if_possible = false
+selectable = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/ExcaliburAirVar" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 21
+y = -25
+width = 14
+height = 15
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 12
+active_ticks = 2
+
+[node name="Hitbox2" type="Node2D" parent="StateMachine/ExcaliburAirVar" index="1"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 12
+y = -50
+width = 21
+height = 10
+damage = 100
+hitstun_ticks = 23
+victim_hitlag = 4
+can_counter_hit = false
+sdi_modifier = "0.0"
+guard_break = true
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+grounded_hit_state = "HurtAerial"
+start_tick = 12
+active_ticks = 2

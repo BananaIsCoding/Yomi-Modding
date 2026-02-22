@@ -12,8 +12,7 @@ var specialBoost = 0
 var armorOn = false
 var damageReduction = 0.0
 
-var tween
-
+var cameraTween
 var Emoting = false
 var EmoteTimer = 0
 
@@ -24,12 +23,14 @@ var dmgBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprite
 var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/SpecialAttackUp.png")
 var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
 var BoostToRemove = []
-
 class BoostData:
 	var boostType
 	var instance
 	var tickRemaining : int
 	var strength
+
+const new_modulate_alpha = 0.0
+const fade_speed = 0.30 # Lower number = slower
 
 func tick():
 	.tick()
@@ -69,11 +70,9 @@ func tick():
 			BoostToRemove.clear()
 	
 	EmoteHandler()
-
 # 100% my functions I think (why is there no region in godot)
 func CalcCritChance():
 	return critChance + (critStar * 3)
-	
 func AddDamageBoost(percentage, duration):
 	# will add if statement for alter form
 	dmgBoost += percentage
@@ -86,7 +85,6 @@ func AddDamageBoost(percentage, duration):
 	newItem.instance = BoostInfoUiInstance.AddBoost(dmgBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
-	
 func AddSpecialBoost(percentage, duration):
 	specialBoost += percentage
 	
@@ -98,7 +96,6 @@ func AddSpecialBoost(percentage, duration):
 	newItem.instance = BoostInfoUiInstance.AddBoost(specialBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
-	
 func ApplyInstinctSkill():
 	critStar += 15;
 	gain_super_meter_raw(MAX_SUPER_METER)
@@ -107,7 +104,6 @@ func ApplyInstinctSkill():
 		CritStartUi = BoostInfoUiInstance.AddBoost(critStarPng, newToolTip)
 	else:
 		CritStartUi.hint_tooltip = newToolTip
-
 func ToggleArmorMode():
 	armorOn = !armorOn
 	if armorOn:
@@ -123,32 +119,31 @@ func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease
 	var game = Global.current_game
 	
 	#emit_signal("zoom_changed")
-	if tween:
-		tween.kill()
+	if cameraTween:
+		cameraTween.kill()
 		set_camera_zoom(initial_value)
 		
-	tween = game.create_tween()
+	cameraTween = game.create_tween()
 	
-	tween.set_parallel(true)
-	tween.set_trans(transition_type)
-	tween.set_ease(ease_type)
+	cameraTween.set_parallel(true)
+	cameraTween.set_trans(transition_type)
+	cameraTween.set_ease(ease_type)
 	
-	tween.tween_property(game, "camera_zoom", initial_value, 0.0025)
+	cameraTween.tween_property(game, "camera_zoom", initial_value, 0.0025)
 	
-	tween.set_ease(ease_type)
-	tween.tween_property(game, "camera_zoom", end_value, duration)
+	cameraTween.set_ease(ease_type)
+	cameraTween.tween_property(game, "camera_zoom", end_value, duration)
 	
-	yield (tween, "finished")
+	yield (cameraTween, "finished")
 	if not is_instance_valid(self):
 		return 
-	tween.kill()
+	cameraTween.kill()
 	game.update_camera_limits()
-	
 func set_camera_zoom(value):
 	if is_ghost or ReplayManager.resimulating:
 		return 
-	if tween:
-		tween.kill()
+	if cameraTween:
+		cameraTween.kill()
 	var game = Global.current_game
 	game.camera_zoom = value
 	#emit_signal("zoom_changed")
@@ -165,7 +160,6 @@ func emote(message):
 	$EmoteLabel.modulate.a = 1.0
 	Emoting = true
 	EmoteTimer = 0
-
 func EmoteHandler():
 	if $EmoteLabel.bbcode_text != "":
 		Emoting = true
@@ -185,6 +179,28 @@ func EmoteHandler():
 			$EmoteLabel.bbcode_text = ""
 			Emoting = false
 			EmoteTimer = 0
+
+# UI hider from guide
+func UITweener():
+	if not is_ghost:
+		get_node("/root/Main/%HudLayer/HudLayer").modulate.a = lerp(get_node("/root/Main/%HudLayer/HudLayer").modulate.a, new_modulate_alpha, fade_speed)
+		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = lerp(get_node("/root/Main/%HudLayer/%GameUI").modulate.a, new_modulate_alpha, fade_speed)
+		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = lerp(get_node("/root/Main/%HudLayer/%BottomBar").modulate.a, new_modulate_alpha, fade_speed)
+func UIResetter():
+	if not is_ghost:
+		get_node("/root/Main/%HudLayer/HudLayer").modulate.a = lerp(get_node("/root/Main/%HudLayer/HudLayer").modulate.a, 1.0, fade_speed)
+		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = lerp(get_node("/root/Main/%HudLayer/%GameUI").modulate.a, 1.0, fade_speed)
+		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = lerp(get_node("/root/Main/%HudLayer/%BottomBar").modulate.a, 1.0, fade_speed)
+func quick_ui_hider():
+	if not is_ghost:
+		get_node("/root/Main/%HudLayer/HudLayer").modulate.a = 0.0
+		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = 0.0
+		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = 0.0
+func quick_ui_revealer():
+	if not is_ghost:
+		get_node("/root/Main/%HudLayer/HudLayer").modulate.a = 1.0
+		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = 1.0
+		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = 1.0
 
 # overriding to support damage reduction
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0"):

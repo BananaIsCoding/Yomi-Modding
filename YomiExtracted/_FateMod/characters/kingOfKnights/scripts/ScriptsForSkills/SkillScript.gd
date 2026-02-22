@@ -12,7 +12,6 @@ func _enter():
 	if host.is_ghost:
 		anim_name = ""
 	prevHitLag = host.opponent.hitlag_ticks
-	print(prevHitLag)
 	cutscene = true
 	
 	

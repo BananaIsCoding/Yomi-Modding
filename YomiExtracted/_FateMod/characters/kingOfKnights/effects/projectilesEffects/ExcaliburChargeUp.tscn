@@ -8,7 +8,10 @@ z_index = 1
 gravity = "0"
 ground_friction = "0"
 extra_state_variables = "immunity_susceptible"
-can_be_hit_by_melee = true
+immunity_susceptible = false
+deletes_other_projectiles = false
+movable = false
+apply_hitlag_when_hit_by_melee = false
 
 [node name="Sprite" parent="Flip" index="0"]
 position = Vector2( 0.1, -0.9 )
@@ -22,11 +25,13 @@ __meta__ = {
 y = -7
 width = 14
 height = 16
+can_draw = false
 
 [node name="Hurtbox" parent="." index="3"]
 y = -9
 width = 13
 height = 25
+can_draw = false
 
 [node name="Default" parent="StateMachine" index="0"]
 __meta__ = {
