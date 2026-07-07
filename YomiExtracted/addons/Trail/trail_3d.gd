@@ -4,7 +4,7 @@
 \
 \
 \
-"\nAuthor: Oussama BOUKHELF\nLicense: MIT\nVersion: 0.1\nEmail: o.boukhelf@gmail.com\nDescription: Advanced 2D/3D Trail system.\n"
+"\nAuthor: Oussama BOUKHELF\nLicense: MIT\nVersion: 0.1\nEmail: o.boukhelf@gmail.com\nDescription: Advanced 2D/3D Trail system.\n"
 
 extends ImmediateGeometry
 
@@ -43,7 +43,7 @@ var _points: = []
 class Point:
 	\
 \
-	"\n	Class for the 3D point that will be emmited when the object move.\n	"
+	"\n	Class for the 3D point that will be emmited when the object move.\n	"
 	var transform: = Transform()
 	var age: = 0.0
 
@@ -61,7 +61,7 @@ func add_point(transform: Transform) -> void :
 	\
 \
 \
-	"\n	Add a point to the list of points.\n	This function is called programmatically.\n	"
+	"\n	Add a point to the list of points.\n	This function is called programmatically.\n	"
 	var point = Point.new(transform, lifetime)
 	points.push_back(point)
 
@@ -70,7 +70,7 @@ func clear_points() -> void :
 	\
 \
 \
-	"\n	Cleat points list.\n	This function is called programmatically.\n	"
+	"\n	Cleat points list.\n	This function is called programmatically.\n	"
 	points.clear()
 
 
@@ -78,7 +78,7 @@ func _prepare_geometry(point_prev: Point, point: Point, half_width: float, facto
 	\
 \
 \
-	"\n	Generate and transform the trail geometry based on the path points that\n	the target object generated.\n	"
+	"\n	Generate and transform the trail geometry based on the path points that\n	the target object generated.\n	"
 	var normal: = Vector3()
 	
 	if alignment == "View":
@@ -118,7 +118,7 @@ func render(update: = false) -> void :
 	\
 \
 \
-	"\n	Render the points.\n	This function is called programmatically.\n	"
+	"\n	Render the points.\n	This function is called programmatically.\n	"
 	if update:
 		always_update = update
 	else:
@@ -128,7 +128,7 @@ func render(update: = false) -> void :
 func _render_realtime() -> void :
 	\
 \
-	"\n	Render the points every frame when \"emit\" is set to True.\n	"
+	"\n	Render the points every frame when \"emit\" is set to True.\n	"
 	var render_points = _points + _temp_segment + [_C]
 	_render_geometry(render_points)
 
@@ -137,7 +137,7 @@ func _render_geometry(source: Array) -> void :
 	\
 \
 \
-	"\n	Base function for rendering the generated geometry to the screen.\n	Renders the trail, and the wireframe if set in parameters.\n	"
+	"\n	Base function for rendering the generated geometry to the screen.\n	Renders the trail, and the wireframe if set in parameters.\n	"
 	var points_count = source.size()
 	if points_count < 2:
 		return
@@ -204,7 +204,7 @@ func _render_geometry(source: Array) -> void :
 func _update_points() -> void :
 	\
 \
-	"\n	Update ages of the points and remove extra ones.\n	"
+	"\n	Update ages of the points and remove extra ones.\n	"
 	var delta = get_process_delta_time()
 		
 	_A.update(delta, _points)
@@ -225,7 +225,7 @@ func smooth() -> void :
 	\
 \
 \
-	"\n	Smooth the given path.\n	This function is called programmatically.\n	"
+	"\n	Smooth the given path.\n	This function is called programmatically.\n	"
 	if points.size() < 3:
 		return
 
@@ -245,7 +245,7 @@ func _chaikin(A, B, C) -> Array:
 \
 \
 \
-	"\n	Chaikin’s smoothing Algorithm\n	https://www.cs.unc.edu/~dm/UNC/COMP258/LECTURES/Chaikins-Algorithm.pdf\n\n	Ps: I could have avoided a lot of trouble automating this function using FOR loop,\n	but I opted for a more optimized approach which maybe helpful when dealing with a \n	large amount of objects. \n	"
+	"\n	Chaikin’s smoothing Algorithm\n	https://www.cs.unc.edu/~dm/UNC/COMP258/LECTURES/Chaikins-Algorithm.pdf\n\n	Ps: I could have avoided a lot of trouble automating this function using FOR loop,\n	but I opted for a more optimized approach which maybe helpful when dealing with a \n	large amount of objects. \n	"
 	if smoothing_iterations == 0:
 		return [B]
 
@@ -301,7 +301,7 @@ func _chaikin(A, B, C) -> Array:
 func _emit(delta) -> void :
 	\
 \
-	"\n	Adding points to be rendered, called every frame when \"emit\" is set to True. \n	"
+	"\n	Adding points to be rendered, called every frame when \"emit\" is set to True. \n	"
 	var _transform: Transform = _target.global_transform
 
 	var point = Point.new(_transform, lifetime)

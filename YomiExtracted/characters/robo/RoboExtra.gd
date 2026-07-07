@@ -25,22 +25,43 @@ func get_extra():
 	current_dir = $"%FlyDir".get_dir()
 	return {
 		"fly_dir": $"%FlyDir".get_data() if $"%FlyDir".is_visible_in_tree() else fighter.flying_dir, 
-		"fly_enabled": $"%FlyEnabled".pressed, 
+		"fly_enabled": $"%FlyEnabled".pressed if $"%FlyEnabled".is_visible_in_tree() else (fighter.flying_dir != null), 
 		"armor_enabled": $"%ArmorEnabled".pressed, 
 		"nade_activated": $"%NadeActive".pressed and $"%NadeActive".visible, 
 		"pull_enabled": $"%PullEnabled".pressed and $"%PullEnabled".visible, 
-		"loic_dir": loic.get_data(), 
+		"loic_dir": loic.get_data() if loic.is_visible_in_tree() else {"x": fighter.loic_dir, "y": 0}, 
 		"drive_cancel": drive_pressed() if fighter.stance != "Drive" else not drive_pressed(), 
-		"bounce": bounce.get_data()
+		"bounce": bounce.get_data(), 
+		"honk": $"%HonkEnabled".pressed
 	}
 
 func drive_pressed():
 	return $"%DriveCancel".pressed and $"%DriveCancel".visible
 
+
+
+
+
+func drive_cancel_available():
+	return fighter.drive_cancel_possible(fighter.current_state(), true)
+
 func update_selected_move(move_state):
 	.update_selected_move(move_state)
 	$"%ArmorEnabled".disabled = false
 	$"%FlyEnabled".disabled = false
+
+	
+	
+	
+	
+	
+	
+	var current = fighter.current_state()
+	if current and current.get("IS_NEW_PARRY")\
+	and not current.parried and not current.autoguard\
+	and not current.push and fighter.combo_count <= 0:
+		$"%ArmorEnabled".set_pressed_no_signal(false)
+		$"%ArmorEnabled".disabled = true
 
 	if move_state is CharacterState:
 		if move_state.name != "Step" and (\
@@ -67,11 +88,19 @@ func update_selected_move(move_state):
 
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var fresh = move_state != null and (move_state != fighter.current_state() or selected_move_will_restart)
+	$"%DriveCancel".visible = fighter.drive_cancel_possible(move_state, false) if fresh else drive_cancel_available()
+	$"%DriveCancel".text = "Drive"
 	if move_state:
-		$"%DriveCancel".visible = false
-		if move_state.get_host_command("try_drive_cancel"):
-			$"%DriveCancel".visible = true
-
 		if move_state.is_grab and $"%ArmorEnabled".pressed:
 			can_feint = false
 
@@ -87,6 +116,7 @@ func show_options():
 	$"%ArmorEnabled".hide()
 	$"%NadeActive".hide()
 	$"%PullEnabled".hide()
+	$"%HonkEnabled".hide()
 	$"%FlyDir".set_dir("Neutral")
 	$"%FlyDir".facing = fighter.get_opponent_dir()
 	$"%FlyDir".init()
@@ -95,6 +125,8 @@ func show_options():
 		$"%FlyDir".set_dir(current_dir)
 
 	var nade = fighter.obj_from_name(fighter.grenade_object)
+	if fighter.stance == "Drive" and fighter.honking_cooldown <= 0:
+		$"%HonkEnabled".show()
 	if nade:
 		if not nade.active:
 			$"%NadeActive".show()
@@ -133,11 +165,18 @@ func reset():
 		$"%FlyEnabled".set_pressed_no_signal(true)
 	else:
 		$"%FlyEnabled".set_pressed_no_signal(false)
+	loic.set_dir_from_data({"x": fighter.loic_dir, "y": 0})
 	$"%ArmorEnabled".set_pressed_no_signal(false)
 	$"%NadeActive".set_pressed_no_signal(false)
 	$"%PullEnabled".set_pressed_no_signal(false)
+	$"%HonkEnabled".set_pressed_no_signal(false)
 	$"%DriveCancel".set_pressed_no_signal(fighter.stance == "Drive")
 	
+	
+	
+	$"%DriveCancel".visible = drive_cancel_available()
+	$"%DriveCancel".text = "Drive"
+
 	if fighter.current_state().get("disable_aerial_movement"):
 		$"%FlyEnabled".set_pressed_no_signal(false)
 		$"%FlyEnabled".disabled = true

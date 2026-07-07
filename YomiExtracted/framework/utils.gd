@@ -5,7 +5,7 @@ class_name Utils
 const cardinal_dirs = [Vector2(1, 0), Vector2(0, 1), Vector2( - 1, 0), Vector2(0, - 1)]
 const diagonal_dirs = [Vector2(1, 1), Vector2(1, - 1), Vector2( - 1, - 1), Vector2( - 1, 1)]
 const dirs = [Vector2(1, 0), Vector2(0, 1), Vector2( - 1, 0), Vector2(0, - 1), Vector2(1, 1), Vector2(1, - 1), Vector2( - 1, - 1), Vector2( - 1, 1)]
-const INVALID_FILE_CHARS = "<>:/\\|?*"
+const INVALID_FILE_CHARS = "<>:/\\|?*\""
 
 
 
@@ -99,6 +99,27 @@ static func int_max(n1: int, n2: int):
 
 static func starts_with(string: String, pattern: String):
 	return string.trim_prefix(pattern) != string
+
+
+
+
+
+
+static func normalize_timer_settings(match_data: Dictionary):
+	if not match_data.has("timer_mode"):
+		if match_data.get("chess_timer", false):
+			match_data["timer_mode"] = "chess"
+		else:
+			match_data["timer_mode"] = "default"
+	
+	
+	
+	
+	if match_data["timer_mode"] == "increment":
+		var inc = int(match_data.get("increment_per_turn", 0))
+		var starting = int(match_data.get("increment_starting_time", 0))
+		if starting < inc:
+			match_data["increment_starting_time"] = inc
 
 static func map(value, istart, istop, ostart, ostop):
 	return ostart + (ostop - ostart) * ((value - istart) / (istop - istart))

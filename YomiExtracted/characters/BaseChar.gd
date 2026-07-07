@@ -20,6 +20,19 @@ signal predicted(freeze_ticks)
 var MAX_HEALTH = 1500
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 const MAX_STALES = 15
 const MIN_STALE_MODIFIER = "0.2"
 
@@ -45,10 +58,19 @@ const PREDICTION_CORRECT_SUPER_GAIN = 30
 const INCORRECT_PREDICTION_LAG = 7
 
 const PARRY_CHIP_DIVISOR = 3
+const PARRY_CHIP_PROJECILE_DIVISOR = 4
 const PUSH_BLOCK_CHIP_MODIFIER = "0.33"
 const PARRY_KNOCKBACK_DIVISOR = "3"
 
 const PARRY_COMBO_SCALING = "0.85"
+var parry_combo_scaling = PARRY_COMBO_SCALING
+
+
+
+
+
+const BURST_PARRY_COMBO_SCALING = "0.85"
+var burst_parry_combo_scaling = BURST_PARRY_COMBO_SCALING
 const PARRY_GROUNDED_KNOCKBACK_DIVISOR = "1.5"
 const PUSH_BLOCK_FORCE = "-10"
 const PUSH_BLOCK_DIST = "220"
@@ -269,6 +291,15 @@ var got_blocked = false
 var block_used_air_movement = false
 
 var di_enabled = true
+
+
+
+var prorated_di = true
+
+
+
+
+var combo_proration_ready = false
 var turbo_mode = false
 var extremely_turbo_mode = false
 var infinite_resources = false
@@ -285,6 +316,13 @@ var hp: int = 0
 var super_meter: int = 0
 var supers_available: int = 0
 var combo_proration: int = 0
+
+
+
+
+
+
+var combo_proration_set = false
 var last_parry_tick = 0
 
 var parried_last_state = false
@@ -301,6 +339,7 @@ var refresh_prediction = false
 var burst_cancel_combo = false
 
 var parry_chip_divisor = PARRY_CHIP_DIVISOR
+var parry_chip_projectile_divisor = PARRY_CHIP_PROJECILE_DIVISOR
 var parry_knockback_divisor = PARRY_KNOCKBACK_DIVISOR
 
 var moved_forward = false
@@ -330,6 +369,7 @@ var wall_slams = 0
 
 var counterhit_this_turn = false
 var guard_broken_this_turn = false
+var gained_whiff_meter = false
 
 var last_pos = null
 var penalty = 0
@@ -389,12 +429,62 @@ var parried = false
 var busy = false
 
 var initiative = false
+
+
+
+
+var aura_particles: Array = []
+var aura_entries: Array = []
 var aura_particle = null
+var aura_particle_2 = null
+var aura_particle_3 = null
+
+
+
+var style_aura_got_hit_tick = - 100000
+var style_aura_projectile_spawn_tick = - 100000
+var style_aura_projectiles_active_tick = - 100000
+var style_aura_combo_active_tick = - 100000
+var style_aura_being_comboed_tick = - 100000
+var style_aura_melee_attack_tick = - 100000
+var style_aura_burst_tick = - 100000
+var style_aura_perfect_parry_tick = - 100000
+var style_aura_install_super_tick = - 100000
+var style_aura_taunt_tick = - 100000
+var style_aura_parry_combo_tick = - 100000
+
+
+
+
+var style_aura_manual_action_pending = false
+var style_aura_in_manual_state = false
+
+
+
+var style_aura_combo_started_tick = - 100000
+var style_aura_being_comboed_started_tick = - 100000
+var style_aura_melee_attack_started_tick = - 100000
+var style_aura_projectiles_first_active_tick = - 100000
+var style_aura_taunt_started_tick = - 100000
+var was_taunting_for_aura = false
+var style_aura_parry_combo_started_tick = - 100000
+var was_parry_combo_active_for_aura = false
+var was_combo_active_for_aura = false
+var was_being_comboed_for_aura = false
+var was_projectiles_active_for_aura = false
+
+
+
+var _aura_rising_edge_initialized = false
 
 var in_blockstring = false
 var brace_enabled = false
 
 var parry_combo = false
+
+
+
+var parried_burst_combo = false
 
 var feinting = false
 var clashing = false
@@ -439,6 +529,8 @@ func clash():
 	if feints < num_feints:
 		feints += 1
 	emit_signal("clashed")
+	if hooks:
+		hooks.clashed()
 
 func get_visual_hp():
 	var ratio = float(hp) / MAX_HEALTH
@@ -473,13 +565,450 @@ func init(pos = null):
 	refresh_air_movements()
 
 
+func _aura_attach_limb(settings) -> String:
+	if settings is Dictionary:
+		return settings.get("attach_limb", "")
+	return ""
+
+
+
+
+
+
+func _resolved_attach_limb(entry: Dictionary) -> String:
+	var name = Custom.resolve_attach_limb(entry)
+	var settings = entry.get("settings")
+	if get_facing_int() == - 1 and settings is Dictionary and settings.get("attach_consistent_side", true):
+		name = Custom.swap_left_right_limb(name)
+	return name
+
+func _aura_position_for_limb(limb_name: String) -> Vector2:
+	if limb_name == "":
+		return hurtbox_pos_float()
+	var pos = get_limb_local_pos(limb_name)
+	if pos != null:
+		return pos
+	return hurtbox_pos_float()
+
+
+
+
+
+
+
+func _aura_rotation_for_limb(limb_name: String) -> float:
+	if limb_name == "":
+		return 0.0
+	var dir = get_limb_sprite_parent_dir(limb_name)
+	if dir == null or dir.length_squared() < 0.0001:
+		return 0.0
+	return dir.angle()
+
+func _aura_flipped_for_limb(limb_name: String) -> bool:
+	if limb_name == "":
+		return false
+	var data = get_limb_data()
+	if not data.has(limb_name):
+		return false
+	var by_tex = data[limb_name]
+	var tex = get_current_limb_sprite_texture()
+	if tex == null or not by_tex.has(tex):
+		return false
+	var e = by_tex[tex]
+	if not (e is Dictionary):
+		return false
+	return e.get("flipped", false)
+
+
+
+
+func _aura_hidden_for_limb(limb_name: String) -> bool:
+	if limb_name == "":
+		return false
+	if not has_limb_entry_on_current_sprite(limb_name):
+		return true
+	return is_limb_absent_on_current_sprite(limb_name)
+
+
+
+
+
+func _update_style_aura_trackers():
+	
+	if combo_count > 0:
+		style_aura_combo_active_tick = current_tick
+	if is_instance_valid(opponent) and opponent.combo_count > 0:
+		style_aura_being_comboed_tick = current_tick
+	var state = current_state()
+	
+	
+	
+	
+	
+	
+	
+	if state and state.has_hitboxes and not state.is_grab:
+		style_aura_melee_attack_tick = current_tick
+	if get_active_projectiles().size() > 0:
+		style_aura_projectiles_active_tick = current_tick
+	if is_in_install_super():
+		style_aura_install_super_tick = current_tick
+	if state and state.name == "Taunt":
+		style_aura_taunt_tick = current_tick
+	
+	
+	if parry_combo or parried_burst_combo:
+		style_aura_parry_combo_tick = current_tick
+
+	
+	
+	
+	
+	
+	
+	var combo_now = combo_count > 0
+	var being_comboed_now = is_instance_valid(opponent) and opponent.combo_count > 0
+	var projectiles_now = get_active_projectiles().size() > 0
+	var taunting_now = state and state.name == "Taunt"
+	var parry_combo_now = parry_combo or parried_burst_combo
+	if _aura_rising_edge_initialized:
+		if combo_now and not was_combo_active_for_aura:
+			style_aura_combo_started_tick = current_tick
+		if being_comboed_now and not was_being_comboed_for_aura:
+			style_aura_being_comboed_started_tick = current_tick
+		if projectiles_now and not was_projectiles_active_for_aura:
+			style_aura_projectiles_first_active_tick = current_tick
+		if taunting_now and not was_taunting_for_aura:
+			style_aura_taunt_started_tick = current_tick
+		if parry_combo_now and not was_parry_combo_active_for_aura:
+			style_aura_parry_combo_started_tick = current_tick
+	else:
+		_aura_rising_edge_initialized = true
+	was_combo_active_for_aura = combo_now
+	was_being_comboed_for_aura = being_comboed_now
+	was_projectiles_active_for_aura = projectiles_now
+	was_taunting_for_aura = taunting_now
+	was_parry_combo_active_for_aura = parry_combo_now
+
+
+
+
+
+func _update_aura_threshold_trackers(particle, settings: Dictionary):
+	if not settings.get("dynamic_triggers", false):
+		return
+	var first_run = not particle._threshold_rising_edge_initialized
+	if MAX_HEALTH > 0:
+		var hp_pct = int((hp * 100) / MAX_HEALTH)
+		if settings.get("trigger_low_health", false):
+			var threshold = int(settings.get("trigger_low_health_threshold", 30))
+			var active_now = hp_pct <= threshold
+			if active_now:
+				particle.style_aura_low_health_tick = current_tick
+			if not first_run and active_now and not particle.was_low_health_active:
+				particle.style_aura_low_health_started_tick = current_tick
+			particle.was_low_health_active = active_now
+		if settings.get("trigger_high_health", false):
+			var threshold = int(settings.get("trigger_high_health_threshold", 70))
+			var active_now = hp_pct >= threshold
+			if active_now:
+				particle.style_aura_high_health_tick = current_tick
+			if not first_run and active_now and not particle.was_high_health_active:
+				particle.style_aura_high_health_started_tick = current_tick
+			particle.was_high_health_active = active_now
+	if settings.get("trigger_super_level", false):
+		var min_level = int(settings.get("trigger_super_level_min", 1))
+		var active_now = supers_available >= min_level
+		if active_now:
+			particle.style_aura_super_level_tick = current_tick
+		if not first_run and active_now and not particle.was_super_level_active:
+			particle.style_aura_super_level_started_tick = current_tick
+		particle.was_super_level_active = active_now
+	
+	
+	
+	if settings.get("trigger_action_type", false):
+		var pick = str(settings.get("trigger_action_type_value", "Attack"))
+		var state = current_state()
+		if state:
+			var matches = false
+			match pick:
+				"Movement":
+					
+					
+					
+					var sname = state.name if state else ""
+					var passive = sname == "Wait" or sname == "Fall" or sname == "Landing"
+					matches = state.type == CharacterState.ActionType.Movement and style_aura_in_manual_state and not passive
+				"Defense":
+					matches = state.type == CharacterState.ActionType.Defense
+				"Attack":
+					matches = state.type == CharacterState.ActionType.Attack
+				"Special":
+					matches = state.type == CharacterState.ActionType.Special or state.type == CharacterState.ActionType.Super
+				"Super":
+					matches = state.type == CharacterState.ActionType.Super
+			if matches:
+				particle.style_aura_action_type_tick = current_tick
+			if not first_run and matches and not particle.was_action_type_active:
+				particle.style_aura_action_type_started_tick = current_tick
+			particle.was_action_type_active = matches
+	particle._threshold_rising_edge_initialized = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+const _TRIGGER_ACTIVE_ROWS = [
+	{enable = "trigger_during_combo", linger = "trigger_during_combo_linger", default = 0, source = "self", tick = "style_aura_combo_active_tick"}, 
+	{enable = "trigger_while_being_comboed", linger = "trigger_while_being_comboed_linger", default = 0, source = "self", tick = "style_aura_being_comboed_tick"}, 
+	{enable = "trigger_during_melee_attacks", linger = "trigger_during_melee_attacks_linger", default = 0, source = "self", tick = "style_aura_melee_attack_tick"}, 
+	{enable = "trigger_low_health", linger = "trigger_low_health_linger", default = 0, source = "particle", tick = "style_aura_low_health_tick"}, 
+	{enable = "trigger_high_health", linger = "trigger_high_health_linger", default = 0, source = "particle", tick = "style_aura_high_health_tick"}, 
+	{enable = "trigger_super_level", linger = "trigger_super_level_linger", default = 0, source = "particle", tick = "style_aura_super_level_tick"}, 
+	{enable = "trigger_after_take_damage", linger = "trigger_after_take_damage_duration", default = 30, source = "self", tick = "style_aura_got_hit_tick"}, 
+	{enable = "trigger_after_opponent_take_damage", linger = "trigger_after_opponent_take_damage_duration", default = 30, source = "opponent", tick = "style_aura_got_hit_tick"}, 
+	{enable = "trigger_after_spawn_projectile", linger = "trigger_after_spawn_projectile_duration", default = 30, source = "self", tick = "style_aura_projectile_spawn_tick"}, 
+	{enable = "trigger_projectiles_active", linger = "trigger_projectiles_active_linger", default = 0, source = "self", tick = "style_aura_projectiles_active_tick"}, 
+	{enable = "trigger_after_perfect_parry", linger = "trigger_after_perfect_parry_duration", default = 30, source = "self", tick = "style_aura_perfect_parry_tick"}, 
+	{enable = "trigger_after_burst", linger = "trigger_after_burst_duration", default = 30, source = "self", tick = "style_aura_burst_tick"}, 
+	{enable = "trigger_action_type", linger = "trigger_action_type_linger", default = 0, source = "particle", tick = "style_aura_action_type_tick"}, 
+	{enable = "trigger_during_install", linger = "trigger_during_install_linger", default = 0, source = "self", tick = "style_aura_install_super_tick"}, 
+	{enable = "trigger_during_taunt", linger = "trigger_during_taunt_linger", default = 0, source = "self", tick = "style_aura_taunt_tick"}, 
+	{enable = "trigger_during_parry_combo", linger = "trigger_during_parry_combo_linger", default = 0, source = "self", tick = "style_aura_parry_combo_tick"}, 
+]
+
+func _aura_trigger_active(particle, settings: Dictionary) -> bool:
+	if not settings.get("dynamic_triggers", false):
+		return true
+	var any_active = false
+	for row in _TRIGGER_ACTIVE_ROWS:
+		if not settings.get(row.enable, false):
+			continue
+		var source
+		match row.source:
+			"self": source = self
+			"particle": source = particle
+			"opponent": source = opponent if is_instance_valid(opponent) else null
+		var tick = source.get(row.tick) if source else - 100000
+		if current_tick - tick <= int(settings.get(row.linger, row.default)):
+			any_active = true
+			break
+	if settings.get("triggers_inverted", false):
+		return not any_active
+	return any_active
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const _TRIGGER_EVENT_ROWS = [
+	{enable = "trigger_during_combo", name = "combo", source = "self", tick = "style_aura_combo_started_tick"}, 
+	{enable = "trigger_while_being_comboed", name = "being_comboed", source = "self", tick = "style_aura_being_comboed_started_tick"}, 
+	{enable = "trigger_during_melee_attacks", name = "melee_attack", source = "self", tick = "style_aura_melee_attack_started_tick"}, 
+	{enable = "trigger_low_health", name = "low_health", source = "particle", tick = "style_aura_low_health_started_tick"}, 
+	{enable = "trigger_high_health", name = "high_health", source = "particle", tick = "style_aura_high_health_started_tick"}, 
+	{enable = "trigger_super_level", name = "super_level", source = "particle", tick = "style_aura_super_level_started_tick"}, 
+	{enable = "trigger_after_take_damage", name = "got_hit", source = "self", tick = "style_aura_got_hit_tick"}, 
+	{enable = "trigger_after_opponent_take_damage", name = "opp_got_hit", source = "opponent", tick = "style_aura_got_hit_tick"}, 
+	{enable = "trigger_after_spawn_projectile", name = "projectile_spawn", source = "self", tick = "style_aura_projectile_spawn_tick"}, 
+	{enable = "trigger_projectiles_active", name = "projectiles_active", source = "self", tick = "style_aura_projectiles_first_active_tick"}, 
+	{enable = "trigger_after_perfect_parry", name = "perfect_parry", source = "self", tick = "style_aura_perfect_parry_tick"}, 
+	{enable = "trigger_after_burst", name = "burst", source = "self", tick = "style_aura_burst_tick"}, 
+	{enable = "trigger_during_taunt", name = "taunt", source = "self", tick = "style_aura_taunt_started_tick"}, 
+	{enable = "trigger_during_parry_combo", name = "parry_combo", source = "self", tick = "style_aura_parry_combo_started_tick"}, 
+	{enable = "trigger_action_type", name = "action_type", source = "particle", tick = "style_aura_action_type_started_tick"}, 
+]
+
+func _aura_trigger_event_fired(particle, settings: Dictionary) -> bool:
+	if not settings.get("dynamic_triggers", false):
+		return false
+	var EVENT_WINDOW = 1
+	for row in _TRIGGER_EVENT_ROWS:
+		if not settings.get(row.enable, false):
+			continue
+		var source
+		match row.source:
+			"self": source = self
+			"particle": source = particle
+			"opponent": source = opponent if is_instance_valid(opponent) else null
+		if source == null:
+			continue
+		var started_tick = source.get(row.tick)
+		if current_tick - started_tick > EVENT_WINDOW:
+			continue
+		
+		if particle._consumed_event_ticks.get(row.name, - 100000) == started_tick:
+			continue
+		particle._consumed_event_ticks[row.name] = started_tick
+		return true
+	return false
+
+
+
+
+
+func _apply_aura_state(particle, entry: Dictionary):
+	var settings = entry["settings"]
+	var resolved = _resolved_attach_limb(entry)
+	_update_aura_threshold_trackers(particle, settings)
+	var ko_gated = settings.get("disable_on_ko", true) and game_over
+	var should_emit = Global.enable_custom_particles and not ko_gated and _aura_trigger_active(particle, settings)
+	if resolved == "":
+		
+		particle.position = hurtbox_pos_float()
+		particle.attached_to_limb = false
+		particle.attached_rotation = 0.0
+		particle.attached_limb_flipped = false
+		particle.facing = get_facing_int()
+	else:
+		var hidden = _aura_hidden_for_limb(resolved)
+		if hidden:
+			
+			
+			
+			
+			should_emit = false
+		else:
+			particle.position = _aura_position_for_limb(resolved)
+			
+			
+			
+			
+			
+			
+			if entry.get("attach_limb", "") == "Eyes":
+				var pair_idx = entry.get("pair_index", 0)
+				var spacing = float(settings.get("attach_eye_spacing", 6))
+				var x_eye = - spacing * 0.5 if pair_idx == 0 else spacing * 0.5
+				var y_eye = float(settings.get("attach_eye_left_y_offset", 0)) if pair_idx == 0 else float(settings.get("attach_eye_right_y_offset", 0))
+				particle.default_x_offset = float(settings.get("x_offset", 0)) + x_eye
+				particle.default_y_offset = float(settings.get("y_offset", 0)) + y_eye
+			particle.attached_to_limb = true
+			if settings.get("attach_position_only", true):
+				particle.attached_rotation = 0.0
+				particle.attached_limb_flipped = false
+			else:
+				particle.attached_rotation = _aura_rotation_for_limb(resolved)
+				var flipped = _aura_flipped_for_limb(resolved)
+				if entry.get("pair_index", 0) == 1 and settings.get("attach_pair_mirror", true):
+					flipped = not flipped
+				particle.attached_limb_flipped = flipped
+				
+				
+				
+				
+				
+				
+				if entry.get("attach_limb", "") == "Eyes" and entry.get("pair_index", 0) == 1 and settings.get("attach_pair_mirror", true):
+					particle.default_x_offset = - particle.default_x_offset
+			
+			
+			
+			particle.facing = 1
+	
+	
+	
+	
+	
+	
+	
+	
+	var is_one_shot = settings.get("dynamic_triggers", false) and settings.get("dynamic_one_shot", false)
+	if is_one_shot:
+		
+		
+		
+		if _aura_trigger_event_fired(particle, settings):
+			particle.emit_burst()
+	else:
+		
+		
+		if particle.particles.one_shot:
+			particle.particles.one_shot = false
+		if particle.particles_flipped and particle.particles_flipped.one_shot:
+			particle.particles_flipped.one_shot = false
+		if not settings.get("dynamic_triggers", false):
+			
+			if particle.particles.emitting != should_emit:
+				particle.particles.emitting = should_emit
+		elif should_emit:
+			
+			
+			
+			if not particle._aura_emit_active:
+				particle._aura_emit_active = true
+				
+				
+				
+				
+				
+				
+				if particle.emission_faded():
+					
+					
+					
+					particle.restart_emission()
+				else:
+					particle.particles.emitting = true
+					if particle.particles_flipped and particle._last_mirror_active:
+						particle.particles_flipped.emitting = true
+		else:
+			
+			
+			
+			
+			
+			particle._has_been_hidden = true
+			if particle._aura_emit_active:
+				particle._aura_emit_active = false
+				particle.mark_emission_stopped()
+			if particle.particles.emitting:
+				particle.particles.emitting = false
+			if particle.particles_flipped and particle.particles_flipped.emitting:
+				particle.particles_flipped.emitting = false
+	
+	
+	
+	
+	if settings.get("hide_when_inactive", false):
+		particle.visible = should_emit
+	elif not particle.visible:
+		particle.visible = true
+
 func is_ivy():
-	if not Network.multiplayer_active and not SteamLobby.SPECTATING:
+	if SteamLobby.SPECTATING or not Network.multiplayer_active:
 		var username = Network.pid_to_username(id)
 		return username in SteamHustle.FX_NAMES
-	else:
-		if id in Network.network_ids:
-			return Network.network_ids[id] in SteamHustle.FX_IDS
+	if id in Network.network_ids:
+		return Network.network_ids[id] in SteamHustle.FX_IDS
 	return false
 
 
@@ -513,18 +1042,43 @@ func apply_style(style):
 		else:
 			sprite.get_material().set_shader_param("use_extra_color_1", false)
 			sprite.get_material().set_shader_param("use_extra_color_2", false)
-		if Global.enable_custom_particles and not is_ghost and style.show_aura and style.has("aura_settings"):
+		if Global.enable_custom_particles and not is_ghost:
 			reset_aura()
-			is_aura_active = true
-			aura_particle = preload("res://fx/CustomTrailParticle.tscn").instance()
-			particles.add_child(aura_particle)
-			aura_particle.load_settings(style.aura_settings)
-			aura_particle.position = hurtbox_pos_float()
-			aura_particle.start_emitting()
-			if aura_particle.show_behind_parent:
-				aura_particle.z_index = - 1
+			var expanded = Custom.expand_aura_entries(Custom.style_auras(style))
+			for entry in expanded:
+				is_aura_active = true
+				var particle = preload("res://fx/CustomTrailParticle.tscn").instance()
+				particles.add_child(particle)
+				particle.load_settings(entry["settings"])
+				
+				
+				_apply_aura_state(particle, entry)
+				
+				
+				
+				
+				
+				
+				particle.tick()
+				if particle.show_behind_parent:
+					particle.z_index = - 1
+				aura_particles.append(particle)
+				aura_entries.append(entry)
+			aura_particle = aura_particles[0] if aura_particles.size() > 0 else null
+			aura_particle_2 = aura_particles[1] if aura_particles.size() > 1 else null
+			aura_particle_3 = aura_particles[2] if aura_particles.size() > 2 else null
 		if style.has("hitspark"):
-			if Custom.hitsparks.has(style.hitspark):
+			if style.hitspark == "custom":
+				
+				
+				
+				custom_hitspark_config = style.get("custom_hitspark", null)
+				custom_hitspark = Custom.make_custom_hitspark_scene(custom_hitspark_config)
+				if custom_hitspark:
+					for hitbox in hitboxes:
+						hitbox.HIT_PARTICLE = custom_hitspark
+			elif Custom.hitsparks.has(style.hitspark):
+				custom_hitspark_config = null
 				custom_hitspark = load(Custom.hitsparks[style.hitspark])
 				for hitbox in hitboxes:
 					hitbox.HIT_PARTICLE = custom_hitspark
@@ -537,9 +1091,21 @@ func reset_color():
 
 func reset_aura():
 	is_aura_active = false
-	if is_instance_valid(aura_particle):
-		aura_particle.queue_free()
+	for p in aura_particles:
+		if is_instance_valid(p):
+			
+			
+			if p.get("active_burst_clones") != null:
+				for clone in p.active_burst_clones:
+					if is_instance_valid(clone):
+						clone.queue_free()
+				p.active_burst_clones.clear()
+			p.queue_free()
+	aura_particles.clear()
+	aura_entries.clear()
 	aura_particle = null
+	aura_particle_2 = null
+	aura_particle_3 = null
 
 func reset_style():
 	reset_color()
@@ -551,6 +1117,8 @@ func reapply_style():
 
 func start_super(freeze_ticks = 0):
 	emit_signal("super_started", freeze_ticks)
+	if hooks:
+		hooks.super_started(freeze_ticks)
 
 func change_stance_to(stance):
 	self.stance = stance
@@ -582,7 +1150,7 @@ func can_unlock_achievements():
 func _ready():
 	sprite.animation = "Wait"
 	state_variables.append_array(
-		["current_di", "current_nudge", "got_blocked", "super_meter_used_recently", "super_meter_grace_ticks", "parry_combo", "busy", "air_option_bar", "air_option_bar_max", "blocked_last_turn", "burst_cancel_combo", "in_blockstring", "knockback_taken_modifier", "block_used_air_movement", "last_parry_tick", "grounded_last_frame", "wakeup_throw_immunity_ticks", "sadness_immunity_ticks", "blockstun_ticks", "guard_broken_this_turn", "counterhit_this_turn", "feint_parriable", "brace_enabled", "turn_frames", "last_turn_block", "parry_chip_divisor", "parry_knockback_divisor", "feinted_last", "hit_out_of_brace", "brace_effect_applied_yet", "braced_attack", "blocked_hitbox_plus_frames", "visible_combo_count", "melee_attack_combo_scaling_applied", "projectile_hit_cancelling", "used_buffer", "max_di_scaling", "min_di_scaling", "last_input", "penalty_buffer", "buffered_input", "use_buffer", "was_my_turn", "combo_supers", "penalty_ticks", "can_nudge", "buffer_moved_backward", "wall_slams", "moved_backward", "moved_forward", "buffer_moved_forward", "used_air_dodge", "refresh_prediction", "clipping_wall", "has_hyper_armor", "hit_during_armor", "colliding_with_opponent", "clashing", "last_pos", "penalty", "hitstun_decay_combo_count", "touching_wall", "feinting", "feints", "lowest_tick", "is_color_active", "blocked_last_hit", "combo_proration", "state_changed", "nudge_amount", "initiative_effect", "reverse_state", "combo_moves_used", "parried_last_state", "initiative", "last_vel", "last_aerial_vel", "trail_hp", "always_perfect_parry", "parried", "got_parried", "parried_this_frame", "grounded_hits_taken", "on_the_ground", "hitlag_applied", "combo_damage", "burst_enabled", "di_enabled", "turbo_mode", "infinite_resources", "one_hit_ko", "dummy_interruptable", "air_movements_left", "super_meter", "supers_available", "parried", "parried_hitboxes", "burst_meter", "bursts_available"]
+		["current_di", "current_nudge", "got_blocked", "super_meter_used_recently", "super_meter_grace_ticks", "parry_combo", "parried_burst_combo", "busy", "air_option_bar", "air_option_bar_max", "blocked_last_turn", "burst_cancel_combo", "in_blockstring", "knockback_taken_modifier", "block_used_air_movement", "last_parry_tick", "grounded_last_frame", "wakeup_throw_immunity_ticks", "sadness_immunity_ticks", "blockstun_ticks", "guard_broken_this_turn", "counterhit_this_turn", "gained_whiff_meter", "feint_parriable", "brace_enabled", "turn_frames", "last_turn_block", "parry_chip_divisor", "parry_knockback_divisor", "feinted_last", "hit_out_of_brace", "brace_effect_applied_yet", "braced_attack", "blocked_hitbox_plus_frames", "visible_combo_count", "melee_attack_combo_scaling_applied", "projectile_hit_cancelling", "used_buffer", "max_di_scaling", "min_di_scaling", "last_input", "penalty_buffer", "buffered_input", "use_buffer", "was_my_turn", "combo_supers", "penalty_ticks", "can_nudge", "buffer_moved_backward", "wall_slams", "moved_backward", "moved_forward", "buffer_moved_forward", "used_air_dodge", "refresh_prediction", "clipping_wall", "has_hyper_armor", "hit_during_armor", "colliding_with_opponent", "clashing", "last_pos", "penalty", "hitstun_decay_combo_count", "touching_wall", "feinting", "feints", "lowest_tick", "is_color_active", "blocked_last_hit", "combo_proration", "combo_proration_set", "combo_proration_ready", "state_changed", "nudge_amount", "initiative_effect", "reverse_state", "combo_moves_used", "parried_last_state", "initiative", "last_vel", "last_aerial_vel", "trail_hp", "always_perfect_parry", "parried", "got_parried", "parried_this_frame", "grounded_hits_taken", "on_the_ground", "hitlag_applied", "combo_damage", "burst_enabled", "di_enabled", "turbo_mode", "infinite_resources", "one_hit_ko", "dummy_interruptable", "air_movements_left", "super_meter", "supers_available", "parried", "parried_hitboxes", "burst_meter", "bursts_available", "style_aura_got_hit_tick", "style_aura_projectile_spawn_tick", "style_aura_projectiles_active_tick", "style_aura_combo_active_tick", "style_aura_being_comboed_tick", "style_aura_melee_attack_tick", "style_aura_burst_tick", "style_aura_perfect_parry_tick", "style_aura_install_super_tick", "style_aura_taunt_tick", "style_aura_taunt_started_tick", "was_taunting_for_aura", "style_aura_parry_combo_tick", "style_aura_parry_combo_started_tick", "was_parry_combo_active_for_aura", "style_aura_manual_action_pending", "style_aura_in_manual_state"]
 	)
 	add_to_group("Fighter")
 	connect("got_hit", self, "on_got_hit")
@@ -600,13 +1168,16 @@ func on_state_changed(states_stack):
 	pass
 
 func on_got_hit():
-	pass
+	if hooks:
+		hooks.got_hit()
 
 func on_got_hit_by_fighter():
-	pass
+	if hooks:
+		hooks.got_hit_by_fighter()
 
 func on_got_hit_by_projectile():
-	pass
+	if hooks:
+		hooks.got_hit_by_projectile()
 
 func gain_burst_meter(amount = null):
 	if not burst_enabled:
@@ -664,6 +1235,7 @@ func use_burst():
 	bursts_available -= 1
 	if bursts_available < 0:
 		bursts_available = 0
+	style_aura_burst_tick = current_tick
 	refresh_air_movements()
 
 func use_burst_meter(amount):
@@ -726,6 +1298,7 @@ func gain_super_meter(amount, stale_amount = "1.0"):
 	gain_super_meter_raw(amount)
 
 func gain_super_meter_raw(amount):
+
 	super_meter += amount
 	var played_sound = false
 	while super_meter >= MAX_SUPER_METER:
@@ -756,7 +1329,8 @@ func drain_super_meter(amount):
 
 func spawn_object(projectile: PackedScene, pos_x: int, pos_y: int, relative = true, data = null, local = true):
 	var obj = .spawn_object(projectile, pos_x, pos_y, relative, data, local)
-
+	if obj is BaseProjectile:
+		style_aura_projectile_spawn_tick = current_tick
 
 	return obj
 
@@ -803,6 +1377,7 @@ func get_global_throw_pos():
 	return pos
 
 func emit_hit_by_signal(hitbox):
+	style_aura_got_hit_tick = current_tick
 	emit_signal("got_hit")
 	if hitbox == null:
 		return
@@ -830,6 +1405,8 @@ func reset_combo():
 	combo_damage = 0
 	hitstun_decay_combo_count = 0
 	combo_proration = 0
+	combo_proration_set = false
+	combo_proration_ready = false
 	combo_moves_used = {}
 	burst_cancel_combo = false
 	combo_supers = 0
@@ -840,6 +1417,7 @@ func reset_combo():
 	opponent.braced_attack = false
 	opponent.brace_effect_applied_yet = false
 	parry_combo = false
+	parried_burst_combo = false
 	if lose_one_air_option_in_neutral and num_air_movements == air_movements_left:
 			refresh_air_movements()
 
@@ -878,9 +1456,30 @@ func is_colliding_with_opponent():
 
 func on_state_started(state):
 	.on_state_started(state)
+	
+	
+	
+	
+	
+	if state and state.has_hitboxes and not state.is_grab:
+		style_aura_melee_attack_started_tick = current_tick
+	
+	
+	
+	
+	style_aura_in_manual_state = style_aura_manual_action_pending
+	style_aura_manual_action_pending = false
+
+
+
+
+
+func is_in_install_super():
+	return false
 
 
 func thrown_by(hitbox: ThrowBox):
+	style_aura_got_hit_tick = current_tick
 	emit_signal("got_hit")
 	state_machine._change_state("Grabbed")
 
@@ -913,11 +1512,6 @@ func _process(delta):
 
 	else:
 		self_modulate.a = 1.0
-	if is_instance_valid(aura_particle):
-		aura_particle.visible = Global.enable_custom_particles
-		aura_particle.position = hurtbox_pos_float()
-		aura_particle.facing = get_facing_int()
-	
 	if is_style_active:
 		if applied_style and not is_color_active and Global.enable_custom_colors:
 			apply_style(applied_style)
@@ -954,6 +1548,7 @@ func debug_text():
 			"state_interruptable": state_interruptable, 
 			"initiative": initiative, 
 			"busy_interrupt": busy_interrupt, 
+			"combo_stale": get_combo_stale(Utils.int_max(combo_count + (combo_proration if combo_count > 1 else 0) - 1, 0)), 
 		}
 	)
 
@@ -970,12 +1565,25 @@ func increment_opponent_combo(hitbox):
 	var host = objs_map[hitbox.host]
 	var projectile = not host.is_in_group("Fighter")
 	var will_scale = hitbox.scale_combo or opponent.combo_count == 0
+	if host.get("combo_scaling_disabled"):
+		will_scale = false
 	var old_count = opponent.combo_count
 
 	if hitbox.increment_combo:
-		opponent.incr_combo(will_scale, projectile, projectile and hitbox.scale_combo, hitbox.combo_scaling_amount)
-		if opponent.combo_count <= 1 and hitbox.scale_combo:
-			opponent.combo_proration = hitbox.damage_proration
+		opponent.incr_combo(will_scale, projectile, will_scale and projectile and hitbox.scale_combo, hitbox.combo_scaling_amount)
+		if hitbox.scale_combo:
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			if not opponent.combo_proration_set:
+				opponent.combo_proration = Utils.int_min(hitbox.damage_proration, MAX_STALES)
+				opponent.combo_proration_set = true
 			if opponent.combo_count == 1 and old_count == 0 and opponent.air_movements_left < opponent.num_air_movements:
 				opponent.air_movements_left += 1
 
@@ -1036,9 +1644,8 @@ func launched_by(hitbox):
 				will_block = not projectile
 
 	var scaling_offset = hitbox.combo_scaling_amount - 1
-	
+	var self_hit = _is_self_hit(hitbox)
 
-	
 
 	if will_launch:
 		var state
@@ -1054,10 +1661,18 @@ func launched_by(hitbox):
 					state = "HurtAerial"
 					grounded_hits_taken = 0
 
-		increment_opponent_combo(hitbox)
-		
-		
+		if not self_hit:
+			increment_opponent_combo(hitbox)
+
 		state_machine._change_state(state, {"hitbox": hitbox})
+		
+		
+		
+		
+		
+		
+		
+		was_my_turn = false
 		if hitbox.disable_collision:
 			colliding_with_opponent = false
 
@@ -1085,7 +1700,12 @@ func launched_by(hitbox):
 		damage = fixed.round(fixed.mul(str(damage), "0.5"))
 	if hitbox.counter_hit:
 		damage = fixed.round(fixed.mul(str(damage), COUNTER_HIT_DAMAGE_MODIFIER))
-	take_damage(damage, hitbox.minimum_damage, hitbox.meter_gain_modifier, scaling_offset)
+	
+	
+	
+	
+	
+	take_damage(damage, hitbox.minimum_damage, hitbox.meter_gain_modifier, scaling_offset, "1.0", self_hit, will_block)
 
 	if will_launch:
 		state_tick()
@@ -1132,6 +1752,8 @@ func counter_hitbox(hitbox):
 
 
 func hit_by(hitbox, force_hit = false):
+	if hooks:
+		hooks.hit_by(hitbox)
 	if parried:
 		return
 	if hitbox.name in parried_hitboxes:
@@ -1149,11 +1771,13 @@ func hit_by(hitbox, force_hit = false):
 		return thrown_by(hitbox)
 	if force_hit or ( not can_parry_hitbox(hitbox)):
 		ghost_got_hit = true
+		var self_hit = _is_self_hit(hitbox)
 		match hitbox.hitbox_type:
 			Hitbox.HitboxType.Normal:
 				launched_by(hitbox)
 			Hitbox.HitboxType.NoHitstun:
-				take_damage(hitbox.damage if opponent.combo_count <= 0 else hitbox.damage_in_combo)
+				var combo_ref = self if self_hit else opponent
+				take_damage(hitbox.damage if combo_ref.combo_count <= 0 else hitbox.damage_in_combo, 0, "1.0", 0, "1.0", self_hit)
 			Hitbox.HitboxType.Burst:
 				launched_by(hitbox)
 			Hitbox.HitboxType.Flip:
@@ -1164,17 +1788,19 @@ func hit_by(hitbox, force_hit = false):
 					hitbox.facing = get_facing()
 					pass
 				emit_signal("got_hit")
-				increment_opponent_combo(hitbox)
-				take_damage(hitbox.get_damage(), hitbox.minimum_damage, hitbox.meter_gain_modifier)
+				if not self_hit:
+					increment_opponent_combo(hitbox)
+				take_damage(hitbox.get_damage(), hitbox.minimum_damage, hitbox.meter_gain_modifier, 0, "1.0", self_hit)
 			Hitbox.HitboxType.ThrowHit:
 				emit_signal("got_hit")
 				apply_hitlag(hitbox)
 				opponent.apply_hitlag(hitbox)
 				if hitbox.rumble:
 					rumble(hitbox.screenshake_amount, hitbox.victim_hitlag if hitbox.screenshake_frames < 0 else hitbox.screenshake_frames)
-				take_damage(hitbox.get_damage(), hitbox.minimum_damage, hitbox.meter_gain_modifier)
+				take_damage(hitbox.get_damage(), hitbox.minimum_damage, hitbox.meter_gain_modifier, 0, "1.0", self_hit)
 
-				opponent.incr_combo(hitbox.scale_combo, false, false, hitbox.combo_scaling_amount)
+				if not self_hit:
+					opponent.incr_combo(hitbox.scale_combo, false, false, hitbox.combo_scaling_amount)
 			Hitbox.HitboxType.OffensiveBurst:
 				opponent.hitstun_decay_combo_count = 0
 
@@ -1230,8 +1856,14 @@ func block_hitbox(hitbox, force_parry = false, force_block = false, ignore_guard
 		if perfect_parry:
 			parried_last_state = true
 			last_parry_tick = current_tick
+			style_aura_perfect_parry_tick = current_tick
 			if not hitbox.block_punishable and not projectile:
-				parry_combo = true
+				
+				
+				if hitbox.hitbox_type == Hitbox.HitboxType.Burst:
+					parried_burst_combo = true
+				else:
+					parry_combo = true
 		else:
 			blocked_last_hit = true
 			blocked_last_turn = true
@@ -1281,7 +1913,7 @@ func block_hitbox(hitbox, force_parry = false, force_block = false, ignore_guard
 		if not perfect_parry:
 			last_turn_block = true
 
-			var chip = fixed.round(fixed.mul(str(hitbox.damage / parry_chip_divisor), hitbox.chip_damage_modifier))
+			var chip = fixed.round(fixed.mul(str(hitbox.damage / (parry_chip_divisor if not projectile else parry_chip_projectile_divisor)), hitbox.chip_damage_modifier))
 			var push_block = current_state().get("push")
 			if push_block:
 				chip = fixed.round(fixed.mul(str(chip), PUSH_BLOCK_CHIP_MODIFIER))
@@ -1307,8 +1939,8 @@ func block_hitbox(hitbox, force_parry = false, force_block = false, ignore_guard
 				current_state().endless = opponent.current_state().endless
 				current_state().iasa_at = opponent.current_state().iasa_at
 				current_state().current_tick = 0
-				opponent.current_state().was_blocked = true
 				opponent.on_attack_blocked()
+				opponent.current_state().character_state_was_blocked = true
 				opponent.blockstun_ticks += block_hitlag
 				opponent.add_penalty( - 10)
 				if opponent.feints < opponent.num_feints:
@@ -1418,7 +2050,8 @@ func block_hitbox(hitbox, force_parry = false, force_block = false, ignore_guard
 			on_parried()
 
 func on_parried():
-	pass
+	if hooks:
+		hooks.parried()
 
 func projectile_free_cancel():
 
@@ -1463,9 +2096,12 @@ func get_penalty_damage_modifier():
 		return "1.0"
 	return fixed.add("1.0", fixed.mul(fixed.div(str(penalty - min_penalty_for_damage), str(MAX_PENALTY - min_penalty_for_damage)), "0.5"))
 
-func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0"):
+func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
 	
-	if opponent.combo_count == 0:
+	
+	var combo_ref = self if self_hit else opponent
+
+	if combo_ref.combo_count == 0:
 		trail_hp = get_visual_hp()
 
 	if damage == 0:
@@ -1473,22 +2109,31 @@ func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_sc
 
 	gain_burst_meter(damage / BURST_ON_DAMAGE_AMOUNT)
 	var damage_score = Utils.int_max(damage, minimum)
-	damage = Utils.int_max(combo_stale_damage(damage, combo_scaling_offset), 1)
+	damage = Utils.int_max(combo_stale_damage(damage, combo_scaling_offset, self_hit), 1)
 	damage = Utils.int_max(damage, minimum)
 	damage = Utils.int_max(guts_stale_damage(damage), 1)
-	if opponent.parry_combo:
-		damage = fixed.round(fixed.mul(str(damage), PARRY_COMBO_SCALING))
+	if not self_hit:
+		
+		
+		if opponent.parried_burst_combo:
+			damage = fixed.round(fixed.mul(str(damage), burst_parry_combo_scaling))
+		elif opponent.parry_combo:
+			damage = fixed.round(fixed.mul(str(damage), parry_combo_scaling))
 	damage = fixed.round(fixed.mul(str(damage), get_penalty_damage_modifier()))
 	var meter_gain = fixed.round(fixed.mul(str(damage / DAMAGE_SUPER_GAIN_DIVISOR), meter_gain_modifier))
 
-	opponent.gain_super_meter(meter_gain)
+	if not self_hit:
+		opponent.gain_super_meter(meter_gain)
 	gain_super_meter(fixed.round(fixed.mul(str(damage / DAMAGE_TAKEN_SUPER_GAIN_DIVISOR), damage_taken_meter_gain_modifier)))
 	damage = fixed.round(fixed.mul(fixed.mul(str(damage), damage_taken_modifier), global_damage_modifier))
-	opponent.combo_damage += damage
+	if not self_hit:
+		opponent.combo_damage += damage
 	hp -= damage
 	add_penalty( - 25)
 	if hp < 0:
 		hp = 0
+	if hp <= 0 and (has_armor() or has_autoblock_armor() or armor_block):
+		hp = 1
 	if current_state().get("IS_NEW_PARRY") and current_state().push:
 		if hp <= 0:
 			hp = 1
@@ -1512,9 +2157,17 @@ func guts_stale_damage(damage: int):
 	damage = fixed.round(fixed.mul(str(damage), guts))
 	return damage
 
-func combo_stale_damage(damage: int, combo_scaling_offset = 0):
-	var staling = get_combo_stale(Utils.int_max(opponent.combo_count - combo_scaling_offset + (opponent.combo_proration if opponent.combo_count > 1 else 0) - 1, 0))
+func combo_stale_damage(damage: int, combo_scaling_offset = 0, self_hit = false):
+	var src = self if self_hit else opponent
+	var staling = get_combo_stale(Utils.int_max(src.combo_count - combo_scaling_offset + (src.combo_proration if src.combo_count > 1 else 0) - 1, 0))
 	return fixed.round(fixed.mul(str(damage), staling))
+
+
+func _is_self_hit(hitbox) -> bool:
+	if not objs_map.has(hitbox.host):
+		return false
+	var attacker = objs_map[hitbox.host].get_fighter()
+	return attacker == self
 
 func can_perfect_parry():
 	return true
@@ -1546,11 +2199,30 @@ func release_opponent():
 func on_attack_blocked():
 	pass
 
-func get_di_scaling(brace = true):
+func get_di_scaling(brace = true, lookahead = 0):
 	if brace and hit_out_of_brace:
 		return "0"
 	var max_extra_di = fixed.sub(max_di_scaling, min_di_scaling)
-	var scaling_amount = str(Utils.int_clamp(opponent.combo_count, 0, di_combo_limit))
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var effective_count = opponent.combo_count + lookahead
+	var di_count = effective_count
+	
+	
+	
+	if prorated_di and effective_count > 1 and opponent.combo_proration > 0\
+	and opponent.combo_proration_ready:
+		di_count += Utils.int_min(opponent.combo_proration, MAX_STALES)
+	var scaling_amount = str(Utils.int_clamp(di_count, 0, di_combo_limit))
 	var scaling_ratio = fixed.div(scaling_amount, str(di_combo_limit))
 	var total_extra_scaling = fixed.mul(max_extra_di, scaling_ratio)
 	var total = fixed.add(min_di_scaling, total_extra_scaling)
@@ -1752,6 +2424,8 @@ func process_continue():
 	return false
 
 func tick_before():
+	if hooks:
+		hooks.tick_before()
 	if queued_action == "Forfeit":
 		if forfeit:
 			queued_action = "Continue"
@@ -1774,6 +2448,12 @@ func tick_before():
 			queued_data = input["data"]
 			queued_extra = input["extra"]
 
+			
+			
+			
+			
+			
+			style_aura_manual_action_pending = true
 			if queued_action == "Forfeit":
 
 				forfeit = true
@@ -1828,6 +2508,7 @@ func tick_before():
 		turn_start_effects()
 		counterhit_this_turn = false
 		guard_broken_this_turn = false
+		gained_whiff_meter = false
 		if current_state() is CounterAttack:
 			current_state().bracing = false
 		if brace_effect_applied_yet:
@@ -1932,6 +2613,8 @@ func can_be_thrown():
 	return .can_be_thrown() and blockstun_ticks <= 0
 
 func tick():
+	if hooks:
+		hooks.pre_tick()
 	if is_ghost and not is_grounded():
 		ghost_was_in_air = true
 	if hitlag_ticks > 0:
@@ -2031,6 +2714,13 @@ func tick():
 		buffer_moved_forward = true
 	if current_state().backdash_iasa:
 		buffer_moved_backward = true
+	
+	
+	_update_style_aura_trackers()
+	for i in range(aura_particles.size()):
+		var p = aura_particles[i]
+		if is_instance_valid(p):
+			_apply_aura_state(p, aura_entries[i])
 	for particle in particles.get_children():
 		particle.tick()
 	any_available_actions = true
@@ -2101,6 +2791,8 @@ func tick():
 		if "emotes" in ReplayManager.frames:
 			if current_tick in ReplayManager.frames.emotes[id]:
 				emote(ReplayManager.frames.emotes[id][current_tick])
+	if hooks:
+		hooks.post_tick()
 
 func passive_sadness_gain():
 	var dir = fixed.sign(last_vel.x)
@@ -2217,6 +2909,7 @@ func on_state_interruptable(state = null):
 	else:
 		dummy_interruptable = true
 		refresh_prediction = true
+	_arm_prorated_di()
 
 func on_state_hit_cancellable(projectile = false, state = null):
 	if not dummy:
@@ -2224,6 +2917,17 @@ func on_state_hit_cancellable(projectile = false, state = null):
 		refresh_prediction = true
 		if projectile:
 			projectile_hit_cancelling = true
+	_arm_prorated_di()
+
+
+
+
+
+func _arm_prorated_di():
+	if combo_count > 0 and combo_proration > 0:
+		combo_proration_ready = true
+	elif opponent and opponent.combo_count > 0 and opponent.combo_proration > 0:
+		opponent.combo_proration_ready = true
 
 func get_fighter():
 	return self
@@ -2238,6 +2942,9 @@ func on_action_selected(action, data, extra):
 	queued_extra = extra
 	state_interruptable = false
 	state_hit_cancellable = false
+	
+	
+	style_aura_manual_action_pending = true
 	if action == "Undo":
 		emit_signal("undo")
 
@@ -2247,6 +2954,8 @@ func on_action_selected(action, data, extra):
 		if not state.is_usable():
 			action = "Forfeit"
 	emit_signal("action_selected", action, data, extra)
+	if hooks:
+		hooks.action_selected(action, data, extra)
 
 
 func drain_air_option_bar(amount):

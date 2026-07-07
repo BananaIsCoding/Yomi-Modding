@@ -11,9 +11,17 @@ export (PackedScene) var airAttackParticle
 export (PackedScene) var groundAttackParticle
 export (int) var cutsceneTPF
 
-
+func _enter_tree():
+	._enter_tree()	
+	
 func _enter():
 	$"%ExcaliburChargeUp".start_emitting()
+	var playerPos = host.get_pos()
+	var opponentPos =  host.opponent.get_pos()
+	
+	print(Global.current_game.camera.global_position)
+	print(Global.current_game.camera.position)
+	$"%ExcaliburCutscene".position = Global.current_game.camera.position - Vector2(playerPos.x, playerPos.y)
 	
 func _exit():
 	
@@ -54,7 +62,6 @@ func _tick():
 			$"%ExcaliburCutscene".frame += 1
 
 func spawn_exported_projectile():
-	print(host.name)
 	if projectile_scene:
 		var pos = get_projectile_pos()
 		projectile = host.spawn_object(projectile_scene, pos.x, pos.y, true, get_projectile_data(), projectile_local_pos)

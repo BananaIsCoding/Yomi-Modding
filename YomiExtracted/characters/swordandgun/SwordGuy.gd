@@ -16,7 +16,7 @@ const IS_COWBOY = true
 const RIFT_PROJECTILE = preload("res://characters/swordandgun/projectiles/AfterImageExplosion.tscn")
 const AFTER_IMAGE_MAX_DIST = "410"
 const MAX_AIR_SPEED_1KCUTS = "12"
-const CUTS_METER_DRAIN_1 = 2
+const CUTS_METER_DRAIN_1 = 3
 const DRIFT_JUMP_TIMER = 4
 const CUTS_METER_DRAIN_2 = 3
 const DRIFT_SUPERS = 1
@@ -28,6 +28,11 @@ var lasso_projectile = null
 var after_image_object = null
 var used_aerial_h_slash = false
 var used_aerial_l_slice = false
+
+
+
+
+var lightning_slice_ground_bounced = false
 var has_gun = true
 var gun_projectile = null
 var consecutive_shots = 1
@@ -42,6 +47,12 @@ var stance_teleport_x = 0
 var detonating = false
 var shifting = false
 var temporal_round = null
+
+
+
+
+
+var active_time_bullets: int = 0
 var drift_effect = false
 var fatal_cut_move_dir_x = 0
 var fatal_cut_move_dir_y = 0
@@ -63,6 +74,14 @@ var shifted_this_turn = false
 func _ready():
 	shooting_arm.set_material(sprite.get_material())
 	material = null
+
+
+
+
+func get_current_limb_sprite_node_for(limb_name: String):
+	if (limb_name == "LeftHand" or limb_name == "RightHand") and shooting_arm and shooting_arm.visible:
+		return shooting_arm
+	return .get_current_limb_sprite_node_for(limb_name)
 
 func init(pos = null):
 	.init(pos)
@@ -95,6 +114,35 @@ func shift():
 			set_vel(get_vel().x, "0")
 		if combo_count <= 0:
 			add_penalty(15)
+
+func gain_super_meter(amount, stale_amount = "1.0"):
+	
+	
+	if obj_from_name(cut_projectile) and (combo_count > 0 or opponent.combo_count > 0):
+		amount = fixed.round(fixed.mul(str(amount), "0.5"))
+	
+	
+	
+	
+	
+	if obj_from_name(temporal_round) or _has_active_time_bullet():
+		amount = fixed.round(fixed.mul(str(amount), "0.75"))
+
+	.gain_super_meter(amount, stale_amount)
+
+func _has_active_time_bullet() -> bool:
+	return active_time_bullets > 0
+
+
+
+
+func _register_time_bullet():
+	active_time_bullets += 1
+
+func _unregister_time_bullet():
+	active_time_bullets -= 1
+	if active_time_bullets < 0:
+		active_time_bullets = 0
 
 func start_1k_cuts_buff():
 	max_air_speed = MAX_AIR_SPEED_1KCUTS
@@ -159,11 +207,13 @@ func tick():
 		var proj = objs_map[cut_projectile]
 		if proj == null or proj.disabled:
 			cut_projectile = null
-
-
-
-
-
+		else:
+			if current_tick % 2 == 0:
+				use_super_meter(CUTS_METER_DRAIN_1)
+			else:
+				use_super_meter(CUTS_METER_DRAIN_2)
+			if super_meter == 0 and supers_available == 0:
+				proj.disable()
 	if is_grounded():
 		if used_aerial_h_slash:
 			used_aerial_h_slash = false
@@ -282,17 +332,83 @@ func use_bullet():
 func has_1k_cuts():
 	return cut_projectile != null
 
+func is_in_install_super():
+	return has_1k_cuts()
+
 func on_attack_blocked():
 	if not bullet_cancelling:
 		return
 	if not has_gun:
+		return
+	
+	
+	
+	
+	var state = current_state()
+	if state.get("draw_cancel_on_block") and state.current_tick < state.draw_cancel_on_block_min_tick:
 		return
 	if bullets_left > 0:
 		bullet_cancelling = false
 		can_update_sprite = false
 		change_state("Brandish")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+func draw_cancel_possible(state, respect_tick = true):
+	if state == null or not can_bullet_cancel():
+		return false
+	if state.has_method("can_draw_cancel") and not state.can_draw_cancel():
+		return false
+	
+	
+	
+	
+	var shoot_after_tick = state.current_tick + 2 if respect_tick else - 1
+	
+	
+	var block_after_tick = state.current_tick + 1 if respect_tick else - 1
+	
+	
+	
+	var block_floor = Utils.int_max(block_after_tick, state.draw_cancel_on_block_min_tick)
+	var shoot = state.has_upcoming_host_command("try_shoot", shoot_after_tick)
+	var blk = state.get("draw_cancel_on_block") and state.has_active_or_upcoming_hitbox(block_floor)
+	if shoot:
+		return true
+	return blk
+
+
+
+
+func draw_cancel_on_block_only(state, respect_tick = true):
+	if state == null:
+		return false
+	
+	
+	var shoot_after_tick = state.current_tick + 2 if respect_tick else - 1
+	if state.has_upcoming_host_command("try_shoot", shoot_after_tick):
+		return false
+	return bool(state.get("draw_cancel_on_block"))
+
 func on_got_hit():
+	.on_got_hit()
 	if cut_projectile:
 		if objs_map.has(cut_projectile):
 			objs_map[cut_projectile].disable()
@@ -316,6 +432,11 @@ func on_state_started(state):
 
 func should_free_cancel_allow_grounded_and_aerial_states():
 	return current_state().state_name != "QuickerDraw" and .should_free_cancel_allow_grounded_and_aerial_states()
+
+func reset_combo():
+	.reset_combo()
+	
+	lightning_slice_ground_bounced = false
 
 func _draw():
 	._draw()

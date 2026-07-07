@@ -1,5 +1,9 @@
 extends CanvasLayer
 
+
+
+const CHAR_SHADER = preload("res://characters/BaseChar.gdshader")
+
 var game: Game
 
 onready var p1_healthbar = $"%P1HealthBar"
@@ -68,6 +72,15 @@ var p2_effects = []
 var p1_prev_super = 0
 var p2_prev_super = 0
 
+
+
+
+
+
+var _last_published_hp_pct: = - 1
+var _last_hp_publish_msec: = 0
+const HP_PUBLISH_MIN_INTERVAL_MS = 3000
+
 func _ready():
 	hide()
 	$"%WinLabel".hide()
@@ -113,7 +126,6 @@ func init(game):
 	p1_air_movement_label.text = p1.air_option_bar_name
 	p2_air_movement_label.text = p2.air_option_bar_name
 	
-	
 
 	if Network.multiplayer_active and not SteamLobby.SPECTATING:
 		$"%P1Username".text = Network.pid_to_username(1)
@@ -124,12 +136,94 @@ func init(game):
 		if game.match_data.user_data.has("p2"):
 			$"%P2Username".text = game.match_data.user_data.p2
 	
+	
+	
+	
+	
+	$"%P1Username".remove_color_override("font_color")
+	$"%P2Username".remove_color_override("font_color")
+	
+	
+	
+	
+	var ud = game.match_data.get("user_data", {}) if game.match_data else {}
+	var p1_color = null
+	var p2_color = null
+	if ud.get("p1_color") is String and ud.p1_color != "":
+		p1_color = Color("#" + ud.p1_color)
+	if ud.get("p2_color") is String and ud.p2_color != "":
+		p2_color = Color("#" + ud.p2_color)
+	if p1_color == null or p2_color == null:
+		if Network.steam:
+			var p1_steam = SteamLobby.steam_id_for_match_side(1)
+			var p2_steam = SteamLobby.steam_id_for_match_side(2)
+			if p1_color == null and p1_steam != 0:
+				p1_color = Global.get_remote_name_color(p1_steam)
+			if p2_color == null and p2_steam != 0:
+				p2_color = Global.get_remote_name_color(p2_steam)
+		elif not SteamLobby.SPECTATING and Global.has_name_color():
+			
+			
+			
+			var my_side = Network.player_id if Network.multiplayer_active else 1
+			if my_side == 1 and p1_color == null:
+				p1_color = Global.get_name_color()
+			elif my_side == 2 and p2_color == null:
+				p2_color = Global.get_name_color()
+	if p1_color != null:
+		$"%P1Username".add_color_override("font_color", p1_color)
+	if p2_color != null:
+		$"%P2Username".add_color_override("font_color", p2_color)
+	
 	$"%P1ShowStyle".set_pressed_no_signal(true)
 	$"%P2ShowStyle".set_pressed_no_signal(true)
-	
-	
+	refresh_portrait_style(1)
+	refresh_portrait_style(2)
+
+
 	game.connect("game_won", self, "on_game_won")
 	pass
+
+
+
+
+
+
+
+
+func refresh_portrait_style(player_id):
+	if not is_instance_valid(game):
+		return
+	var portrait = $"%P1Portrait" if player_id == 1 else $"%P2Portrait"
+	var show_btn = $"%P1ShowStyle" if player_id == 1 else $"%P2ShowStyle"
+	var player = game.get_player(player_id)
+	if player == null:
+		return
+	
+	
+	portrait.modulate = Color.white
+	portrait.self_modulate = Color.white
+	var mat = portrait.material
+	if not (mat is ShaderMaterial):
+		mat = ShaderMaterial.new()
+		mat.shader = CHAR_SHADER
+		portrait.material = mat
+	
+	
+	mat.set_shader_param("extra_replace_color_1", player.extra_color_1)
+	mat.set_shader_param("extra_replace_color_2", player.extra_color_2)
+	mat.set_shader_param("use_outline", false)
+	mat.set_shader_param("use_extra_color_1", false)
+	mat.set_shader_param("use_extra_color_2", false)
+	var style = player.applied_style
+	if show_btn.pressed and style != null and Global.enable_custom_colors:
+		mat.set_shader_param("color", Color.white)
+		Custom.apply_style_to_material(style, mat, true)
+	else:
+		
+		
+		
+		mat.set_shader_param("color", player.P1_COLOR if player_id == 1 else player.P2_COLOR)
 
 func healthbar_armor_effect(player, healthbar: TextureProgress, no_armor_image, armor_image, projectile_armor_image):
 	if player.has_armor():
@@ -153,6 +247,40 @@ func on_game_won(winner):
 func super_speed_scale(ticks):
 	return 15 * (15 / float(ticks))
 
+
+
+
+
+
+func _publish_local_hp_pct():
+	if not Network.steam or not Network.multiplayer_active or SteamLobby.SPECTATING:
+		return
+	if SteamLobby.LOBBY_ID == 0:
+		return
+	
+	
+	
+	if is_instance_valid(game) and game.is_in_replay:
+		return
+	var local_fighter
+	if Network.player_id == 1:
+		local_fighter = p1
+	elif Network.player_id == 2:
+		local_fighter = p2
+	else:
+		return
+	if local_fighter == null or local_fighter.MAX_HEALTH <= 0:
+		return
+	var pct = int(max(local_fighter.get_visual_hp(), 0) * 100 / local_fighter.MAX_HEALTH)
+	if pct == _last_published_hp_pct:
+		return
+	var now = OS.get_ticks_msec()
+	if now - _last_hp_publish_msec < HP_PUBLISH_MIN_INTERVAL_MS:
+		return
+	_last_published_hp_pct = pct
+	_last_hp_publish_msec = now
+	Steam.setLobbyMemberData(SteamLobby.LOBBY_ID, "hp_pct", str(pct))
+
 func drain_health_trail(trail, drain_value):
 	if drain_value < trail.value:
 		trail.value -= TRAIL_DRAIN_RATE
@@ -160,6 +288,37 @@ func drain_health_trail(trail, drain_value):
 			trail.value = drain_value
 	else:
 		trail.value = drain_value
+
+
+
+
+
+func _sync_next_turn_info(p1_ghost, p2_ghost):
+	if Global.show_next_turn_info_hud:
+		_mirror_next_turn_label($"%P1NextTurnReadyLabel", p1_ghost.actionable_label)
+		_mirror_next_turn_label($"%P1NextTurnHitLabel", p1_ghost.hit_frame_label)
+		_mirror_next_turn_label($"%P2NextTurnReadyLabel", p2_ghost.actionable_label)
+		_mirror_next_turn_label($"%P2NextTurnHitLabel", p2_ghost.hit_frame_label)
+	else:
+		$"%P1NextTurnReadyLabel".text = ""
+		$"%P1NextTurnHitLabel".text = ""
+		$"%P2NextTurnReadyLabel".text = ""
+		$"%P2NextTurnHitLabel".text = ""
+	
+	
+	
+	var char_alpha = 1.0 if Global.show_next_turn_info_on_chars else 0.0
+	p1_ghost.actionable_label.modulate.a = char_alpha
+	p1_ghost.hit_frame_label.modulate.a = char_alpha
+	p2_ghost.actionable_label.modulate.a = char_alpha
+	p2_ghost.hit_frame_label.modulate.a = char_alpha
+
+func _mirror_next_turn_label(hud_label, char_label):
+	if not is_instance_valid(char_label) or not char_label.visible:
+		hud_label.text = ""
+		return
+	
+	hud_label.text = char_label.text.replace("\n", " ")
 
 func _physics_process(_delta):
 	if is_instance_valid(game):
@@ -169,6 +328,7 @@ func _physics_process(_delta):
 
 		p1_healthbar.value = max(p1.get_visual_hp(), 0)
 		p2_healthbar.value = max(p2.get_visual_hp(), 0)
+		_publish_local_hp_pct()
 		if p2_prev_super < p2.supers_available:
 			p2_super_meter.value = p2.MAX_SUPER_METER
 			active_p2_super_meter.value = p2.MAX_SUPER_METER
@@ -198,6 +358,7 @@ func _physics_process(_delta):
 			p2_ghost_health_bar.value = max(p2_ghost.get_visual_hp(), 0)
 			drain_health_trail(p1_ghost_health_bar_trail, p1_ghost.trail_hp)
 			drain_health_trail(p2_ghost_health_bar_trail, p2_ghost.trail_hp)
+			_sync_next_turn_info(p1_ghost, p2_ghost)
 		else:
 			p1_ghost_health_bar.value = 0
 			p2_ghost_health_bar.value = 0
@@ -205,6 +366,12 @@ func _physics_process(_delta):
 			p2_ghost_health_bar_trail.value = 0
 			p1_ghost_health_bar.visible = false
 			p2_ghost_health_bar.visible = false
+			
+			
+			$"%P1NextTurnReadyLabel".text = ""
+			$"%P1NextTurnHitLabel".text = ""
+			$"%P2NextTurnReadyLabel".text = ""
+			$"%P2NextTurnHitLabel".text = ""
 
 		healthbar_armor_effect(p1, p1_healthbar, preload("res://ui/healthbar3.png"), preload("res://ui/healthbar3_armor.png"), preload("res://ui/healthbar_projectile_armor.png"))
 		healthbar_armor_effect(p1, p1_ghost_health_bar, preload("res://ui/healthbar3.png"), preload("res://ui/healthbar3_armor.png"), preload("res://ui/healthbar_projectile_armor.png"))
@@ -294,26 +461,31 @@ func _physics_process(_delta):
 			$"%P1SuperTexture".set_material(p1.get_material())
 			$"%P2SuperTexture".set_material(p2.get_material())
 			var screen_center = game.get_viewport_rect().size / 2
+			var cam_screen_center = game.camera.get_camera_screen_center()
+			var zoom = game.camera.zoom.x
 			var p1_texture: Texture = p1.sprite.frames.get_frame(p1.sprite.animation, p1.sprite.frame)
 			var p2_texture: Texture = p2.sprite.frames.get_frame(p2.sprite.animation, p2.sprite.frame)
-			var p1_offset
-			var p2_offset
-			if p1_texture:
-				$"%P1SuperTexture".rect_size = p1_texture.get_size() / game.camera.zoom.x
-				p1_offset = (p1_texture.get_size() / 2) / game.camera.zoom.x
-			if p2_texture:
-				$"%P2SuperTexture".rect_size = p2_texture.get_size() / game.camera.zoom.x
-				p2_offset = (p2_texture.get_size() / 2) / game.camera.zoom.x
 			$"%P1SuperTexture".texture = p1_texture
 			$"%P1SuperTexture".flip_h = p1.flip.scale.x < 0
 			$"%P2SuperTexture".texture = p2_texture
 			$"%P2SuperTexture".flip_h = p2.flip.scale.x < 0
-			if p1_offset:
-				$"%P1SuperTexture".rect_global_position = game.get_screen_position(1) + screen_center - p1_offset - (Vector2(0, 4) / game.camera.zoom.x)
-				p1_super_effects_node.position = p1_offset
-			if p2_offset:
-				$"%P2SuperTexture".rect_global_position = game.get_screen_position(2) + screen_center - p2_offset - (Vector2(0, 4) / game.camera.zoom.x)
-				p2_super_effects_node.position = p2_offset
+			
+			
+			
+			if p1_texture:
+				var p1_size = p1_texture.get_size() / zoom
+				var p1_world = p1.position + Vector2(p1.sprite.offset.x * sign(p1.flip.scale.x), p1.sprite.offset.y)
+				var p1_screen = (p1_world - cam_screen_center) / zoom + screen_center
+				$"%P1SuperTexture".rect_size = p1_size
+				$"%P1SuperTexture".rect_global_position = p1_screen - p1_size / 2
+				p1_super_effects_node.position = p1_size / 2
+			if p2_texture:
+				var p2_size = p2_texture.get_size() / zoom
+				var p2_world = p2.position + Vector2(p2.sprite.offset.x * sign(p2.flip.scale.x), p2.sprite.offset.y)
+				var p2_screen = (p2_world - cam_screen_center) / zoom + screen_center
+				$"%P2SuperTexture".rect_size = p2_size
+				$"%P2SuperTexture".rect_global_position = p2_screen - p2_size / 2
+				p2_super_effects_node.position = p2_size / 2
 		else:
 			super_started = false
 			$"%P1SuperTexture".visible = false
@@ -322,3 +494,14 @@ func _physics_process(_delta):
 				effect.queue_free()
 				p1_effects = []
 				p2_effects = []
+				
+		if $"%P1HealthBar".is_visible_in_tree():
+			var viz = Global.show_health_count
+			var p1c = $"%P1HpCount"
+			var p2c = $"%P2HpCount"
+			p1c.visible = viz
+			p2c.visible = viz
+			if viz:
+				p1c.text = str(p1.hp * 10) + " / " + str(p1.MAX_HEALTH * 10)
+				p2c.text = str(p2.hp * 10) + " / " + str(p2.MAX_HEALTH * 10)
+			

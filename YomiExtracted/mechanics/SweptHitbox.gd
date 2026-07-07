@@ -69,20 +69,24 @@ func _seg_seg_intersect(start: int, delta: int, padding: int, n1: int, n2: int):
 	return near_time
 
 func _seg_rect_intersect(box: CollisionBox):
+	return _swept_aabb_intersect(x_facing() + pos_x, y + pos_y, to_x_facing(), to_y, box.get_aabb())
+
+
+
+
+
+
+
+
+
+
+func _swept_aabb_intersect(start_x: int, start_y: int, delta_x: int, delta_y: int, aabb: Dictionary):
 	var fixed: FixedMath = host.fixed
-
-	var start_x: int = x_facing() + pos_x
-	var start_y: int = y + pos_y
-
-	var aabb = box.get_aabb()
 
 	
 	if start_x > aabb.x1 and start_x < aabb.x2 and start_y > aabb.y1 and start_y < aabb.y2:
 		return "0"
 
-	var delta_x: int = to_x_facing()
-	var delta_y: int = to_y
-	
 	var zero_y = delta_y == 0
 	var zero_x = delta_x == 0
 	
@@ -99,7 +103,7 @@ func _seg_rect_intersect(box: CollisionBox):
 				return null
 	
 	elif zero_x and zero_y:
-		return _aabb_intersect(aabb)
+		return _aabb_intersect_at(start_x, start_y, aabb)
 
 	var near_x: int
 	var far_x: int
@@ -124,23 +128,54 @@ func _seg_rect_intersect(box: CollisionBox):
 
 	var near_time_x: String = fixed.mul(str(near_x - start_x), recip_x)
 	var far_time_y: String = fixed.mul(str(far_y - start_y), recip_y)
-	
+
 	if fixed.gt(near_time_x, far_time_y):
 		return null
-	
+
 	var near_time_y: String = fixed.mul(str(near_y - start_y), recip_y)
 	var far_time_x: String = fixed.mul(str(far_x - start_x), recip_x)
-	
+
 	if fixed.gt(near_time_y, far_time_x):
 		return null
-	
+
 	var near_time: String = _fixed_max(near_time_x, near_time_y)
 	var far_time: String = _fixed_min(far_time_x, far_time_y)
-	
+
 	if fixed.ge(near_time, "1") or fixed.le(far_time, "0"):
 		return null
-		
+
 	return near_time
+
+
+
+
+
+func _aabb_intersect_at(start_x: int, start_y: int, aabb: Dictionary):
+	var x1 = start_x - width
+	var x2 = start_x + width
+	var y1 = start_y - height
+	var y2 = start_y + height
+	if x1 > aabb.x2 or x2 < aabb.x1 or y1 > aabb.y2 or y2 < aabb.y1:
+		return null
+	return "0"
+
+
+
+
+
+
+func _seg_swept_intersect(other):
+	var other_start_x = other.x_facing() + other.pos_x
+	var other_start_y = other.y + other.pos_y
+	var aabb = {
+		"x1": other_start_x - other.width, 
+		"x2": other_start_x + other.width, 
+		"y1": other_start_y - other.height, 
+		"y2": other_start_y + other.height, 
+	}
+	var delta_x = to_x_facing() - other.to_x_facing()
+	var delta_y = to_y - other.to_y
+	return _swept_aabb_intersect(x_facing() + pos_x, y + pos_y, delta_x, delta_y, aabb)
 	
 func _seg_rect_test(box: CollisionBox):
 	return _seg_rect_intersect(box) != null
@@ -197,6 +232,8 @@ func get_aabb():
 func overlaps(box: CollisionBox):
 	if box.width == 0 and box.height == 0:
 		return false
+	if box.get("IS_SWEPT"):
+		return _seg_swept_intersect(box) != null
 	return _seg_rect_test(box)
 
 func box_draw():
@@ -273,25 +310,34 @@ func get_center_float():
 	return Vector2(x_facing() + pos_x, y + pos_y)
 
 func get_overlap_center_float(box: CollisionBox):
-	var start = Vector2(x_facing() + pos_x, y + pos_y)
 	
-	var delta = Vector2(to_x_facing(), to_y)
-
-	var box_center = box.get_center_float()
 	
-	var box_center_delta = box_center - start
 	
-	var approx_center_delta = box_center_delta.project(delta)
 	
-	var l = approx_center_delta.distance_to(box_center_delta)
 	
-	var avg_size = float(width + height) / 2.0
-	var avg_size_vec = Vector2(avg_size, avg_size)
-	var box_avg_size = float(box.width + box.height) / 2.0
-	var box_avg_size_vec = Vector2(box_avg_size, box_avg_size)
-
-	var approx_center_dist = max(avg_size - ((avg_size - (l - box_avg_size)) / 2.0), 0)
-	
-	approx_center_delta = approx_center_delta.move_toward(box_center_delta, approx_center_dist)
-	
-	return start + approx_center_delta
+	var near_time
+	if box.get("IS_SWEPT"):
+		near_time = _seg_swept_intersect(box)
+	else:
+		near_time = _seg_rect_intersect(box)
+	if near_time == null:
+		
+		
+		return get_center_float()
+	var t = float(near_time)
+	var self_cx = float(x_facing() + pos_x) + float(to_x_facing()) * t
+	var self_cy = float(y + pos_y) + float(to_y) * t
+	var box_cx: float
+	var box_cy: float
+	if box.get("IS_SWEPT"):
+		box_cx = float(box.x_facing() + box.pos_x) + float(box.to_x_facing()) * t
+		box_cy = float(box.y + box.pos_y) + float(box.to_y) * t
+	else:
+		var bc = box.get_center_float()
+		box_cx = bc.x
+		box_cy = bc.y
+	var ox1 = max(self_cx - width, box_cx - box.width)
+	var oy1 = max(self_cy - height, box_cy - box.height)
+	var ox2 = min(self_cx + width, box_cx + box.width)
+	var oy2 = min(self_cy + height, box_cy + box.height)
+	return Vector2((ox1 + ox2) / 2.0, (oy1 + oy2) / 2.0)

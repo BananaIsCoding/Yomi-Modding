@@ -8,10 +8,6 @@ func _tick():
 	if current_tick in [1, 9, 17]:
 		host.set_facing(host.creator.get_facing_int())
 	host.total_ticks += 1
-	if host.total_ticks > LIFETIME:
-		disable()
-
-
 
 
 func disable():

@@ -53,6 +53,10 @@ var obj_name: String
 
 var custom_hitspark
 
+
+
+var custom_hitspark_config = null
+
 var data
 var obj_data
 var current_tick = 0
@@ -94,8 +98,9 @@ var default_hurtbox = {
 
 var projectile_invulnerable = false
 var throw_invulnerable = false
+var roll_projectile_invulnerable = false
 
-var state_variables = ["id", "grounded_attack_immune", "game_tick", "match_seed", "aerial_attack_immune", "last_object_hit", "can_update_sprite", "last_hit_frame", "damages_own_team", "ceiling_height", "has_ceiling", "has_projectile_parry_window", "always_parriable", "use_platforms", "gravity", "ground_friction", "air_friction", "max_ground_speed", "max_air_speed", "max_fall_speed", "projectile_invulnerable", "gravity_enabled", "default_hurtbox", "throw_invulnerable", "creator_name", "name", "obj_name", "stage_width", "hitlag_ticks", "combo_count", "invulnerable", "current_tick", "disabled", "state_interruptable", "state_hit_cancellable"]
+var state_variables = ["id", "roll_projectile_invulnerable", "grounded_attack_immune", "game_tick", "match_seed", "aerial_attack_immune", "last_object_hit", "can_update_sprite", "last_hit_frame", "damages_own_team", "ceiling_height", "has_ceiling", "has_projectile_parry_window", "always_parriable", "use_platforms", "gravity", "ground_friction", "air_friction", "max_ground_speed", "max_air_speed", "max_fall_speed", "projectile_invulnerable", "gravity_enabled", "default_hurtbox", "throw_invulnerable", "creator_name", "name", "obj_name", "stage_width", "hitlag_ticks", "combo_count", "invulnerable", "current_tick", "disabled", "state_interruptable", "state_hit_cancellable"]
 
 var hitboxes = []
 
@@ -119,6 +124,10 @@ var logic_rng_static: BetterRng
 var logic_rng_seed = 0
 var logic_rng_static_seed = 0
 
+
+var hooks = null
+var _init_hook_fired = false
+
 func _enter_tree():
 	if obj_name:
 		name = obj_name
@@ -141,6 +150,17 @@ func _ready():
 	for sound in $Sounds.get_children():
 		sounds[sound.name] = sound
 		sound.bus = "Fx"
+	
+	
+	
+	
+	
+	
+	if ModLoader.active:
+		hooks = get_node_or_null("Hooks")
+		if hooks:
+			hooks.host = self
+			hooks.ready()
 
 func global_hitlag(amount, force = false):
 
@@ -152,6 +172,8 @@ func global_hitlag(amount, force = false):
 	if amount > 0 and amount < 1:
 		amount == 1
 	emit_signal("global_hitlag", round(amount))
+	if hooks:
+		hooks.global_hitlag(round(amount))
 
 func play_sound(sound_name):
 	if is_ghost or ReplayManager.resimulating:
@@ -169,6 +191,8 @@ func refresh_hitboxes():
 	for hitbox in hitboxes:
 		hitbox.hit_objects = []
 		emit_signal("hitbox_refreshed", hitbox.name)
+	if hooks:
+		hooks.refresh_hitboxes()
 
 func setup_hitbox_names():
 	for i in range(hitboxes.size()):
@@ -219,6 +243,25 @@ func init(pos = null):
 	if creator and creator.custom_hitspark:
 		for hitbox in hitboxes:
 			hitbox.HIT_PARTICLE = creator.custom_hitspark
+		
+		
+		
+		
+		
+		custom_hitspark_config = creator.custom_hitspark_config
+	
+	
+	
+	
+	
+
+
+
+
+func _fire_init_hook():
+	if hooks and not _init_hook_fired:
+		_init_hook_fired = true
+		hooks.init()
 
 func reset_hurtbox():
 	hurtbox.x = default_hurtbox.x
@@ -241,12 +284,17 @@ func set_rumble(amount):
 	pass
 
 func change_state(state_name, state_data = null, enter = true, exit = true):
+	if hooks:
+		hooks.change_state(state_name, state_data)
 	state_machine._change_state(state_name, state_data, enter, exit)
 
 func obj_from_name(name):
 	if name is String and name in objs_map:
 		var obj = objs_map[name]
-		if obj != null:
+		
+		
+		
+		if is_instance_valid(obj):
 			if not obj.disabled:
 				return obj
 
@@ -256,6 +304,8 @@ func _on_hit_something(obj, hitbox):
 			return
 	last_object_hit = obj.obj_name
 	last_hit_frame = current_tick
+	if hooks:
+		hooks.hit_something(obj, hitbox)
 
 func hit_fighter_last():
 	return last_object_hit == get_opponent().obj_name or last_object_hit == get_fighter().obj_name
@@ -263,9 +313,18 @@ func hit_fighter_last():
 func can_be_thrown():
 	return not throw_invulnerable
 
+func _copy_state_variables_to(o: BaseObj):
+	for variable in state_variables:
+		var v = get(variable)
+		if v is Array or v is Dictionary:
+			o.set(variable, v.duplicate(true))
+		else:
+			o.set(variable, v)
+
 func copy_to(o: BaseObj):
 	if not initialized:
 		init()
+		_fire_init_hook()
 	var current_state = current_state()
 
 	o.state_machine.starting_state = current_state.name
@@ -274,14 +333,10 @@ func copy_to(o: BaseObj):
 	if creator_name and o.objs_map.has(creator_name):
 		o.creator = o.objs_map[creator_name]
 	o.init()
+	o._fire_init_hook()
 	o.update_data()
-	for variable in state_variables:
-		var v = get(variable)
-		if v is Array or v is Dictionary:
-			o.set(variable, v.duplicate(true))
-		else:
-			o.set(variable, get(variable))
-	
+	_copy_state_variables_to(o)
+
 
 
 	o.change_state(current_state.state_name, current_state.data)
@@ -322,13 +377,36 @@ func copy_to(o: BaseObj):
 			hitboxes[i].copy_to(o.hitboxes[i])
 			o.hitboxes[i].update_position(pos.x, pos.y)
 	hurtbox.copy_to(o.hurtbox)
+	
+	
+	
 	o.projectile_invulnerable = projectile_invulnerable
 	o.invulnerable = invulnerable
+	o.throw_invulnerable = throw_invulnerable
+	o.aerial_attack_immune = aerial_attack_immune
+	o.grounded_attack_immune = grounded_attack_immune
 
 	chara.copy_to(o.chara)
 	o.set_facing(get_facing_int())
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var live_object_data = get_data().object_data
+	o.set_vel(live_object_data.vel_x, live_object_data.vel_y)
+	
+	
+	
+	
+	
+	
+	o.update_data()
 
 	for state in state_machine.queued_states:
 		o.state_machine.queued_states.append(state)
@@ -346,7 +424,9 @@ func copy_to(o: BaseObj):
 	o.logic_rng.state = logic_rng.state
 	o.logic_rng_static.state = logic_rng_static.state
 
-	
+	if hooks:
+		hooks.copy_to(o)
+
 func get_frames():
 	return ReplayManager.frames[id]
 
@@ -447,13 +527,11 @@ func obj_distance(obj):
 func spawn_object(projectile: PackedScene, pos_x: int, pos_y: int, relative = true, data = null, local = true):
 	var obj = projectile.instance()
 	obj.creator_name = obj_name
-
 	obj.objs_map = objs_map
 	obj.is_ghost = is_ghost
-	obj.obj_name = str(objs_map.size() + 1)
+	
 	obj.spawn_data = data
 	obj.stage_width = stage_width
-
 	var pos = get_pos()
 	if local:
 		obj.set_pos(pos.x + pos_x * (get_facing_int() if relative else 1), pos.y + pos_y)
@@ -461,10 +539,9 @@ func spawn_object(projectile: PackedScene, pos_x: int, pos_y: int, relative = tr
 		obj.set_pos(pos_x, pos_y)
 	obj.set_facing(get_facing_int())
 	obj.id = id
-	
-
-	obj.obj_name = str(objs_map.size() + 1)
 	emit_signal("object_spawned", obj)
+	if hooks:
+		hooks.spawn_object(obj)
 	return obj
 
 func get_hurtbox_center():
@@ -496,6 +573,12 @@ func start_projectile_invulnerability():
 
 func end_projectile_invulnerability():
 	projectile_invulnerable = false
+
+func start_roll_projectile_invulnerability():
+	roll_projectile_invulnerable = true
+	
+func end_roll_projectile_invulnerability():
+	roll_projectile_invulnerable = false
 
 func start_aerial_attack_invulnerability():
 	aerial_attack_immune = true
@@ -534,23 +617,55 @@ func spawn_particle_effect_relative(particle_effect: PackedScene, pos: Vector2 =
 
 func _spawn_particle_effect(particle_effect: PackedScene, pos: Vector2, dir = Vector2.RIGHT):
 	var obj = particle_effect.instance()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var cfg = self.get("custom_hitspark_config")
+	var is_custom_hitspark = cfg != null and "custom_config" in obj
+	if is_custom_hitspark:
+		obj.set("custom_config", cfg)
 	add_child(obj)
 	obj.tick()
 	var facing = - 1 if dir.x < 0 else 1
 	obj.position = pos
-	if facing < 0:
+	
+	
+	
+	
+	var flip_only = is_custom_hitspark and facing < 0 and cfg is Dictionary and cfg.get("flip_when_facing_left", false)
+	if facing < 0 and not flip_only:
 		obj.rotation = (dir * Vector2( - 1, - 1)).angle()
 	else:
 		obj.rotation = dir.angle()
 	obj.scale.x = facing
+	
+	
+	
+	
+	for child in obj.get_children():
+		if child is CustomTrailParticle:
+			child.facing = facing
 	remove_child(obj)
 
 	emit_signal("particle_effect_spawned", obj)
+	if hooks:
+		hooks.spawn_particle(obj)
 	return obj
 
 func get_camera():
-	var cameras = get_tree().get_nodes_in_group("Camera")
-	return cameras[0] if cameras.size() > 0 and not is_ghost else null
+	if is_ghost:
+		return null
+	for cam in get_tree().get_nodes_in_group("Camera"):
+		if is_instance_valid(cam) and is_instance_valid(cam.get_parent()) and not cam.get_parent().is_ghost:
+			return cam
+	return null
 
 func grab_camera_focus():
 	var camera = get_camera()
@@ -673,8 +788,15 @@ func apply_force_relative(x, y):
 func apply_forces():
 	chara.apply_forces()
 	
+	
+	
+
+
+
 func apply_forces_no_limit():
 	chara.apply_forces_no_limit()
+
+
 
 func set_gravity_modifier(modifier: String):
 	chara.set_gravity_modifier(modifier)
@@ -711,7 +833,7 @@ func limit_x_speed(limit):
 func limit_y_speed(limit):
 	var vel = get_vel()
 	if fixed.gt(fixed.abs(vel.y), limit):
-		var new_vel = fixed.vec_mul(str(fixed.sign(vel.y)), limit)
+		var new_vel = fixed.mul(str(fixed.sign(vel.y)), limit)
 		set_vel(vel.x, new_vel)
 
 func get_object_dir(obj):
@@ -793,12 +915,20 @@ func update_grounded():
 func on_got_parried():
 	hitlag_ticks += current_state().extra_parry_hitlag
 	current_state().on_got_perfect_parried()
+	if hooks:
+		hooks.on_got_parried()
 
 func get_state(state_name):
 	return state_machine.get_state(state_name)
 
 func on_got_blocked():
-	current_state().on_got_blocked()
+	var state = current_state()
+	state.on_got_blocked()
+	state.was_blocked = true
+	if state.get("number_of_hits_blocked") != null:
+		state.number_of_hits_blocked += 1
+	if hooks:
+		hooks.on_got_blocked()
 
 func on_got_parried_by(who):
 	current_state().on_got_perfect_parried_by(who)
@@ -822,6 +952,8 @@ func deactivate_hitboxes():
 
 func hit_by(hitbox: Hitbox):
 	emit_signal("got_hit")
+	if hooks:
+		hooks.hit_by(hitbox)
 
 func get_pos():
 	return {
@@ -837,7 +969,6 @@ func xy_to_dir(x, y, mul = "1.0", div = "100.0"):
 func on_state_started(state):
 	state_interruptable = false
 	state_hit_cancellable = false
-	pass
 
 func on_state_ended(state):
 	pass
@@ -861,6 +992,8 @@ func distance_to(object: BaseObj):
 	return fixed.vec_dist(str(p1.x), str(p1.y), str(p2.x), str(p2.y))
 
 func tick():
+	if hooks:
+		hooks.pre_tick()
 	if current_tick <= 0:
 		update_data()
 
@@ -868,15 +1001,18 @@ func tick():
 		hitlag_ticks -= 1
 	else:
 		normal_tick()
-	
+
 
 
 	can_update_sprite = true
 	update_collision_boxes()
 	update_data()
+	if hooks:
+		hooks.post_tick()
 
 func on_hit_ceiling():
-	pass
+	if hooks:
+		hooks.on_hit_ceiling()
 
 func state_tick():
 	var once = true
@@ -889,6 +1025,207 @@ func state_tick():
 
 func get_states():
 	return state_machine.states_map.values()
+
+
+
+
+func get_limb_data() -> Dictionary:
+	if has_meta("limb_data"):
+		var d = get_meta("limb_data")
+		if d is Dictionary:
+			return d
+	return {}
+
+
+
+
+
+
+func get_current_limb_sprite_node():
+	return sprite
+
+func get_current_limb_sprite_texture():
+	var s = get_current_limb_sprite_node()
+	if s and s is AnimatedSprite and s.frames and s.frames.has_animation(s.animation):
+		return s.frames.get_frame(s.animation, s.frame)
+	return null
+
+
+
+
+
+func get_current_limb_sprite_node_for(_limb_name: String):
+	return get_current_limb_sprite_node()
+
+func get_current_limb_sprite_texture_for(limb_name: String):
+	var s = get_current_limb_sprite_node_for(limb_name)
+	if s and s is AnimatedSprite and s.frames and s.frames.has_animation(s.animation):
+		return s.frames.get_frame(s.animation, s.frame)
+	return null
+
+func get_limb_entry(limb_name: String):
+	var data = get_limb_data()
+	if not data.has(limb_name):
+		return null
+	var by_tex = data[limb_name]
+	var tex = get_current_limb_sprite_texture_for(limb_name)
+	if tex and by_tex.has(tex):
+		var e = by_tex[tex]
+		
+		
+		if e is Dictionary and e.get("absent", false):
+			return null
+		return e
+	return null
+
+
+
+
+func is_limb_absent_on_current_sprite(limb_name: String) -> bool:
+	var data = get_limb_data()
+	if not data.has(limb_name):
+		return false
+	var by_tex = data[limb_name]
+	var tex = get_current_limb_sprite_texture_for(limb_name)
+	if tex and by_tex.has(tex):
+		var e = by_tex[tex]
+		return e is Dictionary and e.get("absent", false)
+	return false
+
+
+
+
+func get_limb_pos(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	var s = get_current_limb_sprite_node_for(limb_name)
+	var tex = get_current_limb_sprite_texture_for(limb_name)
+	if s == null or tex == null:
+		return Vector2(e.x, e.y)
+	return _limb_pixel_to_world(s, tex, Vector2(e.x, e.y))
+
+
+
+func get_limb_dir(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	var s = get_current_limb_sprite_node_for(limb_name)
+	if s == null:
+		return Vector2(e.dir_x, e.dir_y)
+	return _limb_dir_to_world(s, Vector2(e.dir_x, e.dir_y))
+
+
+
+
+
+
+func get_limb_local_pos(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	var s = get_current_limb_sprite_node_for(limb_name)
+	var tex = get_current_limb_sprite_texture_for(limb_name)
+	if s == null or tex == null:
+		return Vector2(e.x, e.y)
+	var local = Vector2(e.x, e.y)
+	if "centered" in s and s.centered:
+		local -= tex.get_size() / 2
+	if "flip_h" in s and s.flip_h:
+		local.x = - local.x
+	if "flip_v" in s and s.flip_v:
+		local.y = - local.y
+	if "offset" in s:
+		local += s.offset
+	return s.transform.xform(local)
+
+
+
+
+
+func get_limb_sprite_parent_dir(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	var s = get_current_limb_sprite_node_for(limb_name)
+	var d = Vector2(e.dir_x, e.dir_y)
+	if s == null:
+		return d
+	if "flip_h" in s and s.flip_h:
+		d.x = - d.x
+	if "flip_v" in s and s.flip_v:
+		d.y = - d.y
+	return s.transform.basis_xform(d)
+
+
+
+func get_limb_local_dir(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	var s = get_current_limb_sprite_node_for(limb_name)
+	var d = Vector2(e.dir_x, e.dir_y)
+	if s == null:
+		return d
+	if "flip_h" in s and s.flip_h:
+		d.x = - d.x
+	if "flip_v" in s and s.flip_v:
+		d.y = - d.y
+	var world_d = s.global_transform.basis_xform(d)
+	return self.global_transform.basis_xform_inv(world_d)
+
+
+func has_limb_entry_on_current_sprite(limb_name: String) -> bool:
+	var data = get_limb_data()
+	if not data.has(limb_name):
+		return false
+	var by_tex = data[limb_name]
+	var tex = get_current_limb_sprite_texture_for(limb_name)
+	return tex != null and by_tex.has(tex)
+
+
+
+func get_limb_pixel_pos(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	return Vector2(e.x, e.y)
+
+
+func get_limb_pixel_dir(limb_name: String):
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return null
+	return Vector2(e.dir_x, e.dir_y)
+
+func is_limb_flipped(limb_name: String) -> bool:
+	var e = get_limb_entry(limb_name)
+	if e == null:
+		return false
+	return e.get("flipped", false)
+
+func _limb_pixel_to_world(sprite_node: Node2D, tex: Texture, pixel_pos: Vector2) -> Vector2:
+	var local = pixel_pos
+	if "centered" in sprite_node and sprite_node.centered:
+		local -= tex.get_size() / 2
+	
+	
+	if "flip_h" in sprite_node and sprite_node.flip_h:
+		local.x = - local.x
+	if "flip_v" in sprite_node and sprite_node.flip_v:
+		local.y = - local.y
+	if "offset" in sprite_node:
+		local += sprite_node.offset
+	return sprite_node.global_transform.xform(local)
+
+func _limb_dir_to_world(sprite_node: Node2D, dir: Vector2) -> Vector2:
+	var d = dir
+	if "flip_h" in sprite_node and sprite_node.flip_h:
+		d.x = - d.x
+	if "flip_v" in sprite_node and sprite_node.flip_v:
+		d.y = - d.y
+	return sprite_node.global_transform.basis_xform(d)
 
 func fixed_deg_to_rad(n):
 	assert (n is int or n is String)

@@ -15,7 +15,7 @@ func _ready():
 
 func _process(delta):
 	var game = Global.current_game
-	visible = game and game.game_paused and not host.disabled and Global.show_projectile_owners and not host.is_ghost
+	visible = game and game.game_paused and not host.disabled and Global.show_projectile_owners and not host.is_ghost and not Global.ui_hidden
 	update()
 
 func _draw():

@@ -7,6 +7,9 @@ onready var ui_layer = $UILayer
 onready var game_layer = $GameLayer
 onready var hud_layer = $HudLayer
 
+
+var hooks = null
+
 var singleplayer = false
 var game
 var ghost_game
@@ -22,6 +25,14 @@ var p2_ghost_data
 var p2_ghost_extra
 
 var match_data = {}
+var has_submitted_a_turn = false
+var last_backup_tick = - 1
+
+
+
+
+var style_permission_requested: = {}
+var style_permission_pending: = {}
 
 var started_ghost_this_frame = false
 
@@ -31,16 +42,40 @@ func _enter_tree():
 	pass
 
 func _ready():
+	
+	
+	
+	if ModLoader.active:
+		hooks = get_node_or_null("Hooks")
+		if hooks:
+			hooks.host = self
+	
+	
+	
+	
+	if SteamLobby.LOBBY_ID != 0:
+		SteamLobby.apply_busy_mode()
 	ui_layer.connect("singleplayer_started", self, "_on_game_started", [true])
 	ui_layer.connect("loaded_replay", self, "_on_loaded_replay")
 	connect("game_started", ui_layer, "on_game_started")
 	Network.connect("start_game", self, "_on_game_started", [false])
 	Network.connect("match_ready", self, "_on_match_ready")
+	Network.connect("force_open_action_buttons", self, "_on_multiplayer_turn_started")
+	Network.connect("style_save_response_received", self, "_on_style_save_response_received")
 	SteamLobby.connect("received_spectator_match_data", self, "_on_received_spectator_match_data")
 	$"%P1ActionButtons".connect("action_clicked", self, "on_action_clicked", [1])
 	$"%P2ActionButtons".connect("action_clicked", self, "on_action_clicked", [2])
 	$"%GhostButton".connect("toggled", self, "_on_ghost_button_toggled")
 	$"%SaveReplayButton".connect("pressed", self, "save_replay")
+	$"%SaveStylesButton".connect("pressed", self, "_show_style_save_menu", [true])
+	$"%StyleBackButton".connect("pressed", self, "_show_style_save_menu", [false])
+	$"%SaveP1StyleButton".connect("pressed", self, "save_player_style", [1])
+	$"%SaveP2StyleButton".connect("pressed", self, "save_player_style", [2])
+	if not Global.STYLE_SAVE_FEATURE_ENABLED:
+		
+		
+		$"%SaveStylesButton".hide()
+	$"%PausePanel".connect("visibility_changed", self, "_on_pause_panel_visibility_changed")
 	$"%CharacterSelect".connect("match_ready", self, "_on_match_ready")
 	$"%GhostSpeed".connect("value_changed", self, "_on_ghost_speed_changed")
 	$"%GhostWaitTimer".connect("timeout", self, "_on_ghost_wait_timer_timeout")
@@ -72,14 +107,15 @@ func _ready():
 
 
 	
-	var container = $"%OptionsContainer".get_node("VBoxContainer").get_node("Contents").get_node("VBoxContainer").get_node("VBoxContainer")
+	var mod_toggle = $"%ModToggle" if has_node("%ModToggle") else null
+	var container = mod_toggle.get_parent() if mod_toggle else null
 
-	if (container.get_node_or_null("LoadOnStart") == null):
+	if container and container.get_node_or_null("DeleteCache") == null:
 		var btt = Button.new()
 		btt.name = "DeleteCache"
 		btt.text = "delete character cache"
 		container.add_child(btt)
-		container.move_child(btt, len(container.get_children()) - 4)
+		container.move_child(btt, mod_toggle.get_index())
 		btt.connect("pressed", self, "_delete_char_cache", [btt])
 
 	var loaded_mods = false
@@ -98,6 +134,9 @@ func _ready():
 		$"%LoadingCharactersLabel2".hide()
 		$"%LoadingCharactersLabel".hide()
 
+	if hooks:
+		hooks.ready()
+
 func _delete_char_cache(btt):
 	var dir = Directory.new()
 	_Global.css_instance.charPackages = {}
@@ -112,8 +151,14 @@ func _on_show_style_toggled(on, player_id):
 			player.reapply_style()
 		else:
 			player.reset_style()
+		
+		var hud = get_node_or_null("%HudLayer")
+		if hud and hud.has_method("refresh_portrait_style"):
+			hud.refresh_portrait_style(player_id)
 
 func _on_player_disconnected():
+	if hooks:
+		hooks.player_disconnected()
 	$"%OpponentDisconnectedLabel".show()
 
 	ui_layer._on_opponent_disconnected()
@@ -141,6 +186,8 @@ func _on_game_started(singleplayer):
 	$"%DirectConnectLobby".hide()
 	$"%Lobby".hide()
 	$"%SteamLobby".hide()
+	if hooks:
+		hooks.game_started(singleplayer)
 
 func _on_ghost_wait_timer_timeout():
 	if is_instance_valid(game):
@@ -156,20 +203,89 @@ func _on_loaded_replay(match_data):
 func _on_received_spectator_match_data(data):
 
 
-	if get_node("/root/SteamLobby/LoadingSpectator/Label"):
-		get_node("/root/SteamLobby/LoadingSpectator/Label").text = "Spectating...\n(Loading Characters, this may take a while)"
+	
+	
+	var spectate_label = $"%SteamLobby".get_node_or_null("LoadingSpectatorRect/SpectateStatusLabel")
+	if spectate_label:
+		spectate_label.text = "Spectating...\n(Loading Characters, this may take a while)"
+	var spectate_cancel = $"%SteamLobby".get_node_or_null("LoadingSpectatorRect/SpectateCancelButton")
+	if spectate_cancel:
+		spectate_cancel.hide()
 	_Global.css_instance.net_loadReplayChars([data.selected_characters[1]["name"], data.selected_characters[2]["name"], data])
 	data["spectating"] = true
 	_on_match_ready(data)
 
 func _on_match_ready(data):
+	Utils.normalize_timer_settings(data)
 	match_data = data
-	singleplayer = true if match_data.has("replay") else data["singleplayer"]
-	if not match_data.has("replay"):
+	if hooks:
+		hooks.match_ready(data)
+	
+	
+	
+	
+	Network.replay_saved = false
+	has_submitted_a_turn = false
+	last_backup_tick = - 1
+	style_permission_requested.clear()
+	style_permission_pending.clear()
+	_set_save_style_button_disabled(1, false)
+	_set_save_style_button_disabled(2, false)
+	if match_data.has("replay_challenge"):
+		singleplayer = false
+	elif match_data.has("replay"):
+		singleplayer = true
+	else:
+		singleplayer = data["singleplayer"]
+	if not match_data.has("replay") and not match_data.has("replay_challenge"):
 		ReplayManager.playback = false
+	if match_data.has("replay_challenge") and match_data.has("selected_characters"):
+		yield(_load_replay_chars_and_wait(match_data), "completed")
 	SteamLobby.SETTINGS_LOCKED = false
 	setup_game(singleplayer, data)
 	emit_signal("game_started")
+
+func _load_replay_chars_and_wait(match_data):
+	var loading_rect = $"%SteamLobby".get_node_or_null("ReplayLoadingRect")
+	var label = null
+	if loading_rect:
+		label = loading_rect.get_node_or_null("ReplayLoadingLabel")
+		loading_rect.show()
+		if label:
+			label.text = "Loading replay characters..."
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+	var css = _Global.css_instance
+	var my_side = Network.player_id
+	for player_id in [1, 2]:
+		var char_name = match_data.selected_characters[player_id]["name"]
+		if not css.isCustomChar(char_name):
+			continue
+		var is_mine = (player_id == my_side)
+		if label:
+			if is_mine:
+				label.text = "Loading your character: " + css.getCharName(char_name) + "..."
+			else:
+				label.text = "Loading opponent's character: " + css.getCharName(char_name) + "..."
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		var idx = css.name_to_index.get(char_name)
+		if idx == null:
+			idx = css.name_to_index.get(css.retro_charName(char_name))
+		if idx != null:
+			css.loadListChar(idx, not is_mine)
+		yield(get_tree(), "idle_frame")
+	
+	
+	if not match_data.get("spectating"):
+		if label:
+			label.text = "Waiting for opponent to load their character..."
+		yield(get_tree(), "idle_frame")
+		SteamLobby.signal_replay_mods_loaded()
+		while not SteamLobby.remote_replay_mods_loaded:
+			yield(get_tree(), "idle_frame")
+	if loading_rect:
+		loading_rect.hide()
 
 
 func show_lobby():
@@ -182,6 +298,8 @@ func setup_game(singleplayer, data):
 		game.queue_free()
 	call_deferred("setup_game_deferred", singleplayer, data)
 	emit_signal("game_setup")
+	if hooks:
+		hooks.game_setup(singleplayer, data)
 
 func setup_main_menu_game():
 	game = preload("res://Game.tscn").instance()
@@ -192,6 +310,252 @@ func save_replay():
 	$"%SaveReplayButton".disabled = true
 	$"%SaveReplayButton".text = "saved"
 	$"%SaveReplayLabel".text = "saved replay to " + filename
+	if hooks:
+		hooks.replay_saved(filename)
+
+
+
+
+
+func _unhandled_key_input(event):
+	if not event.pressed or event.echo:
+		return
+	if not event.is_action_pressed(Hotkeys.SAVE_REPLAY):
+		return
+	if _style_menu_active:
+		return
+	var btn = get_node_or_null("%SaveReplayButton")
+	if btn == null or btn.disabled:
+		return
+	var pause_open = has_node("%PausePanel") and $"%PausePanel".visible
+	save_replay()
+	if not pause_open:
+		_show_save_replay_toast()
+	get_tree().set_input_as_handled()
+
+
+
+
+
+
+
+
+const _TOAST_NODE_NAME: = "_SaveReplayToast"
+const _TOAST_DURATION: = 1.5
+var _toast_baseline_label_text: = ""
+
+func _get_save_replay_toast():
+	var host = get_node_or_null("%GameUI")
+	if host == null:
+		return null
+	return host.get_node_or_null(_TOAST_NODE_NAME)
+
+func _show_save_replay_toast():
+	
+	var existing = _get_save_replay_toast()
+	if existing:
+		existing.queue_free()
+	var pause_label: Label = get_node_or_null("%SaveReplayLabel")
+	if pause_label == null:
+		return
+	
+	
+	
+	
+	var host = get_node_or_null("%GameUI")
+	if host == null:
+		return
+	_toast_baseline_label_text = pause_label.text
+	var label_copy: Label = pause_label.duplicate()
+	label_copy.name = _TOAST_NODE_NAME
+	
+	
+	label_copy.set_anchors_preset(Control.PRESET_CENTER)
+	label_copy.margin_left = - 274
+	label_copy.margin_top = 42
+	label_copy.margin_right = 274
+	label_copy.margin_bottom = 58
+	label_copy.visible = true
+	host.add_child(label_copy)
+	var timer = Timer.new()
+	timer.wait_time = _TOAST_DURATION
+	timer.one_shot = true
+	label_copy.add_child(timer)
+	timer.start()
+	timer.connect("timeout", label_copy, "queue_free")
+
+var _style_menu_main_visibility: = {}
+var _style_menu_active: = false
+
+
+
+
+
+func _show_style_save_menu(show_styles: bool):
+	if show_styles == _style_menu_active:
+		return
+	_style_menu_active = show_styles
+	var main_buttons = ["%ResumeButton", "%ReplayName", "%SaveReplayButton", 
+			"%SaveStylesButton", "%PauseOptionsButton", 
+			"%QuitToMainMenuButton", "%ForfeitButton"]
+	var style_buttons = ["%StyleName", "%SaveP1StyleButton", 
+			"%SaveP2StyleButton", "%StyleBackButton"]
+	if show_styles:
+		_style_menu_main_visibility.clear()
+		for path in main_buttons:
+			var n = get_node_or_null(path)
+			if n:
+				_style_menu_main_visibility[path] = n.visible
+				n.visible = false
+	else:
+		for path in main_buttons:
+			var n = get_node_or_null(path)
+			if n:
+				n.visible = _style_menu_main_visibility.get(path, true)
+		_style_menu_main_visibility.clear()
+	for path in style_buttons:
+		var n = get_node_or_null(path)
+		if n:
+			n.visible = show_styles
+
+
+
+
+func _on_pause_panel_visibility_changed():
+	if not $"%PausePanel".visible and _style_menu_active:
+		_show_style_save_menu(false)
+
+func save_player_style(player_id: int):
+	if not Global.STYLE_SAVE_FEATURE_ENABLED:
+		return
+	if not is_instance_valid(game):
+		return
+	var player = game.get_player(player_id)
+	if not is_instance_valid(player) or player.applied_style == null:
+		$"%SaveReplayLabel".text = "p%d has no style to save" % player_id
+		return
+	
+	
+	
+	
+	
+	
+	
+	
+	var src = player.applied_style
+	
+	
+	
+	
+	
+	var is_replay = match_data.get("replay", false) or match_data.get("replay_challenge", false)
+	
+	
+	
+	
+	var saving_own = not is_replay and not SteamLobby.SPECTATING and ( not Network.multiplayer_active or Network.player_id == player_id)
+	var i_am_chain_owner = _is_chain_latest(src)
+	if Global.STYLE_SAVE_FEATURE_ENABLED and not saving_own and not i_am_chain_owner and src is Dictionary and not src.get("allow_others_save", true):
+		
+		
+		
+		var in_lobby = Network.multiplayer_active or SteamLobby.SPECTATING
+		if not in_lobby:
+			$"%SaveReplayLabel".text = "p%d's style is not shareable" % player_id
+			return
+		if style_permission_requested.has(player_id):
+			
+			return
+		style_permission_requested[player_id] = true
+		style_permission_pending[player_id] = true
+		var requester = Global.get_player_data().username
+		var style_name = src.get("style_name", "") if src is Dictionary else ""
+		Network.broadcast_rpc("receive_style_save_request", [player_id, requester, style_name])
+		$"%SaveReplayLabel".text = "asked p%d for permission..." % player_id
+		_set_save_style_button_disabled(player_id, true)
+		return
+	_do_save_player_style(player_id, _duplicate_style_object(player.applied_style))
+
+func _is_chain_latest(style) -> bool:
+	if not (style is Dictionary):
+		return false
+	var sid = SteamHustle.STEAM_ID
+	if sid == null or typeof(sid) != TYPE_INT or sid <= 0:
+		return false
+	var my_id = str(sid)
+	var latest_id = ""
+	var mod_ids = style.get("modifier_ids", [])
+	if mod_ids is Array and not mod_ids.empty():
+		latest_id = str(mod_ids[mod_ids.size() - 1])
+	else:
+		latest_id = str(style.get("creator_id", ""))
+	return latest_id != "" and latest_id == my_id
+
+func _set_save_style_button_disabled(player_id: int, disabled: bool):
+	var path = "%%SaveP%dStyleButton" % player_id
+	if has_node(path):
+		get_node(path).disabled = disabled
+
+func _do_save_player_style(player_id: int, style):
+	var requested_name = $"%StyleName".text.strip_edges()
+	if requested_name == "":
+		
+		
+		
+		requested_name = style.get("style_name", "") if style is Dictionary else ""
+		if requested_name == "":
+			var ud = match_data.get("user_data", {}) if match_data else {}
+			requested_name = ud.get("p%d" % player_id, "untitled")
+	requested_name = Utils.filter_filename(requested_name)
+	if requested_name == "":
+		requested_name = "untitled"
+	var unique_name = _next_available_style_name(requested_name)
+	style["style_name"] = unique_name
+	Custom.save_style(style)
+	$"%SaveReplayLabel".text = "saved p%d style as %s.style" % [player_id, unique_name]
+
+
+
+func _on_style_save_response_received(target_player_id, requester_id, requester_name, allowed):
+	if not _style_response_for_me(requester_id, requester_name):
+		return
+	if not style_permission_pending.has(target_player_id):
+		return
+	style_permission_pending.erase(target_player_id)
+	if not allowed:
+		
+		return
+	if not is_instance_valid(game):
+		return
+	var player = game.get_player(target_player_id)
+	if not is_instance_valid(player) or player.applied_style == null:
+		$"%SaveReplayLabel".text = "p%d's style is gone" % target_player_id
+		return
+	_do_save_player_style(target_player_id, _duplicate_style_object(player.applied_style))
+
+func _style_response_for_me(requester_id, requester_name) -> bool:
+	if Network.steam:
+		return requester_id != 0 and requester_id == SteamHustle.STEAM_ID
+	return requester_name == Global.get_player_data().username
+
+
+
+func _next_available_style_name(base: String) -> String:
+	var dir = Directory.new()
+	var name = base
+	var n = 2
+	while dir.file_exists("user://custom/" + name + ".style"):
+		name = base + str(n)
+		n += 1
+	return name
+
+func _duplicate_style_object(style):
+	if style is Dictionary:
+		return style.duplicate(true)
+	
+	if style and style.has_method("duplicate"):
+		return style.duplicate(true)
+	return style
 
 func hide_main_menu(all = false):
 	ui_layer.hide_main_menu(all)
@@ -212,25 +576,62 @@ func setup_game_deferred(singleplayer, data):
 	Network.game = game
 	
 	if not data.has("user_data"):
+		var ud: = {}
 		if Network.multiplayer_active:
-			data["user_data"] = {
-				"p1": Network.pid_to_username(1), 
-				"p2": Network.pid_to_username(2), 
-			}
+			ud["p1"] = Network.pid_to_username(1)
+			ud["p2"] = Network.pid_to_username(2)
+			
+			
+			if Network.steam:
+				var p1_steam = SteamLobby.steam_id_for_match_side(1)
+				var p2_steam = SteamLobby.steam_id_for_match_side(2)
+				var p1_col = Global.get_remote_name_color(p1_steam) if p1_steam != 0 else null
+				var p2_col = Global.get_remote_name_color(p2_steam) if p2_steam != 0 else null
+				if p1_col != null:
+					ud["p1_color"] = p1_col.to_html(false)
+				if p2_col != null:
+					ud["p2_color"] = p2_col.to_html(false)
+			elif Global.has_name_color():
+				
+				
+				ud["p" + str(Network.player_id) + "_color"] = Global.get_name_color().to_html(false)
 		else:
-			data["user_data"] = {
-				"p1": Global.get_player_data().username, 
-				"p2": _format_p2_name(data.selected_characters[2]["name"]), 
-			}
+			ud["p1"] = Global.get_player_data().username
+			ud["p2"] = _format_p2_name(data.selected_characters[2]["name"])
+			
+			if Global.has_name_color():
+				ud["p1_color"] = Global.get_name_color().to_html(false)
+		data["user_data"] = ud
 	
 	if game.start_game(singleplayer, data) is bool:
 		return
-	if data.has("turn_time"):
-		if not Network.undo or (data.has("chess_timer") and not data.chess_timer):
-			ui_layer.set_turn_time(data.turn_time, (data.has("chess_timer") and data.chess_timer))
+	var timer_mode = data.get("timer_mode", "default")
+	
+	
+	
+	if timer_mode != "none":
+		if not Network.undo or timer_mode != "chess":
+			if timer_mode == "increment":
+				
+				
+				
+				var starting = int(data.get("increment_starting_time", 60))
+				var inc = int(data.get("increment_per_turn", 10))
+				var bank = int(max(starting, inc))
+				
+				
+				
+				var max_minutes = int(data.get("increment_max_time", 0))
+				if max_minutes > 0:
+					bank = int(min(bank, max_minutes * 60))
+				ui_layer.set_turn_time(bank, false)
+			elif data.has("turn_time"):
+				ui_layer.set_turn_time(data.turn_time, timer_mode == "chess")
 		else:
 			ui_layer.start_timers()
 	ui_layer.init(game)
+	if data.has("replay_challenge") and data.replay_challenge and data.get("restore_timers") and data.has("chess_timer_state"):
+		ui_layer.restore_chess_timer_state(data.chess_timer_state)
 	hud_layer.init(game)
 	var p1 = game.get_player(1)
 	var p2 = game.get_player(2)
@@ -265,10 +666,41 @@ func _on_ghost_button_toggled(toggled):
 func _on_player_actionable():
 
 	ui_layer.on_player_actionable()
+	if hooks:
+		hooks.turn_ui_opened()
 	$"%GhostWaitTimer".start()
 	start_ghost()
+	_maybe_save_backup()
+	_reset_save_replay_button()
+
+func _on_multiplayer_turn_started():
+	_maybe_save_backup()
+	_reset_save_replay_button()
+
+
+
+func _reset_save_replay_button():
+	var btn = get_node_or_null("%SaveReplayButton")
+	if btn == null:
+		return
+	btn.disabled = false
+	btn.text = "save replay"
+
+func _maybe_save_backup():
+	if not is_instance_valid(game):
+		return
+	if SteamLobby.SPECTATING:
+		return
+	if game.current_tick == last_backup_tick:
+		return
+	last_backup_tick = game.current_tick
+	if Global.enable_replay_backups and has_submitted_a_turn and not ReplayManager.playback and not game.game_finished:
+		ReplayManager.save_replay_backup(match_data)
+	has_submitted_a_turn = true
 
 func on_action_clicked(action, data, extra, player_id):
+	if hooks:
+		hooks.action_clicked(player_id, action, data, extra)
 	if player_id == 1:
 		p1_ghost_action = action
 		p1_ghost_data = data
@@ -290,7 +722,35 @@ func _process(_delta):
 		$"%SpeedLines".set_direction(game.camera.current_direction)
 		$"%SpeedLines".set_speed(game.camera.current_speed / game.camera.zoom.x)
 		$"%SpeedLines".tick = game.current_tick
-		$"%SpeedLines".on = not game.is_waiting_on_player()
+		
+		
+		
+		
+		
+		if is_instance_valid(game.p1) and is_instance_valid(game.p2):
+			var screen_center = game.get_viewport_rect().size / 2
+			var cam_pos = game.camera.global_position
+			var zoom = game.camera.zoom.x
+			var p1_screen = (game.p1.global_position - cam_pos) / zoom + screen_center
+			var p2_screen = (game.p2.global_position - cam_pos) / zoom + screen_center
+			$"%SpeedLines".set_player_anchors(p1_screen, p2_screen)
+		
+		
+		
+		
+		$"%SpeedLines".on = not game.is_waiting_on_player() and game.super_freeze_ticks <= 0
+	_tick_save_replay_toast()
+
+func _tick_save_replay_toast():
+	var toast = _get_save_replay_toast()
+	if toast == null:
+		return
+	if has_node("%PausePanel") and $"%PausePanel".visible:
+		toast.queue_free()
+		return
+	var pause_label = get_node_or_null("%SaveReplayLabel")
+	if pause_label and pause_label.text != _toast_baseline_label_text:
+		toast.queue_free()
 
 func _physics_process(delta):
 	set_deferred("started_ghost_this_frame", false)
@@ -400,6 +860,9 @@ func _on_simulation_continue():
 	p1_ghost_action = null
 	p1_ghost_data = null
 	p1_ghost_extra = null
+	p2_ghost_action = null
+	p2_ghost_data = null
+	p2_ghost_extra = null
 	call_deferred("stop_ghost")
 
 func _on_ghost_speed_changed(_value):

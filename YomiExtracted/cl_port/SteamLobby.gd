@@ -39,6 +39,12 @@ func _read_P2P_Packet_custom(readable):
 
 func _receive_challenge(fromData, match_settings):
 	var steam_id = fromData[0]
+	
+	
+	print("[block] cl_port _receive_challenge from ", steam_id, " is_blocked=", is_blocked(steam_id), " block_list=", Global.blocked_users)
+	if is_blocked(steam_id):
+		_send_P2P_Packet(steam_id, {"challenge_declined": SteamHustle.STEAM_ID})
+		return
 	var serverMods = fromData[1]
 	var charMods = fromData[2]
 	Network.steam_oppChars = charMods

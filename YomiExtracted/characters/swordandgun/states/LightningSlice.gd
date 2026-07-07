@@ -19,6 +19,16 @@ func is_usable():
 
 func _frame_0():
 	stall = false
+	
+	
+	
+	
+	hitbox.air_ground_bounce = not host.lightning_slice_ground_bounced
+
+func _on_hit_something(obj, _hitbox):
+	._on_hit_something(obj, _hitbox)
+	if obj.is_in_group("Fighter"):
+		host.lightning_slice_ground_bounced = true
 
 func _frame_1():
 	var vel = host.get_vel()

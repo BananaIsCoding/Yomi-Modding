@@ -6,6 +6,18 @@ onready var default = $Direction.value
 
 export  var centered = true
 
+
+
+export  var _c_EnableThisToUseMinAndMaxValue = 0
+
+
+
+
+
+
+export  var apply_top_node_range = false
+export  var _c_DisabledByDefaultForBackwardCompatibility = 0
+
 export  var min_value = 0
 export  var max_value = 100
 
@@ -17,11 +29,13 @@ func _input(event: InputEvent):
 			$Direction.value = default
 
 func _ready():
+	if apply_top_node_range:
+		$Direction.min_value = min_value
+		$Direction.max_value = max_value
 	if not centered:
 		$Direction.min_value = 0
 	$Label.text = name
 	$Direction.connect("value_changed", self, "on_value_changed")
-	pass
 
 func on_value_changed(value):
 	buffer_value_changed = true

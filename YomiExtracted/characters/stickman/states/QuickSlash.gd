@@ -36,6 +36,12 @@ func _enter():
 		move_dir = {"x": str(host.get_facing_int()), "y": "0"}
 	var move_vec = fixed.vec_mul(move_dir.x, move_dir.y, "20")
 
+	
+	
+	
+	
+	
+	host.reset_momentum()
 	host.apply_force(move_vec.x, fixed.div(move_vec.y, "2"))
 	host.quick_slash_move_dir_x = move_dir.x
 	host.quick_slash_move_dir_y = move_dir.y

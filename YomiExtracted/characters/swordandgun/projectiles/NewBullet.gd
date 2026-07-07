@@ -9,6 +9,12 @@ const NEW_BULLET = true
 
 export  var color = Color("f2ff31")
 
+
+
+
+
+export  var is_time_bullet = false
+
 var dir_x = "0"
 var dir_y = "0"
 var arc_x = "0"
@@ -47,12 +53,21 @@ func _draw():
 		if to_local(last_pos_visual) == Vector2():
 			draw_circle(Vector2(), 6.0, color)
 
+func disable():
+	
+	
+	
+	if is_time_bullet and creator and creator.has_method("_unregister_time_bullet"):
+		creator._unregister_time_bullet()
+	.disable()
+
 func _on_hit_something(obj, hitbox):
 	._on_hit_something(obj, hitbox)
 	if obj == get_opponent():
 		emit_signal("bullet_made_contact")
 
 func on_got_blocked():
+	.on_got_blocked()
 	emit_signal("bullet_made_contact")
 
 func on_got_push_blocked():

@@ -2,8 +2,17 @@ extends CharacterState
 
 onready var hitbox_2 = $Hitbox2
 
+export  var air = false
+
+
+
+
+
+var was_neutral_hit = false
+
 func _frame_0():
 
+	was_neutral_hit = not air and host.opponent != null and not host.opponent.is_in_hurt_state(false)
 	if host.initiative and host.is_grounded():
 
 		host.start_invulnerability()
@@ -22,6 +31,31 @@ func _frame_0():
 
 func on_got_blocked():
 	hitbox_2.block_punishable = true
+
+
+
+
+
+
+func __on_hit_something(obj, hitbox):
+	_on_hit_something(obj, hitbox)
+	host._on_hit_something(obj, hitbox)
+
+func _on_hit_something(obj, hitbox):
+
+	if not air:
+		host.apply_force("0", "6")
+		if was_neutral_hit:
+			host.cancel_opponent_hitstun_pending = true
+			host.cancel_opponent_hitstun_countdown = - 1
+	
+	
+	
+	
+	
+	
+	
+	._on_hit_something(obj, hitbox)
 
 func _tick():
 	host.apply_grav()

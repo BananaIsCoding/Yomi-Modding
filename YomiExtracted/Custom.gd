@@ -2,14 +2,169 @@ extends Node
 
 const SUPPORTER_PACK = 2232850
 
+
+
+const ATTACH_PAIRS = {
+	"Hands": ["LeftHand", "RightHand"], 
+	"Feet": ["LeftFoot", "RightFoot"], 
+	
+	
+	
+	
+	"Eyes": ["Head", "Head"], 
+}
+
+
+
+const ATTACH_LIMB_MIGRATIONS: = {
+	"UpperBody": "", 
+	"LowerBody": "", 
+	"Body": "", 
+	"LeftArm": "LeftHand", 
+	"RightArm": "RightHand", 
+	"LeftLeg": "LeftFoot", 
+	"RightLeg": "RightFoot", 
+}
+
+func migrate_attach_limb(name: String) -> String:
+	if name in ATTACH_LIMB_MIGRATIONS:
+		return ATTACH_LIMB_MIGRATIONS[name]
+	return name
+
+
+
+func swap_left_right_limb(name: String) -> String:
+	if name.begins_with("Left"):
+		return "Right" + name.substr(4)
+	if name.begins_with("Right"):
+		return "Left" + name.substr(5)
+	return name
+
+
+
+
+
+
+const MAX_AURA_SINGLES = 3
+const MAX_AURA_INTERNAL = 6
+
+
+func is_pair_attach(attach_limb: String) -> bool:
+	return attach_limb in ATTACH_PAIRS
+
+
+func pair_limbs(attach_limb: String):
+	if attach_limb in ATTACH_PAIRS:
+		return ATTACH_PAIRS[attach_limb]
+	return null
+
+
+
+
+func style_auras(style) -> Array:
+	if style == null:
+		return []
+	if style.has("auras") and style["auras"] is Array:
+		var out: = []
+		for entry in style["auras"]:
+			if entry is Dictionary:
+				out.append({
+					"show": entry.get("show", false), 
+					"settings": entry.get("settings"), 
+				})
+		return out
+	var legacy: = []
+	if style.get("show_aura") and style.get("aura_settings"):
+		legacy.append({"show": true, "settings": style.get("aura_settings")})
+	if style.get("show_aura_2") and style.get("aura_settings_2"):
+		legacy.append({"show": true, "settings": style.get("aura_settings_2")})
+	return legacy
+
+
+
+
+
+func expand_aura_entries(entries: Array) -> Array:
+	var out: = []
+	var single_count: = 0
+	for e in entries:
+		if not e.get("show", false):
+			continue
+		var s = e.get("settings")
+		if not (s is Dictionary):
+			continue
+		var attach = migrate_attach_limb(s.get("attach_limb", ""))
+		if is_pair_attach(attach):
+			if out.size() + 2 > MAX_AURA_INTERNAL:
+				continue
+			out.append({"settings": s, "attach_limb": attach, "pair_index": 0})
+			out.append({"settings": s, "attach_limb": attach, "pair_index": 1})
+		else:
+			if single_count >= MAX_AURA_SINGLES:
+				continue
+			if out.size() + 1 > MAX_AURA_INTERNAL:
+				continue
+			single_count += 1
+			out.append({"settings": s, "attach_limb": attach, "pair_index": 0})
+	return out
+
+
+
+func resolve_attach_limb(entry: Dictionary) -> String:
+	var attach = entry.get("attach_limb", "")
+	if is_pair_attach(attach):
+		var pair = ATTACH_PAIRS[attach]
+		return pair[entry.get("pair_index", 0)]
+	return attach
+
 var hitsparks = {
 	"bash": "res://fx/HitEffect1.tscn", 
 	"bash2": "res://fx/hitsparks/HitEffect1Alt.tscn", 
+	"bash3": "res://fx/hitsparks/HitEffect2Alt.tscn", 
 	"fire": "res://fx/hitsparks/FireHitEffect.tscn", 
 	"hearts": "res://fx/hitsparks/HeartHitEffect.tscn", 
 	"petals": "res://fx/hitsparks/PetalHitEffect.tscn", 
 	"coins": "res://fx/hitsparks/CoinHitEffect.tscn", 
+	"dust": "res://fx/hitsparks/DustHitEffect.tscn", 
+	"acid": "res://fx/hitsparks/AcidHitEffect.tscn", 
+	"elec": "res://fx/hitsparks/ElectricHitEffect.tscn", 
 }
+
+
+
+
+const HITSPARK_SPRITE_NAMES = ["", "bash", "bash2", "bash3", "fire", "hearts", "petals", "acid", "elec"]
+const HITSPARK_SPRITE_NONE_LABEL = "(none)"
+const CUSTOM_HITSPARK_SCENE_PATH = "res://fx/hitsparks/CustomHitEffect.tscn"
+
+
+
+const HITSPARK_SPRITE_SCALES = {
+	"elec": Vector2(1.36, 0.68), 
+}
+
+
+
+func hitspark_sprite_label(sprite_name: String) -> String:
+	if sprite_name == "":
+		return HITSPARK_SPRITE_NONE_LABEL
+	return sprite_name
+
+
+
+
+
+func make_custom_hitspark_scene(config) -> PackedScene:
+	var template = load(CUSTOM_HITSPARK_SCENE_PATH)
+	if template == null:
+		return null
+	
+	
+	
+	
+	
+	
+	return template
 
 
 
@@ -123,6 +278,9 @@ func save_style(style):
 	make_custom_folder()
 	var file = File.new()
 	var filename_ = "user://custom/" + style.style_name + ".style"
+	
+	if not style.has("mod_data"):
+		style["mod_data"] = {}
 	file.open(filename_, File.WRITE)
 	file.store_var(style, true)
 	file.close()
@@ -135,6 +293,8 @@ func save_style_workshop(style):
 	if not dir.dir_exists(folder_path):
 		dir.make_dir(folder_path)
 	var filename_ = folder_path + "/" + style.style_name + ".style"
+	if not style.has("mod_data"):
+		style["mod_data"] = {}
 	file.open(filename_, File.WRITE)
 	file.store_var(style, true)
 	file.close()
@@ -168,9 +328,14 @@ func load_all_styles():
 	for path in files:
 		var file = File.new()
 		file.open(path, File.READ)
-		var data: Dictionary = file.get_var()
-		styles.append(data)
+		var data = file.get_var()
 		file.close()
+		if not (data is Dictionary):
+			continue
+		if not data.has("mod_data"):
+			data["mod_data"] = {}
+		styles.append(data)
+
 	return [styles, files]
 
 func get_style_name(path):

@@ -75,7 +75,7 @@ func start():
 func _frame_0():
 	start()
 
-	if not (_previous_state() and _previous_state().get("IS_NEW_PARRY")) or _previous_state() == null:
+	if not (_previous_state() and _previous_state().get("IS_NEW_PARRY") and not _previous_state().push) or _previous_state() == null:
 		punishable = false
 
 func is_usable():

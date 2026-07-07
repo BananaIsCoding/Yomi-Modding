@@ -19,6 +19,18 @@ onready var hurtbox_height = hurtbox.height
 var block_hits = BLOCK_HITS
 
 func _frame_1():
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	if host.refresh_amount < host.REFRESH_AMOUNT:
+		return
 	var fighter = host.get_fighter()
 	if fighter:
 		host.return_x = fighter.get_pos().x
@@ -37,6 +49,7 @@ func move():
 		host.apply_force(force.x, force.y)
 
 func on_got_blocked():
+	.on_got_blocked()
 	block_hits -= 1
 	if block_hits == 0:
 		fizzle()

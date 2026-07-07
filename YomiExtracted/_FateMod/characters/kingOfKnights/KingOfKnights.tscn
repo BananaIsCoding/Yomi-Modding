@@ -1056,7 +1056,19 @@ shader_param/outline_color = Color( 0, 0, 0, 1 )
 [node name="King Of Knights" instance=ExtResource( 1 )]
 script = ExtResource( 24 )
 __meta__ = {
-"_editor_description_": ""
+"_editor_description_": "",
+"limb_data": {
+"Head": {
+},
+"LeftFoot": {
+},
+"LeftHand": {
+},
+"RightFoot": {
+},
+"RightHand": {
+}
+}
 }
 character_portrait = ExtResource( 15 )
 player_info_scene = ExtResource( 96 )
@@ -2112,13 +2124,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 127 ): {
-"x": 10,
-"y": 23
-},
 SubResource( 131 ): {
 "x": 9,
 "y": 18
+},
+SubResource( 127 ): {
+"x": 10,
+"y": 23
 }
 }
 title = "Stab Down"

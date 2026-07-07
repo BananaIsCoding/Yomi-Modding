@@ -5,10 +5,34 @@ const ACTIVATE_TIME = 30
 const EXPLOSION = preload("res://characters/robo/projectiles/NadeExplosion.tscn")
 const DI_INFLUENCE = "5"
 const DI_HORIZONTAL_MODIFIER = "0.85"
-const DI_DEGRADATION_PER_HIT = "0.5"
+const DI_DEGRADATION_PER_HIT = "0.0"
 const NUDGE_DISTANCE = 10
 const ARM_TIME_REDUCTION_ON_HIT = 5
 const ARM_TIME_ON_OPPONENT_HIT = 4
+
+
+
+const KNOCKBACK_MULTIPLIER = "1.5"
+
+
+
+const CREATOR_DI_INFLUENCE = "12"
+
+
+
+
+
+
+
+const CREATOR_TIER_AIR_SPEEDS = ["12", "14.25", "23.75", "28.5"]
+const CREATOR_TIER_FALL_SPEEDS = ["15", "15", "20", "24"]
+const CREATOR_HIT_COUNT_CAP = 4
+const GROUNDED_RESET_FRAMES = 60
+
+
+
+var creator_hit_count = 0
+var grounded_frames = 0
 
 onready var my_hitbox = $StateMachine / Active / Hitbox
 onready var active_indicator = $Flip / ActiveIndicator
@@ -40,6 +64,25 @@ func tick():
 			explode()
 		elif ticks_left <= ACTIVATE_TIME:
 			activate()
+	
+	
+	
+	if creator_hit_count > 0:
+		if is_grounded():
+			grounded_frames += 1
+			if grounded_frames >= GROUNDED_RESET_FRAMES:
+				_clear_creator_hit_speed_boost()
+		else:
+			grounded_frames = 0
+	
+	
+	
+	
+	var up_cap = _current_air_speed_cap()
+	var neg_cap = fixed.mul(up_cap, "-1")
+	var vel = get_vel()
+	if fixed.lt(vel.y, neg_cap):
+		set_vel(vel.x, neg_cap)
 
 func activate():
 	if active:
@@ -67,22 +110,39 @@ func can_hit_cancel(fighter):
 func hit_by(hitbox):
 	.hit_by(hitbox)
 	if hitbox:
+		if hitbox.throw:
+			return
 		if hitbox.hitbox_type == Hitbox.HitboxType.Flip:
 			var vel = get_vel()
 			set_vel(fixed.mul(vel.x, "-1"), vel.y)
 		else:
 			reset_momentum()
-			var dir = fixed.normalized_vec_times(get_hitbox_x_dir(hitbox), hitbox.dir_y, fixed.mul(hitbox.knockback, "1.5"))
+			
+			
+			
+			
+			var host = hitbox.host
+			var host_object = obj_from_name(host) if host != null else null
+			var attacker_is_creator = is_instance_valid(host_object) and host_object.id == id
+			var dir = fixed.normalized_vec_times(get_hitbox_x_dir(hitbox), hitbox.dir_y, fixed.mul(hitbox.knockback, KNOCKBACK_MULTIPLIER))
 			if is_grounded() and fixed.gt(dir.y, "0"):
 				dir.y = fixed.mul(dir.y, "-1")
 			change_state("Active")
 			apply_force(dir.x, dir.y)
 			var nudge = fixed.normalized_vec_times(get_hitbox_x_dir(hitbox), hitbox.dir_y, str(NUDGE_DISTANCE))
 			move_directly(nudge.x, nudge.y)
-			var host = hitbox.host
 			if host:
 				my_hitbox.hit_objects.append(host)
-			var host_object = obj_from_name(host)
+			
+			
+			
+			
+			if attacker_is_creator:
+				creator_hit_count = Utils.int_min(creator_hit_count + 1, CREATOR_HIT_COUNT_CAP)
+				grounded_frames = 0
+				_apply_creator_hit_speed_boost()
+			elif creator_hit_count > 0:
+				_clear_creator_hit_speed_boost()
 			if host_object:
 				var player_object = host_object.get_owner()
 				var player = player_object.obj_name
@@ -104,13 +164,16 @@ func hit_by(hitbox):
 				if host != player:
 					my_hitbox.hit_objects.append(player)
 				else:
-					var di_amount = fixed.mul(fixed.sub("1.0", fixed.mul(DI_DEGRADATION_PER_HIT, str(hits_chained))), DI_INFLUENCE)
+					
+					
+					var di_influence = CREATOR_DI_INFLUENCE if attacker_is_creator else DI_INFLUENCE
+					var di_amount = fixed.mul(fixed.sub("1.0", fixed.mul(DI_DEGRADATION_PER_HIT, str(hits_chained))), di_influence)
 					if fixed.lt(di_amount, "0"):
 						di_amount = "0"
 
 					var di_force = xy_to_dir(host_object.current_di.x, host_object.current_di.y, di_amount)
 					apply_force(fixed.mul(di_force.x, DI_HORIZONTAL_MODIFIER), di_force.y)
-				
+
 				if active:
 					if host_object.id != id:
 						ticks_left = Utils.int_min(ticks_left, ARM_TIME_ON_OPPONENT_HIT)
@@ -124,6 +187,7 @@ func refresh():
 	change_state(current_state().state_name)
 	
 func on_got_blocked():
+	.on_got_blocked()
 	var vel = get_vel()
 	if active:
 		ticks_left = Utils.int_min(ticks_left, ARM_TIME_ON_OPPONENT_HIT)
@@ -146,3 +210,27 @@ func disable():
 	creator.grenade_object = null
 	creator.magnetize_opponent = false
 	creator.magnetize_opponent_blocked = false
+
+
+
+
+func _apply_creator_hit_speed_boost():
+	var tier = Utils.int_min(creator_hit_count, CREATOR_HIT_COUNT_CAP) - 1
+	if tier < 0:
+		return
+	chara.set_max_air_speed(CREATOR_TIER_AIR_SPEEDS[tier])
+	chara.set_max_fall_speed(CREATOR_TIER_FALL_SPEEDS[tier])
+
+func _clear_creator_hit_speed_boost():
+	creator_hit_count = 0
+	grounded_frames = 0
+	chara.set_max_air_speed(max_air_speed)
+	chara.set_max_fall_speed(max_fall_speed)
+
+
+
+func _current_air_speed_cap():
+	var tier = Utils.int_min(creator_hit_count, CREATOR_HIT_COUNT_CAP) - 1
+	if tier < 0:
+		return max_air_speed
+	return CREATOR_TIER_AIR_SPEEDS[tier]

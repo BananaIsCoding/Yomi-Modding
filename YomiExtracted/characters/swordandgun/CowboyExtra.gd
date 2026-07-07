@@ -27,6 +27,7 @@ func get_extra():
 	}
 
 func show_options():
+	print("[DRAWDBG] show_options id=", fighter.id, " (hiding) state=", fighter.current_state().state_name, " ctick=", fighter.current_state().current_tick)
 	$"%ShootButton".hide()
 	$"%ShootButton".pressed = false
 	$"%DetonateButton".hide()
@@ -56,7 +57,14 @@ func reset():
 		update_sight_button()
 	if "Knockdown" in fighter.current_state().state_name:
 		sight_button.hide()
+
 	
+	
+	
+	$"%ShootButton".visible = draw_cancel_available()
+	$"%ShootButton".text = "Draw on Block" if fighter.draw_cancel_on_block_only(fighter.current_state(), true) else "Draw"
+	print("[DRAWDBG] reset id=", fighter.id, " state=", fighter.current_state().state_name, " ctick=", fighter.current_state().current_tick, " vis=", $"%ShootButton".visible)
+
 	block_disable()
 
 func update_tp_button():
@@ -97,20 +105,40 @@ func update_sight_button():
 	if "Knockdown" in fighter.current_state().state_name:
 		sight_button.hide()
 
+
+
+
+
+
+
+
+
+
+
+func draw_cancel_available():
+	if fighter.bullet_cancelling:
+		return false
+	return fighter.draw_cancel_possible(fighter.current_state(), true)
+
 func update_selected_move(move_state):
 	.update_selected_move(move_state)
-	if move_state:
-		var state_children = move_state.get_children()
-		var has_command = false
-		for child in state_children:
-			if child is HostCommand:
-				if child.command == "try_shoot":
-					has_command = true
-					break
-		var can_draw_cancel = true
-		if move_state.has_method("can_draw_cancel"):
-			can_draw_cancel = move_state.can_draw_cancel()
-		$"%ShootButton".visible = (has_command or "try_shoot" in move_state.host_commands.values()) and fighter.can_bullet_cancel() and can_draw_cancel
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var fresh = move_state != null and (move_state != fighter.current_state() or selected_move_will_restart)
+	var show_draw = fighter.draw_cancel_possible(move_state, false) if fresh else draw_cancel_available()
+	$"%ShootButton".visible = show_draw
+	
+	
+	var label_state = move_state if fresh else fighter.current_state()
+	$"%ShootButton".text = "Draw on Block" if fighter.draw_cancel_on_block_only(label_state, not fresh) else "Draw"
+	print("[DRAWDBG] usm id=", fighter.id, " move=", (move_state.state_name if move_state else "null"), " cur=", fighter.current_state().state_name, " ctick=", fighter.current_state().current_tick, " fresh=", fresh, " vis=", show_draw)
 	if fighter.after_image_object != null:
 		$"%DetonateButton".show()
 		update_tp_button()

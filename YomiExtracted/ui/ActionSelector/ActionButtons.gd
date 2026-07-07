@@ -59,6 +59,11 @@ func _input(event):
 func _ready():
 
 	$"%SelectButton".connect("pressed", self, "_on_submit_pressed")
+	_rebuild_select_button_shortcut()
+	
+	
+	if not Hotkeys.is_connected("binding_changed", self, "_on_hotkey_binding_changed"):
+		Hotkeys.connect("binding_changed", self, "_on_hotkey_binding_changed")
 
 	buttons.append($"%ContinueButton")
 	$"%UndoButton".connect("pressed", self, "_on_undo_pressed")
@@ -129,6 +134,19 @@ func _on_continue_pressed():
 func _on_undo_pressed():
 	on_action_submitted("Undo")
 
+
+
+
+
+func try_undo() -> bool:
+	if not active or not visible:
+		return false
+	var btn = $"%UndoButton"
+	if btn.disabled or not btn.visible:
+		return false
+	_on_undo_pressed()
+	return true
+
 func space_pressed():
 	if visible:
 		if not $"%SelectButton".disabled and $"%SelectButton".visible:
@@ -155,9 +173,38 @@ func _process(delta):
 		_send_ui_action(buffered_ui_actions[ - 1])
 		buffered_ui_actions = []
 	
+var _select_button_shortcut: ShortCut
+
+
+
+
+
+func _build_select_button_shortcut() -> ShortCut:
+	var sc = ShortCut.new()
+	var scancode = Hotkeys.get_bound_scancode(Hotkeys.LOCK_IN)
+	if scancode == 0:
+		
+		return sc
+	var ev = InputEventKey.new()
+	ev.scancode = scancode
+	ev.pressed = true
+	sc.shortcut = ev
+	return sc
+
+func _rebuild_select_button_shortcut():
+	_select_button_shortcut = _build_select_button_shortcut()
+	if has_node("%SelectButton"):
+		$"%SelectButton".shortcut = _select_button_shortcut
+
+func _on_hotkey_binding_changed(action: String):
+	if action == Hotkeys.LOCK_IN:
+		_rebuild_select_button_shortcut()
+
 func unpress_extra_on_lock_in():
 	var select_button: Button = $"%SelectButton"
-	select_button.shortcut = preload("res://ui/ActionSelector/SelectButtonShortcut.tres")
+	if _select_button_shortcut == null:
+		_select_button_shortcut = _build_select_button_shortcut()
+	select_button.shortcut = _select_button_shortcut
 	if lock_in_pressed:
 		check_extra_button_pressed(fighter_extra)
 
@@ -397,6 +444,12 @@ func _send_ui_action(action = null):
 
 func extra_updated():
 	if fighter_extra:
+		
+		
+		
+		
+		
+		fighter_extra.selected_move_will_restart = not locked_in
 		fighter_extra.update_selected_move(current_button.state)
 	if not fighter_extra.can_feint:
 		$"%FeintButton".pressed = false
@@ -411,6 +464,9 @@ func on_action_selected(action, button):
 			b.set_pressed_no_signal(false)
 	button.set_pressed_no_signal(true)
 	if fighter_extra:
+		
+		
+		fighter_extra.selected_move_will_restart = not locked_in
 		fighter_extra.update_selected_move(button.state)
 	var same_button = button == current_button
 	current_button = button
@@ -641,6 +697,8 @@ func update_select_button():
 		$"%SelectButton".disabled = game.spectating or locked_in
 
 func activate(refresh = true):
+	if is_instance_valid(fighter) and is_instance_valid(game) and game.show_last_di_state:
+		$"%DI".set_last_di(fighter.current_di)
 	if visible and refresh:
 		return
 
@@ -650,7 +708,18 @@ func activate(refresh = true):
 
 
 	if is_instance_valid(fighter):
-		$"%DI".set_label("DI" + " x%.1f" % float(fighter.get_di_scaling(false)))
+		
+		
+		
+		
+		if fighter.opponent and fighter.opponent.combo_count > 0:
+			$"%DI".set_label("DI" + " x%.1f" % float(fighter.get_di_scaling(false, 1)))
+		else:
+			$"%DI".set_label("DI")
+		if is_instance_valid(game) and game.show_last_di_state:
+			$"%DI".set_last_di(fighter.current_di)
+		else:
+			$"%DI".set_last_di(null)
 		var last_action_name = ReplayManager.get_last_action(fighter.id)
 
 		if last_action_name and fighter.state_machine.states_map.has(last_action_name.action):

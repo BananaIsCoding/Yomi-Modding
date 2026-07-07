@@ -4,10 +4,36 @@ class_name TelekinesisProjectile
 
 var launched = false
 
+
+
+
+
+var got_perfect_parried = false
+
+
+
+
+var got_push_blocked = false
+
 export (PackedScene) var disable_obj
 export (PackedScene) var disable_particle
 export  var rumble = true
 export  var no_hitlag = true
+export  var disable_on_block = false
+
+func _ready():
+	
+	
+	._ready()
+	state_variables.append_array(["got_perfect_parried", "got_push_blocked"])
+
+func on_got_parried():
+	.on_got_parried()
+	got_perfect_parried = true
+
+func on_got_push_blocked():
+	.on_got_push_blocked()
+	got_push_blocked = true
 
 func disable():
 	disable_action()
@@ -34,6 +60,10 @@ func disable_action():
 func hit_action(obj):
 	pass
 
+func on_got_blocked():
+	if disable_on_block:
+		disable()
+
 func tick():
 	.tick()
 	if no_hitlag:
@@ -46,3 +76,9 @@ func drop():
 func launch(data):
 
 	state_machine.queue_state("Launch", data)
+
+func launch_redirect(data):
+	
+	
+	
+	state_machine.queue_state("LaunchRedirect", data)

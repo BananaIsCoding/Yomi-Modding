@@ -5,6 +5,12 @@ const MUZZLE_FLASH_SCENE = preload("res://characters/swordandgun/projectiles/Muz
 const TEMPORAL_BULLET_SCENE = preload("res://characters/swordandgun/projectiles/frozen_bullet.tscn")
 const FAST_TEMPORAL_BULLET_SCENE = preload("res://characters/swordandgun/projectiles/frozen_bullet_fast.tscn")
 
+
+
+
+const TEMPORAL_PATH_SCENE = preload("res://characters/swordandgun/projectiles/TemporalPath.tscn")
+const USE_PATH_TEMPORAL = false
+
 const KICKBACK_FORCE = "-1.0"
 const AUTO_AIM_DIST = "0.2"
 
@@ -70,11 +76,20 @@ func _frame_4():
 
 
 		
-		var bullet = host.spawn_object(TEMPORAL_BULLET_SCENE if not fast else FAST_TEMPORAL_BULLET_SCENE, fixed.round(bullet_location.x), fixed.round(bullet_location.y), true, bullet_location, false)
-		
-		bullet.set_facing(Utils.int_sign(host.opponent.get_pos().x - pos.x))
-		var barrel_location = host.get_barrel_location(angle)
-		host.temporal_round = bullet.obj_name
+		if USE_PATH_TEMPORAL:
+			
+			
+			
+			var bullet = host.spawn_object(TEMPORAL_PATH_SCENE, fixed.round(bullet_location.x), fixed.round(bullet_location.y), true, bullet_location, false)
+			bullet.dir_x = dir.x
+			bullet.dir_y = dir.y
+			bullet.fast = fast
+			host.temporal_round = bullet.obj_name
+		else:
+			var bullet = host.spawn_object(TEMPORAL_BULLET_SCENE if not fast else FAST_TEMPORAL_BULLET_SCENE, fixed.round(bullet_location.x), fixed.round(bullet_location.y), true, bullet_location, false)
+
+			bullet.set_facing(Utils.int_sign(host.opponent.get_pos().x - pos.x))
+			host.temporal_round = bullet.obj_name
 
 func is_accurate(dir, angle):
 

@@ -7,7 +7,6 @@ onready var hitbox = $Hitbox
 
 var t = 0
 
-
 func _frame_1():
 	if not host.hitbox_out:
 		hitbox.activate()

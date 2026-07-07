@@ -7,3 +7,4 @@
 
 [node name="8Way" parent="." index="0" instance=ExtResource( 2 )]
 margin_bottom = 62.0
+Neutral = false

@@ -18,14 +18,14 @@ func _frame_0():
 
 
 func _tick():
-	if current_tick < FADE_IN_TIME:
-		host.sprite.modulate.a = current_tick / float(FADE_IN_TIME)
-	else:
-		move_velocity = Utils.approach(move_velocity, MOVE_SPEED * host.creator.loic_dir, ACCEL)
-		host.sprite.modulate.a = 1.0
+	
+	
+	
+	host.sprite.modulate.a = min(current_tick / float(FADE_IN_TIME), 1.0)
 
-		if host.creator:
-			host.move_directly(move_velocity, 0)
+	if host.creator:
+		move_velocity = Utils.approach(move_velocity, MOVE_SPEED * host.creator.loic_dir, ACCEL)
+		host.move_directly(move_velocity, 0)
 
 
 	var drain_ratio = fixed.sub("1.0", fixed.div(str(current_tick), str(host.aim_ticks)))

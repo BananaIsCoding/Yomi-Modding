@@ -69,10 +69,17 @@ var buffer_armor = false
 var can_unlock_gratuitous = true
 var can_flamethrower = true
 var magnet_ticks_left = 0
+var nade_explosion_in_combo = false
+var hit_with_loic = false
 var grenade_object = null
 var flame_touching_opponent = null
 var magnet_installed = false
+var honking = false
+var honking_cooldown = 0
 var armor_startup_ticks = 0
+
+
+var step_count = 0
 
 var used_earthquake_grab = false
 var started_magnet_in_initiative = false
@@ -87,6 +94,8 @@ var buffer_drive_cancel = false
 var super_armor_installed = false
 var propel_friction_ticks = 0
 
+var HONK_COOLDOWN = 30
+
 onready var chainsaw_arm = $"%ChainsawArm"
 onready var drive_jump_sprite = $"%DriveJumpSprite"
 onready var magnet_polygon = $"%MagnetPolygon"
@@ -94,6 +103,11 @@ onready var magnet_polygon2 = $"%MagnetPolygon2"
 
 onready var chainsaw_arm_ghosts = [
 ]
+
+func get_current_limb_sprite_node():
+	if drive_jump_sprite and drive_jump_sprite.visible:
+		return drive_jump_sprite
+	return .get_current_limb_sprite_node()
 
 func _ready():
 	chainsaw_arm.set_material(sprite.get_material())
@@ -134,6 +148,7 @@ func init(pos = null):
 		loic_meter = LOIC_METER
 
 func on_got_hit_by_fighter():
+	.on_got_hit_by_fighter()
 	if armor_active:
 		got_hit = true
 
@@ -143,6 +158,7 @@ func on_got_parried():
 	can_ground_pound = false
 
 func on_got_hit():
+	.on_got_hit()
 	gain_air_option_bar(GAIN_AIR_OPTION_BAR_ON_HIT / Utils.int_max(combo_count, 1))
 	
 func on_launched():
@@ -179,6 +195,17 @@ func has_armor():
 
 func has_autoblock_armor():
 	return (armor_active and not (current_state() is CharacterHurtState))
+
+func meter_gain_modified(amount):
+	
+	
+	
+	var modified = .meter_gain_modified(amount)
+	if orbital_strike_projectile:
+		var proj = obj_from_name(orbital_strike_projectile)
+		if proj and proj.current_state() and proj.current_state().name == "Fire":
+			modified = modified / 2
+	return modified
 
 
 func incr_combo(scale = true, projectile = false, force = false, combo_scale_amount = 1):
@@ -273,6 +300,16 @@ func tick():
 			buffer_armor = false
 	if current_state().is_grab and feinting and armor_active:
 		feinting = false
+	if honking:
+		honking = false
+		play_sound("Honk")
+		honking_cooldown = HONK_COOLDOWN
+	if combo_count == 0:
+		nade_explosion_in_combo = false
+	elif honking_cooldown > 0:
+		honking_cooldown -= 1
+		if combo_count > 0:
+			honking_cooldown = 0
 
 	if magnet_ticks_left > 0:
 
@@ -380,11 +417,15 @@ func tick():
 		var can_gain_loic = true
 		if obj and obj.active:
 			can_gain_loic = false
+		if get_opponent().combo_count > 0:
+			can_gain_loic = false
+				
 		if can_gain_loic:
-			if armor_pips > 0:
-				loic_meter += LOIC_GAIN
-			else:
-				loic_meter += LOIC_GAIN_NO_ARMOR
+			var gain = LOIC_GAIN
+			if armor_pips <= 0:
+				gain = LOIC_GAIN_NO_ARMOR
+			loic_meter += gain
+			
 		if infinite_resources:
 			loic_meter = LOIC_METER
 			can_loic = true
@@ -478,6 +519,10 @@ func stop_magnet_fx():
 func process_extra(extra):
 	.process_extra(extra)
 	var can_fly = true
+	if extra.has("honk"):
+		honking = extra.honk
+
+		
 	force_fly = false
 
 
@@ -496,8 +541,13 @@ func process_extra(extra):
 				force_fly = extra.force_fly
 		elif extra.has("fly_enabled") and not extra.fly_enabled:
 			flying_dir = null
+			
+			
+			
+			if fly_fx_started:
+				stop_fly_fx()
 	
-	if extra.has("loic_dir"):
+	if extra.has("loic_dir") and not busy_interrupt:
 
 
 
@@ -569,8 +619,38 @@ func try_drive_cancel(fast = false):
 	else:
 		change_state("DriveCancel" if not fast else "FastDriveCancel")
 
+
+
+
+
+
+
+
+
+
+
+
+func drive_cancel_possible(state, respect_tick = true):
+	if state == null:
+		return false
+	
+	
+	
+	
+	var after_tick = state.current_tick + 2 if respect_tick else - 1
+	return state.has_upcoming_host_command("try_drive_cancel", after_tick)
+
 func on_state_ended(state):
+	.on_state_ended(state)
 	drive_cancel = false
+
+
+
+func _resolved_attach_limb(entry: Dictionary) -> String:
+	var name = ._resolved_attach_limb(entry)
+	if step_count % 2 == 0 and current_state() and current_state().name == "Step":
+		name = Custom.swap_left_right_limb(name)
+	return name
 
 func debug_text():
 	.debug_text()

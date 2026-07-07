@@ -16,6 +16,9 @@ var start_x = 0
 func _enter():
 	start_x = host.get_pos().x
 
+	
+	
+	host.sprite.modulate = Color("ff333d") if not host.has_projectile_parry_window else Color.white
 
 func _tick():
 	if current_tick <= 1:
@@ -30,6 +33,9 @@ func _tick():
 		hitbox.hitstun_ticks = MIN_HITSTUN
 	if hitbox.damage < 0:
 		host.disable()
+	
+	
+	host.sprite.modulate = Color("ff333d") if not host.has_projectile_parry_window else Color.white
 	._tick()
 
 func _frame_5():

@@ -13,3 +13,13 @@ func load_character_data(data):
 		get_node("CharacterLabel").align = 0
 		theme = load("res://cl_port/visuals/error.tres")
 	$"%CharacterLabel".text = n
+	if data.get("use_extra_color_1"):
+		$"%CharacterPortrait".get_material().set_shader_param("extra_replace_color_1", data.get("extra_color_1"))
+	if data.get("use_extra_color_2"):
+		$"%CharacterPortrait".get_material().set_shader_param("extra_replace_color_2", data.get("extra_color_2"))
+	
+	
+	
+	
+	character_limb_data = data.get("limb_data", {})
+	_refresh_auras()

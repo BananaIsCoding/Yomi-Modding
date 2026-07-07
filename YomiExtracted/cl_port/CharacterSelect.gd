@@ -167,14 +167,21 @@ func loadListChar(index, hideName = false):
 	
 	var char_scene
 	if (miss == []):
-		char_scene = load(_charPath).instance()
-		char_scene.name = curFighter
+		var packed = load(_charPath)
+		char_scene = packed.instance() if packed else null
+		if char_scene == null:
+			
+			miss = ["scene at " + _charPath + " failed to instance"]
+			errorMessage[curFighter] = "ERROR - scene failed to load:\n" + _charPath
+		else:
+			char_scene.name = curFighter
 	else:
 		errorMessage[curFighter] = "ERROR - these files are missing:"
 		for f in miss:
 			errorMessage[curFighter] += "\n" + f
-	
-	ModLoader.saveScene(char_scene, _charPath)
+
+	if miss == []:
+		ModLoader.saveScene(char_scene, _charPath)
 
 	
 	bttContainer.get_node(curFighter).character_scene = load(_charPath)
@@ -589,7 +596,11 @@ func _on_button_pressed(button):
 func get_display_data(button):
 	var data = {}
 	if not isCustomChar(button.name) or (button.name in loadedChars):
-		var scene = button.character_scene.instance()
+		var scene = button.character_scene.instance() if button.character_scene else null
+		if scene == null:
+			data["name"] = "(broken)"
+			data["portrait"] = null
+			return data
 		data["name"] = scene.name
 		data["portrait"] = scene.character_portrait
 		scene.free()
@@ -956,8 +967,19 @@ func _createImportFiles(folder, _charName, _charPath):
 	if (modName in charPackages.keys()):
 		loadingText = "Loading Cached Package"
 		ProjectSettings.load_resource_pack(charPackages[modName])
-		return []
-	
+		
+		
+		
+		var packed = ResourceLoader.load(_charPath, "", true)
+		var test_instance = packed.instance() if packed else null
+		if test_instance == null:
+			print("Char cache for '" + modName + "' failed to instance — purging and re-importing.")
+			dir.remove(charPackages[modName])
+			charPackages.erase(modName)
+		else:
+			test_instance.queue_free()
+			return []
+
 	_import_start()
 
 	var assets = ModLoader._get_all_files(folder, "png") + ModLoader._get_all_files(folder, "wav") + ModLoader._get_all_files(folder, "ogg")

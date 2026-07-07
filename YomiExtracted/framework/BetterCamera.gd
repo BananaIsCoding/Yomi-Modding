@@ -11,6 +11,10 @@ export  var default_screenshake_time = 0.1
 
 
 
+var hooks = null
+
+
+
 
 var shake_amount = 0
 var rng = BetterRng.new()
@@ -39,6 +43,11 @@ class Offset extends Reference:
 	
 func _ready():
 	rng.randomize()
+	if ModLoader.active:
+		hooks = get_node_or_null("Hooks")
+		if hooks:
+			hooks.host = self
+			hooks.ready()
 
 func bump_at_location(dir, location = global_position, amount: = default_screenshake_amount, time: = default_screenshake_time, falloff = 1400, power = 4):
 
@@ -58,6 +67,10 @@ func bump(dir = Vector2(), amount = default_screenshake_amount, time = default_s
 	time = float(time)
 	amount *= SCREENSHAKE_MODIFIER
 	time *= SCREENSHAKE_TIME_MODIFIER
+	
+	time /= Global.get_playback_speed_factor()
+	if hooks:
+		hooks.screenshake(dir, amount, time)
 
 
 	var shake_tween = create_tween()

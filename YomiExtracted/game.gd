@@ -39,11 +39,18 @@ onready var camera: GoodCamera = $Camera2D
 onready var objects_node = $Objects
 onready var fx_node = $Fx
 
+
+
+
+onready var hooks = $Hooks
+
 var mouse_pressed = false
 
 var current_tick = - 1
 var max_replay_tick = 0
 var game_started = false
+
+var last_clash_hook_tick = - 1
 var undoing = false
 var singleplayer = false
 var parry_freeze = false
@@ -89,6 +96,7 @@ var match_data = null
 var simulated_once = false
 var started_multiplayer = false
 var prediction_enabled = true
+var show_last_di_state = true
 
 var p1 = null
 var p2 = null
@@ -107,9 +115,31 @@ var global_gravity_modifier = "1.0"
 var camera_snap_position = Vector2()
 
 var objects: Array = []
+
+
+
+
+
+var active_objects: Array = []
+
+
+
+
+var objs_spawned_count = 0
 var objs_map = {
-	
+
 }
+
+
+
+
+var detached_husks: Array = []
+
+
+
+
+
+const DISABLED_HUSK_LINGER_TICKS = 300
 var effects: Array = []
 
 var drag_position = null
@@ -152,7 +182,8 @@ func get_ticks_left():
 	return time - Utils.int_min(current_tick, time)
 
 func _ready():
-	
+	hooks.game = self
+
 	if is_ghost:
 		hide()
 		for object in objects_node.get_children():
@@ -163,6 +194,7 @@ func _ready():
 		ghost_time = Time.get_unix_time_from_system()
 	else:
 		emit_signal("simulation_continue")
+	hooks.ready()
 
 func _spawn_particle_effect(particle_effect: PackedScene, pos: Vector2, dir = Vector2.RIGHT):
 	var obj = particle_effect.instance()
@@ -191,6 +223,7 @@ func copy_to(game: Game):
 
 
 
+	game.current_tick = current_tick
 	p1.chara.copy_to(game.p1.chara)
 	p2.chara.copy_to(game.p2.chara)
 	game.p1.update_data()
@@ -204,14 +237,17 @@ func copy_to(game: Game):
 		object.free()
 	for fx in game.effects:
 		fx.free()
+	
+	
+	game.objs_spawned_count = objs_spawned_count
 	for object in objects:
-		if is_instance_valid(object):
-			if not object.disabled:
-				var new_obj = load(object.filename).instance()
-				game.on_object_spawned(new_obj)
-				object.copy_to(new_obj)
-			else:
-				game.objs_map[str(game.objs_map.size() + 1)] = null
+		if is_instance_valid(object) and not object.disabled:
+			var new_obj = load(object.filename).instance()
+			
+			
+			new_obj.obj_name = object.obj_name
+			game.on_object_spawned(new_obj)
+			object.copy_to(new_obj)
 	game.camera.limit_left = camera.limit_left
 	game.camera.limit_right = camera.limit_right
 
@@ -232,6 +268,7 @@ func _on_super_started(ticks, player):
 		p1_super = true
 	if player == p2:
 		p2_super = true
+	hooks.super_started(ticks, player)
 
 func get_screen_position(player_id):
 	var screen_center = camera.get_camera_screen_center()
@@ -253,16 +290,25 @@ func on_particle_effect_spawned(fx: ParticleEffect):
 	effects.append(fx)
 	fx_node.add_child(fx)
 	fx.connect("tree_exited", self, "_on_fx_exit_tree", [fx])
+	hooks.particle_effect_spawned(fx)
 	
 func on_object_spawned(obj: BaseObj):
 	objects.append(obj)
+	active_objects.append(obj)
+	
+	
+	
+	
+	if not obj.obj_name:
+		objs_spawned_count += 1
+		obj.obj_name = str(objs_spawned_count)
 	objects_node.add_child(obj)
 	obj.has_ceiling = has_ceiling
 	obj.ceiling_height = ceiling_height
-	obj.obj_name = str(objs_map.size() + 1)
+	var name_int = obj.obj_name.to_int()
 	obj.logic_rng = BetterRng.new()
 	obj.logic_rng_static = BetterRng.new()
-	var seed_ = hash(match_data.seed + (objs_map.size() + 1))
+	var seed_ = hash(match_data.seed + name_int)
 	obj.logic_rng.seed = seed_
 	obj.logic_rng_seed = seed_
 	obj.logic_rng_static.seed = match_data.seed
@@ -279,6 +325,7 @@ func on_object_spawned(obj: BaseObj):
 	for particle in obj.particles.get_children():
 		effects.append(particle)
 	connect_signals(obj)
+	hooks.object_spawned(obj)
 
 func _on_fx_exit_tree(fx):
 	effects.erase(fx)
@@ -289,20 +336,29 @@ func _on_obj_exit_tree(obj):
 func on_hitbox_refreshed(hitbox_name):
 	p1.parried_hitboxes.erase(hitbox_name)
 	p2.parried_hitboxes.erase(hitbox_name)
-	pass
+	hooks.hitbox_refreshed(hitbox_name)
 
 func on_clash():
 	super_freeze_ticks = 5
 	parry_freeze = true
-	pass
+	
+	if current_tick != last_clash_hook_tick:
+		last_clash_hook_tick = current_tick
+		hooks.clashed(p1, p2)
 
-func on_parry():
+func on_parry(parrier):
 	super_freeze_ticks = 10
 	parry_freeze = true
+	hooks.parried(parrier, parrier.get_opponent())
 
-func on_block():
-	super_freeze_ticks = 7
-	parry_freeze = true
+
+
+func on_block(blocker):
+	hooks.blocked(blocker, blocker.get_opponent())
+
+
+func on_player_acted(action, data, extra, player):
+	hooks.player_acted(player, action, data, extra)
 
 func on_global_hitlag(amount):
 	if is_ghost:
@@ -310,6 +366,7 @@ func on_global_hitlag(amount):
 	super_freeze_ticks = amount
 	parry_freeze = true
 	hit_freeze = true
+	hooks.global_hitlag(amount)
 
 func forfeit(id):
 	if forfeit:
@@ -321,6 +378,7 @@ func forfeit(id):
 	quitter_focus = true
 	forfeit_player = get_player(id)
 	quitter_focus_ticks = QUITTER_FOCUS_TICKS
+	hooks.forfeit(id)
 
 func start_game(singleplayer: bool, match_data: Dictionary):
 	self.match_data = match_data
@@ -338,21 +396,29 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 	else:
 		return false
 	
-	p1.connect("parried", self, "on_parry")
-	p2.connect("parried", self, "on_parry")
+	p1.connect("parried", self, "on_parry", [p1])
+	p2.connect("parried", self, "on_parry", [p2])
 	p1.connect("clashed", self, "on_clash")
 	p2.connect("clashed", self, "on_clash")
-
-
+	p1.connect("blocked_melee_attack", self, "on_block", [p1])
+	p2.connect("blocked_melee_attack", self, "on_block", [p2])
+	p1.connect("action_selected", self, "on_player_acted", [p1])
+	p2.connect("action_selected", self, "on_player_acted", [p2])
 	p1.connect("predicted", self, "on_prediction", [p1])
 	p2.connect("predicted", self, "on_prediction", [p2])
 	stage_width = Utils.int_clamp(match_data.stage_width, 100, 50000)
 	if match_data.has("game_length"):
-		time = match_data["game_length"]
+		time = int(match_data["game_length"])
 	if match_data.has("frame_by_frame"):
 		frame_by_frame = match_data.frame_by_frame
 	if match_data.has("char_distance"):
-		char_distance = match_data["char_distance"]
+		
+		
+		
+		
+		
+		
+		char_distance = int(match_data["char_distance"])
 	if match_data.has("clashing_enabled"):
 		clashing_enabled = match_data["clashing_enabled"]
 	if match_data.has("asymmetrical_clashing"):
@@ -362,9 +428,11 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 	if match_data.has("has_ceiling"):
 		has_ceiling = match_data["has_ceiling"]
 	if match_data.has("ceiling_height"):
-		ceiling_height = match_data["ceiling_height"]
+		ceiling_height = int(match_data["ceiling_height"])
 	if match_data.has("prediction_enabled"):
 		prediction_enabled = match_data["prediction_enabled"]
+	if match_data.has("show_last_di_state"):
+		show_last_di_state = match_data["show_last_di_state"]
 	p1.has_ceiling = has_ceiling
 	p2.has_ceiling = has_ceiling
 	p1.ceiling_height = ceiling_height
@@ -406,6 +474,8 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 	p2.set_color(Color("ff7a81"))
 	p1.init()
 	p2.init()
+	p1._fire_init_hook()
+	p2._fire_init_hook()
 
 	if match_data.has("selected_styles"):
 		var style1 = match_data.selected_styles[1]
@@ -437,6 +507,8 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 		"P1": p1, 
 		"P2": p2, 
 	}
+	detached_husks = []
+	objs_spawned_count = objs_map.size()
 	p1.objs_map = objs_map
 	p2.objs_map = objs_map
 	snapping_camera = true
@@ -458,7 +530,7 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 	if not is_ghost:
 		if ReplayManager.playback:
 			get_max_replay_tick()
-		elif not match_data.has("replay"):
+		elif not match_data.has("replay") and not match_data.has("replay_challenge"):
 			ReplayManager.init()
 		else:
 			get_max_replay_tick()
@@ -467,7 +539,9 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 
 	var height = 0
 	if match_data.has("char_height"):
-		height = - match_data.char_height
+		
+		
+		height = - int(match_data.char_height)
 
 	p1.set_pos( - char_distance, height)
 	p2.set_pos(char_distance, height)
@@ -498,10 +572,23 @@ func start_game(singleplayer: bool, match_data: Dictionary):
 		if SteamLobby.is_fighting():
 			SteamLobby.on_match_started()
 
-	if match_data.has("starting_meter"):
+	if match_data.has("asymmetrical_health_meter") and match_data.asymmetrical_health_meter:
+		if match_data.has("p1_starting_meter"):
+			p1.gain_super_meter(p1.fixed.round(p1.fixed.mul(str(Fighter.MAX_SUPER_METER), match_data.p1_starting_meter)))
+		if match_data.has("p2_starting_meter"):
+			p2.gain_super_meter(p2.fixed.round(p2.fixed.mul(str(Fighter.MAX_SUPER_METER), match_data.p2_starting_meter)))
+		if match_data.has("p1_starting_health"):
+			p1.hp = int(round(p1.MAX_HEALTH * float(match_data.p1_starting_health) / 100.0))
+			p1.trail_hp = p1.hp
+		if match_data.has("p2_starting_health"):
+			p2.hp = int(round(p2.MAX_HEALTH * float(match_data.p2_starting_health) / 100.0))
+			p2.trail_hp = p2.hp
+	elif match_data.has("starting_meter"):
 		var meter_amount = p1.fixed.round(p1.fixed.mul(str(Fighter.MAX_SUPER_METER), match_data.starting_meter))
 		p1.gain_super_meter(meter_amount)
 		p2.gain_super_meter(meter_amount)
+
+	hooks.game_started(match_data)
 
 func on_prediction(ticks = 7, player = null):
 	_on_super_started(ticks, player)
@@ -530,17 +617,68 @@ func get_max_replay_tick():
 	return max_replay_tick
 
 func clean_objects():
-	var invalid_objects = []
+	
+	
+	var kept = []
+	var active = []
 	for object in objects:
 		if not is_instance_valid(object):
-			invalid_objects.append(object)
-	for object in invalid_objects:
-		objects.erase(object)
+			continue
+		kept.append(object)
+		if not object.disabled:
+			active.append(object)
+	objects = kept
+	active_objects = active
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+func reclaim_disabled_husks():
+	var kept = []
+	for object in objects:
+		if not is_instance_valid(object):
+			continue
+		if object is BaseProjectile and object.disabled:
+			object.disabled_linger += 1
+			if object.disabled_linger >= DISABLED_HUSK_LINGER_TICKS:
+				objs_map.erase(object.obj_name)
+				detached_husks.append(object)
+				continue
+		kept.append(object)
+	objects = kept
+
+
+
+
+func free_finished_husks():
+	if detached_husks.empty():
+		return
+	var still_lingering = []
+	for husk in detached_husks:
+		if not is_instance_valid(husk):
+			continue
+		if husk.is_playing_sounds():
+			still_lingering.append(husk)
+		else:
+			husk.queue_free()
+	detached_husks = still_lingering
 
 func initialize_objects():
-	for object in objects:
+	for object in active_objects:
 		if not object.initialized:
 			object.init()
+			object._fire_init_hook()
 
 func process_fx():
 	for fx in effects:
@@ -561,17 +699,25 @@ func tick():
 			forfeit_player.toggle_quit_graphic(false)
 		quitter_focus = false
 	frame_passed = true
+	hooks.pre_tick()
 	if not singleplayer:
 		if not is_ghost:
 			Network.reset_action_inputs()
 
 	clean_objects()
-	for object in objects:
+	
+	
+	
+	if not is_ghost:
+		reclaim_disabled_husks()
+		free_finished_husks()
+	for object in active_objects:
 		if object.disabled:
 			continue
 		if not object.initialized:
 			object.init()
-		
+			object._fire_init_hook()
+
 		object.tick()
 		var pos = object.get_pos()
 		if pos.x < - stage_width:
@@ -615,7 +761,8 @@ func tick():
 	if (p2.state_interruptable or p2.dummy_interruptable) and not p2.busy_interrupt:
 		p1.reset_combo()
 
-	
+	hooks.post_tick()
+
 	if is_ghost:
 		if not ghost_hidden:
 			if not visible and current_tick >= 0:
@@ -626,7 +773,12 @@ func tick():
 		if ReplayManager.playback:
 			if not ReplayManager.resimulating:
 				is_in_replay = true
-				if current_tick > max_replay_tick and not (ReplayManager.frames.has("finished") and ReplayManager.frames.finished):
+				
+				
+				
+				
+				
+				if current_tick >= max_replay_tick and not (ReplayManager.frames.has("finished") and ReplayManager.frames.finished) and not buffer_playback:
 					ReplayManager.set_deferred("playback", false)
 			else:
 				if current_tick > (ReplayManager.resim_tick if ReplayManager.resim_tick >= 0 else max_replay_tick - 2):
@@ -637,7 +789,11 @@ func tick():
 	else:
 		ReplayManager.frames.finished = true
 	if should_game_end():
-		if started_multiplayer:
+		
+		
+		
+		
+		if started_multiplayer and not spectating:
 			if not ReplayManager.playback:
 				Network.autosave_match_replay(match_data, p1_username, p2_username)
 		end_game()
@@ -860,6 +1016,7 @@ func resolve_collisions(p1, p2, step = 0):
 			return resolve_collisions(p1, p2, step + 1)
 
 func apply_hitboxes(players):
+	hooks.pre_apply_hitboxes(players)
 	var px1 = players[0]
 	var px2 = players[1]
 
@@ -1021,17 +1178,22 @@ func apply_hitboxes(players):
 	var players_to_hit = []
 	var objects_hit_player = false
 	
-	for object in objects:
+	
+	
+	
+	
+	
+	
+	for object in active_objects:
 		if object.disabled:
 			continue
-		
-		
-		var o_hitboxes = object.get_active_hitboxes()
+		var pre_pos = object.get_pos()
+		for hitbox in object.get_active_hitboxes():
+			hitbox.update_position(pre_pos.x, pre_pos.y)
 
-		var o_pos = object.get_pos()
-
-		for hitbox in o_hitboxes:
-			hitbox.update_position(o_pos.x, o_pos.y)
+	for object in active_objects:
+		if object.disabled:
+			continue
 
 		if players_hittable:
 			for p in [px1, px2]:
@@ -1051,8 +1213,11 @@ func apply_hitboxes(players):
 						player_hit_object = true
 						objects_to_hit.append([obj_hit_by, object])
 
-					if p.projectile_invulnerable and object.get("immunity_susceptible"):
-						continue
+					if p.projectile_invulnerable:
+						if object.get("immunity_susceptible"):
+							continue
+						elif p.roll_projectile_invulnerable and object.get("roll_immunity_susceptible"):
+							continue
 
 					var hitboxes = object.get_active_hitboxes()
 					p_hit_by = get_colliding_hitbox(hitboxes, p.hurtbox)
@@ -1063,7 +1228,7 @@ func apply_hitboxes(players):
 		var opp_objects = []
 		var opp_id = (object.id % 2) + 1
 
-		for opp_object in objects:
+		for opp_object in active_objects:
 			if opp_object.disabled:
 				continue
 			if opp_object.id == opp_id or (object.hit_by_self_projectiles and opp_object != object):
@@ -1077,13 +1242,15 @@ func apply_hitboxes(players):
 				if obj_hit_by:
 					objects_hit_each_other = true
 					objects_to_hit.append([obj_hit_by, object])
-		
+
 	if objects_hit_each_other or player_hit_object:
 		for pair in objects_to_hit:
 			pair[0].hit(pair[1])
 	if objects_hit_player:
 		for pair in players_to_hit:
 			pair[0].hit(pair[1])
+
+	hooks.post_apply_hitboxes(players)
 
 func get_colliding_hitbox(hitboxes, hurtbox) -> Hitbox:
 	var hit_by = null
@@ -1149,6 +1316,7 @@ func simulate_until_ready():
 	show_state()
 
 func simulate_one_tick():
+	camera.tick()
 	tick()
 
 	show_state()
@@ -1165,12 +1333,14 @@ func resimulate():
 func undo(cut = true):
 	ReplayManager.undo(cut)
 	game_started = false
+	hooks.undo()
 	start_playback()
 
 func start_playback():
 	ReplayManager.replaying_ingame = true
 
 	emit_signal("playback_requested")
+	hooks.playback_started()
 
 func end_game():
 	if game_finished:
@@ -1179,6 +1349,21 @@ func end_game():
 	game_finished = true
 	p1.game_over = true
 	p2.game_over = true
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	if spectating and not Network.replay_saved:
+		var ud = match_data.get("user_data", {})
+		ReplayManager.save_replay_mp(match_data, str(ud.get("p1", "p1")), str(ud.get("p2", "p2")))
+		Network.replay_saved = true
 
 	if not is_ghost:
 		if not ReplayManager.playback and not ReplayManager.replaying_ingame and not is_in_replay:
@@ -1202,12 +1387,19 @@ func end_game():
 
 	emit_signal("game_won", winner)
 
+	hooks.game_ended(winner)
+
 func negative_on_hit(player):
 	return player.current_state().started_during_combo and not player.opponent.current_state().started_during_combo
 
 func process_tick():
+	hooks.process_tick()
 
 	if super_freeze_ticks > 0:
+		
+		
+		if playback_speed_allows_tick():
+			camera.tick()
 		if hit_freeze:
 			process_fx()
 
@@ -1222,7 +1414,9 @@ func process_tick():
 	if can_tick:
 		advance_frame_input = false
 	if not Global.frame_advance:
-		if Global.playback_speed_mod > 0:
+		if Global.playback_speed_mod == - 1:
+			can_tick = real_tick % 3 != 2
+		elif Global.playback_speed_mod > 0:
 			can_tick = real_tick % Global.playback_speed_mod == 0
 	if (Network.multiplayer_active) and not ghost_tick and not spectating:
 		can_tick = network_simulate_ready
@@ -1231,6 +1425,11 @@ func process_tick():
 		can_tick = true
 
 
+
+	
+	
+	if Global.frame_advance and not can_tick:
+		camera.tick()
 
 	if not ReplayManager.playback:
 		if not is_waiting_on_player():
@@ -1243,13 +1442,13 @@ func process_tick():
 
 					p1_turn = false
 					p2_turn = false
-					if game_paused:
-						if Network.multiplayer_active:
-							Network.can_open_action_buttons = false
 					game_paused = false
 		else:
 			ReplayManager.frames.finished = false
 			game_paused = true
+			
+			
+			camera.tick()
 			var someones_turn = false
 			if p1.state_interruptable and not p1_turn:
 				p2.busy_interrupt = ( not p2.state_interruptable and not (p2.current_state().interruptible_on_opponent_turn or p2.feinting or negative_on_hit(p2)))
@@ -1260,11 +1459,12 @@ func process_tick():
 				p1_turn = true
 
 
-				if singleplayer:
+				if singleplayer or spectating:
 					emit_signal("player_actionable")
 				elif not is_ghost:
 					someones_turn = true
 				player_actionable = true
+				hooks.player_actionable(p1)
 
 			elif p2.state_interruptable and not p2_turn:
 				someones_turn = true
@@ -1276,11 +1476,12 @@ func process_tick():
 				p2_turn = true
 
 
-				if singleplayer:
+				if singleplayer or spectating:
 					emit_signal("player_actionable")
 				elif not is_ghost:
 					someones_turn = true
 				player_actionable = true
+				hooks.player_actionable(p2)
 
 			if someones_turn:
 				ReplayManager.replaying_ingame = false
@@ -1289,7 +1490,6 @@ func process_tick():
 						Network.rpc_("end_turn_simulation", [current_tick, Network.player_id])
 						network_sync_tick = current_tick
 						network_simulate_ready = false
-						Network.sync_unlock_turn()
 						Network.on_turn_started()
 
 
@@ -1310,31 +1510,31 @@ func process_tick():
 func _process(delta):
 	update()
 	super_dim()
-	
-	if camera.global_position.y > camera.limit_bottom - get_viewport_rect().size.y / 2:
-		camera.global_position.y = camera.limit_bottom - get_viewport_rect().size.y / 2
-	if camera.global_position.x > camera.limit_right - get_viewport_rect().size.x / 2:
-		camera.global_position.x = camera.limit_right - get_viewport_rect().size.x / 2
-	if camera.global_position.x < camera.limit_left + get_viewport_rect().size.x / 2:
-		camera.global_position.x = camera.limit_left + get_viewport_rect().size.x / 2
-	
-	if is_instance_valid(ghost_game):
-		ghost_game.camera_zoom = camera_zoom
-		ghost_game.update_camera_limits()
 
-	if game_started and not is_ghost:
-		camera.zoom = Vector2.ONE
-		var dist = p1.get_hurtbox_center().y - p2.get_hurtbox_center().y
-		if abs(p1.get_hurtbox_center().y - p2.get_hurtbox_center().y) > CAMERA_MAX_Y_DIST:
-			var dist_ratio = abs(dist) / float(CAMERA_MAX_Y_DIST)
-			camera.zoom = Vector2.ONE * dist_ratio
-		camera.zoom *= camera_zoom
-	if is_instance_valid(ghost_game):
-		ghost_game.camera.zoom = camera.zoom
-		ghost_game.camera.position = camera.position
-		ghost_game.camera.position = camera.position
+	if playback_speed_allows_tick():
+		if camera.global_position.y > camera.limit_bottom - get_viewport_rect().size.y / 2:
+			camera.global_position.y = camera.limit_bottom - get_viewport_rect().size.y / 2
+		if camera.global_position.x > camera.limit_right - get_viewport_rect().size.x / 2:
+			camera.global_position.x = camera.limit_right - get_viewport_rect().size.x / 2
+		if camera.global_position.x < camera.limit_left + get_viewport_rect().size.x / 2:
+			camera.global_position.x = camera.limit_left + get_viewport_rect().size.x / 2
 
-	camera_snap_position = camera.position
+		if is_instance_valid(ghost_game):
+			ghost_game.camera_zoom = camera_zoom
+			ghost_game.update_camera_limits()
+
+		if game_started and not is_ghost:
+			camera.zoom = Vector2.ONE
+			var dist = p1.get_hurtbox_center().y - p2.get_hurtbox_center().y
+			if abs(p1.get_hurtbox_center().y - p2.get_hurtbox_center().y) > CAMERA_MAX_Y_DIST:
+				var dist_ratio = abs(dist) / float(CAMERA_MAX_Y_DIST)
+				camera.zoom = Vector2.ONE * dist_ratio
+			camera.zoom *= camera_zoom
+		if is_instance_valid(ghost_game):
+			ghost_game.camera.zoom = camera.zoom
+			ghost_game.camera.position = camera.position
+
+		camera_snap_position = camera.position
 
 	if is_ghost and Global.ghost_speed > 2:
 		var current_time = Time.get_unix_time_from_system()
@@ -1351,11 +1551,18 @@ func _process(delta):
 					call_deferred("ghost_tick")
 		
 
+func playback_speed_allows_tick() -> bool:
+	if Global.playback_speed_mod == - 1:
+		return real_tick % 3 != 2
+	elif Global.playback_speed_mod > 0:
+		return real_tick % Global.playback_speed_mod == 0
+	return true
+
 func _physics_process(_delta):
+	hooks.physics_process(_delta)
 	if forfeit:
 		game_paused = false
 		game_finished = true
-	camera.tick()
 	real_tick += 1
 	if not $GhostStartTimer.is_stopped():
 		return
@@ -1374,7 +1581,7 @@ func _physics_process(_delta):
 				process_tick()
 		else:
 			call_deferred("simulate_one_tick")
-			if current_tick >= game_end_tick + 120:
+			if not buffer_playback and current_tick >= game_end_tick + 120:
 				start_playback()
 	else:
 		if ghost_actionable_freeze_ticks > 0:
@@ -1385,7 +1592,7 @@ func _physics_process(_delta):
 			call_deferred("ghost_tick")
 
 	super_active = super_freeze_ticks > 0
-	if super_active:
+	if super_active and playback_speed_allows_tick():
 		super_freeze_ticks -= 1
 		if super_freeze_ticks == 0:
 			super_active = false
@@ -1402,7 +1609,7 @@ func _physics_process(_delta):
 			Network.sync_tick()
 		player_actionable = false
 	
-	if not is_ghost:
+	if not is_ghost and playback_speed_allows_tick():
 		if snapping_camera:
 			var target = (p1.global_position + p2.global_position) / 2
 			if forfeit_player:
@@ -1418,6 +1625,7 @@ func _physics_process(_delta):
 	
 	if not is_ghost and buffer_playback:
 		ReplayManager.resimulating = false
+		ReplayManager.play_full = false
 		game_finished = false
 		emit_signal("simulation_continue")
 		start_playback()
@@ -1450,7 +1658,7 @@ func ghost_tick():
 		if ghost_actionable_freeze_ticks == 0:
 			ghost_simulated_ticks += 1
 			simulate_one_tick()
-		if current_tick > GHOST_FRAMES:
+		if ghost_simulated_ticks > GHOST_FRAMES:
 			emit_signal("ghost_finished")
 
 		if p1.ghost_blocked_melee_attack > 0 and not p1.block_frame_label.visible:
@@ -1496,7 +1704,7 @@ func ghost_tick():
 
 					p2.grounded_indicator.visible = p2.is_grounded() and p2.ghost_was_in_air
 				ghost_p2_actionable = true
-				
+
 
 
 		var p2_tick = ghost_simulated_ticks + (p2.hitlag_ticks if not ghost_p1_actionable else 0)
@@ -1533,7 +1741,7 @@ func ghost_tick():
 						p1.actionable_label.text = "Interrupt\nin %sf" % p1.turn_frames
 					p1.grounded_indicator.visible = p1.is_grounded() and p1.ghost_was_in_air
 
-				
+
 
 
 
@@ -1542,7 +1750,6 @@ func super_dim():
 
 func update_mouse_world_position():
 	Global.mouse_world_position = Global.screen_to_world(get_local_mouse_position())
-	pass
 
 func _unhandled_input(event: InputEvent):
 	if is_afterimage:
@@ -1557,14 +1764,16 @@ func _unhandled_input(event: InputEvent):
 			drag_position = null
 	if event is InputEventMouseMotion:
 		if drag_position and ((is_waiting_on_player() and not ReplayManager.playback) or Global.frame_advance):
-			camera.global_position -= event.relative
+			
+			
+			
+			camera.global_position -= event.relative * camera.zoom
 			snapping_camera = false
 		
-	if not is_ghost and singleplayer:
+	if not is_ghost and (singleplayer or spectating):
 			if event.is_action_pressed("playback"):
-				if not game_finished and not ReplayManager.playback:
-					if is_waiting_on_player() and current_tick > 0:
-						buffer_playback = true
+				if not ReplayManager.resimulating and current_tick > 0:
+					buffer_playback = true
 			if event.is_action_pressed("edit_replay"):
 				if ReplayManager.playback:
 					buffer_edit = true
@@ -1576,7 +1785,8 @@ func _unhandled_input(event: InputEvent):
 					zoom_in()
 				if event.button_index == BUTTON_WHEEL_DOWN:
 					zoom_out()
-	update_mouse_world_position()
+	if not is_ghost:
+		update_mouse_world_position()
 
 func update_camera_limits():
 	if camera_zoom == 1.0 and stage_width > 320:
@@ -1649,7 +1859,9 @@ func show_state():
 	p2.position = p2.get_pos_visual()
 	p1.update()
 	p2.update()
-	for object in objects:
+	for object in active_objects:
+		if object.disabled:
+			continue
 		object.position = object.get_pos_visual()
 		object.update()
 	

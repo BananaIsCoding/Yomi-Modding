@@ -28,6 +28,15 @@ var current_momentum = "0"
 var boost_frames_left = 0
 var stackriken_out = false
 var can_divekick_hop = true
+var detach_delay = 0
+
+
+
+
+
+var cancel_opponent_hitstun_pending = false
+var cancel_opponent_hitstun_countdown = - 1
+const UPPERCUT_HITSTUN_CANCEL_DELAY = 2
 
 const RELEASE_MODIFIER = "1.175"
 const HOOK_DISABLE_DIST = "32"
@@ -63,11 +72,14 @@ func process_extra(extra):
 	if extra.has("explode"):
 		if extra["explode"]:
 			explode_sticky_bomb()
-	if extra.has("pull"):
+	if extra.has("pull") and not busy_interrupt:
 		pulling = extra.pull
 	if extra.has("detach"):
 		if extra.detach:
-			detach()
+			if pulling:
+				detach_delay = 5
+			else:
+				detach()
 
 	if extra.has("release"):
 		if extra.release:
@@ -139,8 +151,48 @@ func apply_grav():
 				return
 	.apply_grav()
 
+
+
+
+func on_state_interruptable(state = null):
+	.on_state_interruptable(state)
+	if cancel_opponent_hitstun_pending and cancel_opponent_hitstun_countdown < 0:
+		cancel_opponent_hitstun_countdown = UPPERCUT_HITSTUN_CANCEL_DELAY
+
 func tick():
 	.tick()
+	
+	
+	
+	
+	if cancel_opponent_hitstun_countdown >= 0:
+		if cancel_opponent_hitstun_countdown == 0:
+			cancel_opponent_hitstun_pending = false
+			cancel_opponent_hitstun_countdown = - 1
+			if opponent and opponent.is_in_hurt_state(false):
+				opponent.combo_count = 0
+				opponent.hitlag_ticks = 0
+				
+				
+				opponent.current_state().enable_interrupt(false, true)
+		else:
+			cancel_opponent_hitstun_countdown -= 1
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	if cancel_opponent_hitstun_pending and is_in_hurt_state(false) and opponent and opponent.is_in_hurt_state(false):
+		var ninja_hurt = current_state()
+		var opp_hurt = opponent.current_state()
+		if ninja_hurt.get("hitstun") != null and opp_hurt.get("hitstun") != null:
+			var target = ninja_hurt.hitstun + UPPERCUT_HITSTUN_CANCEL_DELAY
+			if opp_hurt.hitstun < target:
+				opp_hurt.hitstun = target
 	if turn_frames <= 1 and boost_frames_left <= 0:
 		released_this_turn = false
 	var hook = obj_from_name(grappling_hook_projectile)
@@ -168,6 +220,10 @@ func tick():
 				add_penalty(BACKWARD_PULL_PENALTY)
 	else:
 		pulling = false
+	if detach_delay > 0:
+		detach_delay -= 1
+		if detach_delay <= 0:
+			detach()
 	
 	if skull_shaker_bleed_ticks > 0:
 		skull_shaker_bleed_ticks -= 1
@@ -216,6 +272,7 @@ func on_blocked_something():
 	pass
 
 func on_got_hit():
+	.on_got_hit()
 	if bomb_projectile or bomb_thrown:
 		bomb_thrown = false
 		var bomb_object = obj_from_name(bomb_projectile)

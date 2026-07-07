@@ -7,6 +7,11 @@ class_name PlayerExtra
 var fighter: Fighter
 var player_id
 var selected_move
+
+
+
+
+var selected_move_will_restart = false
 var can_feint = true
 
 func _ready():

@@ -32,6 +32,7 @@ class BoostData:
 const new_modulate_alpha = 0.0
 const fade_speed = 0.30 # Lower number = slower
 
+	
 func tick():
 	.tick()
 	# Decrement cd timer
@@ -203,9 +204,11 @@ func quick_ui_revealer():
 		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = 1.0
 
 # overriding to support damage reduction
-func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0"):
+func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
 	
-	if opponent.combo_count == 0:
+	var combo_ref = self if self_hit else opponent
+
+	if combo_ref.combo_count == 0:
 		trail_hp = get_visual_hp()
 
 	if damage == 0:
@@ -216,18 +219,23 @@ func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_sc
 	damage = Utils.int_max(combo_stale_damage(damage, combo_scaling_offset), 1)
 	damage = Utils.int_max(damage, minimum)
 	damage = Utils.int_max(guts_stale_damage(damage), 1)
-	
-	if opponent.parry_combo:
-		damage = fixed.round(fixed.mul(str(damage), PARRY_COMBO_SCALING))
+
+	if not self_hit:
+		if opponent.parried_burst_combo:
+			damage = fixed.round(fixed.mul(str(damage), burst_parry_combo_scaling))
+		elif opponent.parry_combo:
+			damage = fixed.round(fixed.mul(str(damage), parry_combo_scaling))
 	damage = fixed.round(fixed.mul(str(damage), get_penalty_damage_modifier()))
 	var meter_gain = fixed.round(fixed.mul(str(damage / DAMAGE_SUPER_GAIN_DIVISOR), meter_gain_modifier))
 
-	opponent.gain_super_meter(meter_gain)
-
+	if not self_hit:
+		opponent.gain_super_meter(meter_gain)
+		
 	gain_super_meter(fixed.round(fixed.mul(str(damage / DAMAGE_TAKEN_SUPER_GAIN_DIVISOR), damage_taken_meter_gain_modifier)))
 	damage = fixed.round(fixed.mul(fixed.mul(str(damage), damage_taken_modifier), global_damage_modifier))
-	opponent.combo_damage += damage
-	
+	if not self_hit:
+		opponent.combo_damage += damage
+
 	# if armour state
 	damage *= 1 - damageReduction
 	hp -= damage

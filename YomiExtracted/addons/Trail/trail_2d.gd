@@ -5,7 +5,7 @@
 \
 \
 \
-"\nAuthor: Oussama BOUKHELF\nLicense: MIT\nVersion: 0.1\nEmail: o.boukhelf@gmail.com\nDescription: Advanced 2D/3D Trail system.\nNote: This is a simple implementation, I will update it later on.\n"
+"\nAuthor: Oussama BOUKHELF\nLicense: MIT\nVersion: 0.1\nEmail: o.boukhelf@gmail.com\nDescription: Advanced 2D/3D Trail system.\nNote: This is a simple implementation, I will update it later on.\n"
 
 extends Line2D
 

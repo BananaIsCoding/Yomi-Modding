@@ -10,6 +10,14 @@ func _enter():
 	host.loic_draining = true
 	host.can_loic = false
 	self_ = data.Self
+	
+	
+	
+	
+	
+	
+	if data.has("Dir"):
+		host.loic_dir = data.Dir.x
 
 
 func process_projectile(obj):
