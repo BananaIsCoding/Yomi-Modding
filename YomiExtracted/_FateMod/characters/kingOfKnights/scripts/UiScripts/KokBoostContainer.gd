@@ -27,12 +27,13 @@ func _ready():
 			$"%HBoxContainer".alignment = BoxContainer.ALIGN_END
 			# could do recursive if it get longer than 5 per row
 			var forthBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(forthBox)
 			var thirdBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(thirdBox)
 			var secondBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(secondBox)
 			var firstBox = BoostInfoScene.instance()
+			
+			listOfBoostInstance.append(forthBox)
+			listOfBoostInstance.append(thirdBox)
+			listOfBoostInstance.append(secondBox)
 			listOfBoostInstance.append(firstBox)
 
 			boostBoxContainer.add_child(firstBox)
@@ -69,13 +70,15 @@ func AddBoost(imagePath, toolTip):
 			listOfBoostInstance.append(newBoost)
 			
 			var forthBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(forthBox)
 			var thirdBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(thirdBox)
 			var secondBox = BoostInfoScene.instance()
-			listOfBoostInstance.append(secondBox)
 			var firstBox = BoostInfoScene.instance()
+			
+			listOfBoostInstance.append(forthBox)
+			listOfBoostInstance.append(thirdBox)
+			listOfBoostInstance.append(secondBox)
 			listOfBoostInstance.append(firstBox)
+			
 			
 			boostBoxContainer.add_child(firstBox)
 			boostBoxContainer.add_child(secondBox)

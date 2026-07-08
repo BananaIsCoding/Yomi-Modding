@@ -1,9 +1,16 @@
 extends KokNormalAttackState
 
+## Variables ##
+
 var prevHitLag = 0
 var cutscenePlaying
 var projectile
 var tickForCutscene = 0
+var attackEffect
+
+onready var excaliburCutscene = $"%ExcaliburCutscene"
+onready var chargeUpEffect = $"%ExcaliburChargeUp"
+onready var cutsceneFiller = $"%CutsceneFiller"
 
 export (PackedScene) var groundHitParticle
 export (PackedScene) var airHitParticle
@@ -11,47 +18,16 @@ export (PackedScene) var airAttackParticle
 export (PackedScene) var groundAttackParticle
 export (int) var cutsceneTPF
 
-func _enter_tree():
-	._enter_tree()	
-	
 func _enter():
-	$"%ExcaliburChargeUp".start_emitting()
-	var playerPos = host.get_pos()
-	var opponentPos =  host.opponent.get_pos()
-	
-	print(Global.current_game.camera.global_position)
-	print(Global.current_game.camera.position)
-	$"%ExcaliburCutscene".position = Global.current_game.camera.position - Vector2(playerPos.x, playerPos.y)
-	
+	chargeUpEffect.start_emitting()
+
 func _exit():
 	
 	if host.opponent.position.y > 5:
 		host.state_machine.queue_state("ExcaliburAirVar")
 	else:
 		host.state_machine.queue_state("ExcaliburGroundVar")
-
-
-func _frame_272():
-	$"%ExcaliburChargeUp".stop_emitting()
-	if !host.is_ghost:
-		host.opponent.hitlag_ticks = prevHitLag
-	$"%ExcaliburCutscene".hide()
-	$"%CutsceneFiller".hide()
-	host.quick_ui_revealer()
-	
-func _frame_14():
-	prevHitLag = host.opponent.hitlag_ticks
-	cutscenePlaying = true
-	prevHitLag = host.opponent.hitlag_ticks
-	busy_interrupt_type = BusyInterrupt.None
-	
-func _frame_93():
-	host.quick_ui_hider()
-	if (projectile):
-		projectile.disable()
-	$"%ExcaliburCutscene".show()
-	$"%ExcaliburCutscene".frame = 0
-	$"%CutsceneFiller".show()
+		
 
 func _tick():
 	if cutscenePlaying:
@@ -59,7 +35,50 @@ func _tick():
 		tickForCutscene += 1
 		if tickForCutscene == cutsceneTPF:
 			tickForCutscene = 0
-			$"%ExcaliburCutscene".frame += 1
+			excaliburCutscene.frame += 1
+
+## Specific Frame stuff: ##
+
+func _frame_14():
+	prevHitLag = host.opponent.hitlag_ticks
+	cutscenePlaying = true
+	prevHitLag = host.opponent.hitlag_ticks
+	busy_interrupt_type = BusyInterrupt.None
+
+func _frame_93():
+	host.quick_ui_hider()
+	if (projectile):
+		projectile.disable()
+		
+	var playerPos = host.get_pos()
+	var opponentPos =  host.opponent.get_pos()
+	
+	print(Global.current_game.camera.global_position)
+	print(Global.current_game.camera.position)
+	
+	var midpoint = (Vector2(playerPos.x + opponentPos.x, playerPos.y + opponentPos.y)) / 2
+	var game = Global.current_game
+	excaliburCutscene.position = game.camera.position + Vector2(game.char_distance, 0)
+	excaliburCutscene.show()
+	excaliburCutscene.frame = 0
+	cutsceneFiller.show()
+
+func _frame_272():
+	# Stopping the cutscene 
+	chargeUpEffect.stop_emitting()
+	excaliburCutscene.hide()
+	cutsceneFiller.hide()
+	host.quick_ui_revealer()
+	
+	# Freeing the opponent 
+	# [NOTE] prob not needed as they will be attacked right after 
+	cutscenePlaying = false
+	if !host.is_ghost:
+		host.opponent.hitlag_ticks = prevHitLag
+	
+	attackEffect = host.spawn_object(groundAttackParticle, 435, 17.5)
+
+## Utility Functions: ##
 
 func spawn_exported_projectile():
 	if projectile_scene:

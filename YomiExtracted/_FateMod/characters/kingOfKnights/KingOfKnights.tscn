@@ -1,4 +1,4 @@
-[gd_scene load_steps=271 format=2]
+[gd_scene load_steps=273 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -101,8 +101,10 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ExcaliburScript.gd" type="Script" id=99]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcaliburChargeUp.png" type="Texture" id=100]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/projectilesEffects/ExcaliburChargeUp.tscn" type="PackedScene" id=101]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffectForCutscene.tscn" type="PackedScene" id=102]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburCutsceneSpriteFrames.tres" type="SpriteFrames" id=103]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CutsceneFillerSpriteFrames.tres" type="SpriteFrames" id=104]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburGroundAttackEffect.tscn" type="PackedScene" id=105]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1100,6 +1102,14 @@ scale = Vector2( 0.665, 0.665 )
 z_index = 2
 frames = ExtResource( 103 )
 frame = 27
+
+[node name="ExcaliburCutsceneChargeUp" parent="Flip/ExcaliburCutscene" index="0" instance=ExtResource( 102 )]
+unique_name_in_owner = true
+visible = false
+position = Vector2( 0, 125 )
+
+[node name="ExcaliburGroundAttackEffect" parent="." index="1" instance=ExtResource( 105 )]
+position = Vector2( 435, 17.5 )
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
@@ -2164,6 +2174,7 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+groundAttackParticle = ExtResource( 105 )
 cutsceneTPF = 5
 
 [node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="84"]
