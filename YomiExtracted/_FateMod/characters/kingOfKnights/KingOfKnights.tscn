@@ -1,4 +1,4 @@
-[gd_scene load_steps=273 format=2]
+[gd_scene load_steps=275 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -28,7 +28,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/NormalAttacksScript.gd" type="Script" id=26]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Heavy.png" type="Texture" id=27]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Thrust.png" type="Texture" id=28]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffect.tscn" type="PackedScene" id=29]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburChargeUpEffect.tscn" type="PackedScene" id=29]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Stab.png" type="Texture" id=30]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/VerticalStrike.png" type="Texture" id=31]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/DashEffect.tscn" type="PackedScene" id=32]
@@ -101,10 +101,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ExcaliburScript.gd" type="Script" id=99]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcaliburChargeUp.png" type="Texture" id=100]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/projectilesEffects/ExcaliburChargeUp.tscn" type="PackedScene" id=101]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburChargeUpEffectForCutscene.tscn" type="PackedScene" id=102]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburChargeUpEffectForCutscene.tscn" type="PackedScene" id=102]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburCutsceneSpriteFrames.tres" type="SpriteFrames" id=103]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CutsceneFillerSpriteFrames.tres" type="SpriteFrames" id=104]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ExcaliburGroundAttackEffect.tscn" type="PackedScene" id=105]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ExcaliburGroundAttackScript.gd" type="Script" id=105]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundAttackEffect.tscn" type="PackedScene" id=106]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundHitEffect.tscn" type="PackedScene" id=107]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1107,9 +1109,6 @@ frame = 27
 unique_name_in_owner = true
 visible = false
 position = Vector2( 0, 125 )
-
-[node name="ExcaliburGroundAttackEffect" parent="." index="1" instance=ExtResource( 105 )]
-position = Vector2( 435, 17.5 )
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
@@ -2134,13 +2133,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 10,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"
@@ -2174,11 +2173,10 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-groundAttackParticle = ExtResource( 105 )
 cutsceneTPF = 5
 
 [node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="84"]
-script = ExtResource( 10 )
+script = ExtResource( 105 )
 __meta__ = {
 "_editor_description_": ""
 }
@@ -2186,7 +2184,10 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "Excalibur"
-anim_length = 180
+anim_length = 36
+projectile_scene = ExtResource( 106 )
+projectile_pos_x = 925
+projectile_pos_y = 18
 title = "Excalibur Attack"
 show_in_menu = false
 type = 1
@@ -2200,46 +2201,28 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+hitboxPath = NodePath("ExcaliburHitBox")
 
-[node name="Hitbox" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="0"]
+[node name="ExcaliburHitBox" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 21
-y = -25
-width = 14
-height = 15
+x = 220
+y = -29
+width = 205
+height = 30
 damage = 100
 hitstun_ticks = 23
 victim_hitlag = 4
 can_counter_hit = false
 sdi_modifier = "0.0"
 guard_break = true
+parriable = false
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 12
-active_ticks = 2
-
-[node name="Hitbox2" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="1"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 12
-y = -50
-width = 21
-height = 10
-damage = 100
-hitstun_ticks = 23
-victim_hitlag = 4
-can_counter_hit = false
-sdi_modifier = "0.0"
-guard_break = true
-dir_y = "0"
-knockback = "1.5"
-launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 12
-active_ticks = 2
+start_tick = 1
+active_ticks = 30
 
 [node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="85"]
 script = ExtResource( 10 )
@@ -2304,3 +2287,6 @@ launch_reversible = true
 grounded_hit_state = "HurtAerial"
 start_tick = 12
 active_ticks = 2
+
+[node name="ExcaliburChargeUp" parent="." index="16" instance=ExtResource( 107 )]
+position = Vector2( -1, -1 )

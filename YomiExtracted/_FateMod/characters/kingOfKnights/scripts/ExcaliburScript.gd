@@ -6,16 +6,11 @@ var prevHitLag = 0
 var cutscenePlaying
 var projectile
 var tickForCutscene = 0
-var attackEffect
 
 onready var excaliburCutscene = $"%ExcaliburCutscene"
 onready var chargeUpEffect = $"%ExcaliburChargeUp"
 onready var cutsceneFiller = $"%CutsceneFiller"
 
-export (PackedScene) var groundHitParticle
-export (PackedScene) var airHitParticle
-export (PackedScene) var airAttackParticle
-export (PackedScene) var groundAttackParticle
 export (int) var cutsceneTPF
 
 func _enter():
@@ -31,7 +26,7 @@ func _exit():
 
 func _tick():
 	if cutscenePlaying:
-		host.opponent.hitlag_ticks = 1
+		host.opponent.hitlag_ticks += 1
 		tickForCutscene += 1
 		if tickForCutscene == cutsceneTPF:
 			tickForCutscene = 0
@@ -69,14 +64,6 @@ func _frame_272():
 	excaliburCutscene.hide()
 	cutsceneFiller.hide()
 	host.quick_ui_revealer()
-	
-	# Freeing the opponent 
-	# [NOTE] prob not needed as they will be attacked right after 
-	cutscenePlaying = false
-	if !host.is_ghost:
-		host.opponent.hitlag_ticks = prevHitLag
-	
-	attackEffect = host.spawn_object(groundAttackParticle, 435, 17.5)
 
 ## Utility Functions: ##
 
