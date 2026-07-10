@@ -11,6 +11,10 @@ onready var hitbox =  get_node(hitboxPath)
 
 ## Hitbox size edit functions ##
 
+func _tick():
+	host.opponent.hitlag_ticks += 1
+
+
 func _frame_1():
 	ChangeHitboxSize(460)
 

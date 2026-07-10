@@ -1,84 +1,97 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fx/ParticleEffect.tscn" type="PackedScene" id=1]
+[ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=7]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/particleStuff/emissionShapes/UnfinishedRingsSS.png" type="Texture" id=8]
 
-[sub_resource type="CanvasItemMaterial" id=7]
-blend_mode = 1
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = ExtResource( 7 )
+shader_param/use_extra_color_1 = false
+shader_param/use_extra_color_2 = false
+shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
+shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
+shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
+shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
+shader_param/max_color_distance = 0.01
+shader_param/super_dim = false
+shader_param/use_outline = false
+shader_param/outline_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="ShaderMaterial" id=9]
-
-[sub_resource type="Gradient" id=8]
+[sub_resource type="Gradient" id=7]
 offsets = PoolRealArray( 0, 0.368613, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.552941 )
 
-[sub_resource type="Curve" id=13]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+[sub_resource type="CanvasItemMaterial" id=8]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = false
 
-[sub_resource type="Curve" id=11]
-min_value = -1.0
-_data = [ Vector2( 0, -0.00681818 ), 0.0, 0.0, 0, 0, Vector2( 0.249158, -1 ), 0.0, 0.0, 0, 0, Vector2( 0.498316, -0.0204545 ), 0.0, 0.0, 0, 0, Vector2( 0.747475, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, -0.0568181 ), 0.0, 0.0, 0, 0 ]
+[node name="ParticleEffect" instance=ExtResource( 1 )]
+material = SubResource( 6 )
+z_index = 100
+lifetime = 90.0
 
-[sub_resource type="Curve" id=12]
-_data = [ Vector2( 0, 0.264773 ), 0.0, 0.0, 0, 0, Vector2( 0.993266, 1 ), 0.315726, 0.0, 0, 0 ]
+[node name="Orbs3" type="CPUParticles2D" parent="." index="2"]
+position = Vector2( 3, 3 )
+amount = 10
+lifetime = 5.0
+randomness = 1.0
+direction = Vector2( 0, -1 )
+spread = 20.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 100.0
+scale_amount = 6.0
+scale_amount_random = 0.38
+color = Color( 1, 0.72549, 0.239216, 1 )
+color_ramp = SubResource( 7 )
 
-[node name="ExcaliburChargeUp" instance=ExtResource( 1 )]
-material = SubResource( 7 )
-free = false
-one_shot = false
-start_enabled = false
-
-[node name="Timer" parent="." index="0"]
-one_shot = false
-
-[node name="MainBeamBG" type="CPUParticles2D" parent="." index="2"]
-visible = false
+[node name="MainBeamBG" type="CPUParticles2D" parent="." index="3"]
 self_modulate = Color( 1, 1, 1, 0.243137 )
 amount = 2000
-lifetime = 2.5
+lifetime = 2.0
 speed_scale = 1.5
 emission_shape = 2
 emission_rect_extents = Vector2( 60, 1 )
 direction = Vector2( 0, -1 )
 spread = 1.0
 gravity = Vector2( 0, 0 )
-initial_velocity = 250.0
-radial_accel = -45.0
+initial_velocity = 350.0
+radial_accel = -75.0
 scale_amount = 10.0
-color = Color( 1, 0.921569, 0.545098, 1 )
+color = Color( 1, 0.992157, 0.396078, 1 )
 
-[node name="MainBeam" type="CPUParticles2D" parent="." index="3"]
-visible = false
+[node name="MainBeam" type="CPUParticles2D" parent="." index="4"]
 amount = 5000
-lifetime = 2.5
+lifetime = 2.0
 speed_scale = 2.0
 emission_shape = 2
 emission_rect_extents = Vector2( 50, 1 )
 direction = Vector2( 0, -1 )
 spread = 0.0
 gravity = Vector2( 0, 0 )
-initial_velocity = 250.0
-radial_accel = -42.0
+initial_velocity = 350.0
+radial_accel = -70.0
 scale_amount = 10.0
-color = Color( 1, 0.921569, 0.545098, 1 )
+color = Color( 1, 0.992157, 0.396078, 1 )
 
-[node name="MainBeamHighlight" type="CPUParticles2D" parent="." index="4"]
-visible = false
+[node name="MainBeamHighlight" type="CPUParticles2D" parent="." index="5"]
 position = Vector2( 0, 3 )
-amount = 4000
-lifetime = 2.4
+amount = 5000
+lifetime = 1.85
 speed_scale = 2.0
 emission_shape = 2
 emission_rect_extents = Vector2( 20, 1 )
 direction = Vector2( 0, -1 )
 spread = 0.25
 gravity = Vector2( 0, 0 )
-initial_velocity = 250.0
-radial_accel = -32.74
+initial_velocity = 350.0
+radial_accel = -45.0
 scale_amount = 5.0
 
-[node name="Orbs" type="CPUParticles2D" parent="." index="5"]
-visible = false
-material = SubResource( 9 )
+[node name="Orbs" type="CPUParticles2D" parent="." index="6"]
 position = Vector2( -100, 3 )
 amount = 50
 lifetime = 5.0
@@ -90,12 +103,11 @@ spread = 5.0
 gravity = Vector2( 0, 0 )
 initial_velocity = 100.0
 scale_amount = 4.5
+scale_amount_random = 1.0
 color = Color( 0.996078, 1, 0.882353, 1 )
-color_ramp = SubResource( 8 )
+color_ramp = SubResource( 7 )
 
-[node name="Orbs2" type="CPUParticles2D" parent="." index="6"]
-visible = false
-material = SubResource( 9 )
+[node name="Orbs2" type="CPUParticles2D" parent="." index="7"]
 position = Vector2( 100, 3 )
 amount = 50
 lifetime = 5.0
@@ -107,17 +119,92 @@ spread = 5.0
 gravity = Vector2( 0, 0 )
 initial_velocity = 100.0
 scale_amount = 4.5
+scale_amount_random = 1.0
 color = Color( 0.996078, 1, 0.882353, 1 )
-color_ramp = SubResource( 8 )
+color_ramp = SubResource( 7 )
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="." index="7"]
-amount = 60
-lifetime = 3.0
-direction = Vector2( 0, -1 )
+[node name="BottomSpiralL2R" type="CPUParticles2D" parent="." index="8"]
+material = SubResource( 8 )
+position = Vector2( 20, -150 )
+amount = 4
+lifetime = 4.0
+randomness = 1.0
+texture = ExtResource( 8 )
+emission_shape = 2
+emission_rect_extents = Vector2( 3, 100 )
 spread = 0.0
-gravity = Vector2( 180, 0 )
-initial_velocity = 40.0
-orbit_velocity = 3.0
-orbit_velocity_curve = SubResource( 13 )
-linear_accel_curve = SubResource( 11 )
-scale_amount_curve = SubResource( 12 )
+gravity = Vector2( 0, 0 )
+angle = 40.0
+angle_random = 1.0
+scale_amount = 2.0
+scale_amount_random = 0.25
+anim_speed = 2.5
+
+[node name="BottomSpiralR2L" type="CPUParticles2D" parent="." index="9"]
+material = SubResource( 8 )
+position = Vector2( 20, -150 )
+amount = 4
+lifetime = 4.0
+randomness = 1.0
+texture = ExtResource( 8 )
+emission_shape = 2
+emission_rect_extents = Vector2( 3, 100 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+angle = -40.0
+angle_random = 1.0
+scale_amount = 2.0
+scale_amount_random = 0.25
+anim_speed = 2.5
+
+[node name="TopSpiralR2L" type="CPUParticles2D" parent="." index="10"]
+material = SubResource( 8 )
+position = Vector2( 10, -400 )
+amount = 2
+lifetime = 4.0
+randomness = 1.0
+texture = ExtResource( 8 )
+emission_shape = 2
+emission_rect_extents = Vector2( 3, 100 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+angle = -40.0
+angle_random = 1.0
+scale_amount = 1.25
+scale_amount_random = 0.25
+anim_speed = 2.5
+
+[node name="TopSpiralL2R" type="CPUParticles2D" parent="." index="11"]
+material = SubResource( 8 )
+position = Vector2( 10, -400 )
+amount = 2
+lifetime = 4.0
+randomness = 1.0
+texture = ExtResource( 8 )
+emission_shape = 2
+emission_rect_extents = Vector2( 3, 100 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+angle = 40.0
+angle_random = 1.0
+scale_amount = 1.25
+scale_amount_random = 0.25
+anim_speed = 2.5
+
+[node name="Burst" type="CPUParticles2D" parent="." index="12"]
+position = Vector2( 0, 3 )
+amount = 150
+lifetime = 0.75
+randomness = 1.0
+emission_shape = 2
+emission_rect_extents = Vector2( 100, 1 )
+direction = Vector2( 0, -1 )
+spread = 80.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 100.0
+angle = 45.0
+angle_random = 1.0
+scale_amount = 35.0
+scale_amount_random = 0.38
+color = Color( 0.996078, 0.988235, 0.392157, 1 )
+color_ramp = SubResource( 7 )
