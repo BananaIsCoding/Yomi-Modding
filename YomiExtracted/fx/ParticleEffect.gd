@@ -13,9 +13,6 @@ var emitting = true
 var enabled = true
 var tick = 0
 
-
-
-
 var hooks = null
 
 var sounds_played = {

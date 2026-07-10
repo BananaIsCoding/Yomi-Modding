@@ -1083,7 +1083,11 @@ use_parent_material = true
 frames = SubResource( 136 )
 animation = "ExcaliburChargeUp"
 
-[node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
+[node name="ExcaliburChargeUp2" parent="Flip/Particles" index="0" instance=ExtResource( 107 )]
+position = Vector2( -1, -1 )
+start_enabled = true
+
+[node name="ExcaliburChargeUp" parent="Flip/Particles" index="1" instance=ExtResource( 29 )]
 unique_name_in_owner = true
 visible = false
 material = SubResource( 135 )
@@ -2287,6 +2291,3 @@ launch_reversible = true
 grounded_hit_state = "HurtAerial"
 start_tick = 12
 active_ticks = 2
-
-[node name="ExcaliburChargeUp" parent="." index="16" instance=ExtResource( 107 )]
-position = Vector2( -1, -1 )
