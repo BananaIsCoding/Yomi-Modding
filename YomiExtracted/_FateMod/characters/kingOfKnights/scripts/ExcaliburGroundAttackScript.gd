@@ -3,12 +3,15 @@ extends KokNormalAttackState
 ## Variables ##
 
 var attackEffect
+var startTick 
+var requiredHiding = false
 
 export (PackedScene) var attackParticle
 export (NodePath) var hitboxPath
-export (NodePath) var hitEffect
+export (NodePath) var hitEffectPath
 
 onready var hitbox =  get_node(hitboxPath)
+onready var hitEffect = get_node(hitEffectPath)
 
 ## Hitbox size edit functions ##
 
@@ -28,6 +31,14 @@ func ChangeHitboxSize(width: int):
 	hitbox.pos_x = width + 15
 	hitbox.width = width
 	
-func _exit_tree():
-	print("Bye, Bye")
+func _frame_49():
 	hitEffect.stop_emitting()
+	startTick = host.current_tick
+	requiredHiding = true
+
+func tick():
+	if not requiredHiding:
+		return
+	if ( host.current_tick - startTick > 30):
+		hitEffect.visible = false
+		requiredHiding = false

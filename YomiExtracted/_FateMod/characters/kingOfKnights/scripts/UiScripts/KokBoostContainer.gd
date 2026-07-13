@@ -63,6 +63,7 @@ func ChangeMainBuff():
 		
 func AddBoost(imagePath, toolTip):
 	if createdRows > 0:
+		print ("1) Ammount of boost:",amountOfBuff)
 		if amountOfBuff % 5 == 0:
 			var newBoost = BoostInfoScene.instance()
 			newBoost.texture = imagePath
@@ -90,14 +91,16 @@ func AddBoost(imagePath, toolTip):
 			amountOfBuff += 1
 			return newBoost
 		else:
+			print ("2) Ammount of boost:",amountOfBuff)
 			listOfBoostInstance[amountOfBuff].texture = imagePath
 			listOfBoostInstance[amountOfBuff].hint_tooltip = toolTip
 			amountOfBuff += 1
 			return listOfBoostInstance[amountOfBuff - 1]
 	else:
+		print ("3) Ammount of boost:",amountOfBuff)
 		var newBoost = BoostInfoScene.instance()
 		newBoost.texture = imagePath
-		mainBuffSlot.hint_tooltip = toolTip
+		newBoost.hint_tooltip = toolTip
 		boostBoxContainer.add_child(newBoost)
 		return newBoost
 

@@ -14,6 +14,7 @@ onready var cutsceneFiller = $"%CutsceneFiller"
 export (int) var cutsceneTPF
 
 func _enter():
+	
 	chargeUpEffect.start_emitting()
 
 func _exit():
@@ -27,6 +28,7 @@ func _exit():
 func _tick():
 	if cutscenePlaying:
 		host.opponent.hitlag_ticks += 1
+		host.set_camera_zoom(1.0)
 		tickForCutscene += 1
 		if tickForCutscene == cutsceneTPF:
 			tickForCutscene = 0
@@ -42,6 +44,7 @@ func _frame_14():
 
 func _frame_93():
 	host.quick_ui_hider()
+	host.set_camera_zoom(1.0)
 	if (projectile):
 		projectile.disable()
 		

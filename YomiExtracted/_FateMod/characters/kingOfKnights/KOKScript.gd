@@ -140,6 +140,7 @@ func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease
 		return 
 	cameraTween.kill()
 	game.update_camera_limits()
+
 func set_camera_zoom(value):
 	if is_ghost or ReplayManager.resimulating:
 		return 
