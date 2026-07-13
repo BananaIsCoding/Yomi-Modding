@@ -32,7 +32,8 @@ particles_anim_loop = false
 [node name="ParticleEffect" instance=ExtResource( 1 )]
 material = SubResource( 6 )
 z_index = 100
-lifetime = 90.0
+free = false
+lifetime = 50.0
 
 [node name="Orbs3" type="CPUParticles2D" parent="." index="2"]
 position = Vector2( 3, 3 )

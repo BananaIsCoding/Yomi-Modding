@@ -6,9 +6,9 @@ var attackEffect
 
 export (PackedScene) var attackParticle
 export (NodePath) var hitboxPath
+export (NodePath) var hitEffect
 
 onready var hitbox =  get_node(hitboxPath)
-
 
 func _frame_1():
 	hitbox.pos_x = 475

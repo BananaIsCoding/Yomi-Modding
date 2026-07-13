@@ -53,7 +53,7 @@ func _frame_93():
 	
 	var midpoint = (Vector2(playerPos.x + opponentPos.x, playerPos.y + opponentPos.y)) / 2
 	var game = Global.current_game
-	excaliburCutscene.position = game.camera.position + Vector2(game.char_distance, 0)
+	excaliburCutscene.position = game.camera.position + Vector2(game.char_distance, -10)
 	excaliburCutscene.show()
 	excaliburCutscene.frame = 0
 	cutsceneFiller.show()

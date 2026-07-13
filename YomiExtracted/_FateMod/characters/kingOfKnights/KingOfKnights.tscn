@@ -2121,13 +2121,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 10,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"
@@ -2169,7 +2169,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 sprite_animation = "Excalibur"
-anim_length = 90
+anim_length = 50
 loop_animation = true
 projectile_scene = ExtResource( 106 )
 projectile_pos_x = 925
@@ -2204,15 +2204,18 @@ y = -29
 width = 205
 height = 30
 damage = 50
+hitstun_ticks = 40
 cancellable = false
 can_counter_hit = false
 di_modifier = "0"
+meter_gain_modifier = ".8"
 can_clash = false
 ignore_projectile_armor = true
 guard_break = true
 parriable = false
 block_cancel_allowed = false
 dir_x = "0.0"
+knockback = "7.0"
 start_tick = 2
 active_ticks = 30
 looping = true
