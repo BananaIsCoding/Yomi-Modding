@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://theme.tres" type="Theme" id=1]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UiScripts/KokBoostContainer.gd" type="Script" id=2]
-[ext_resource path="res://addons/collision_box/throw_box.png" type="Texture" id=3]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/UI/BoostImage.tscn" type="PackedScene" id=4]
 
 [node name="KokBoostInfo" type="MarginContainer"]
@@ -17,21 +16,27 @@ BoostInfoScene = ExtResource( 4 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
-margin_right = 112.0
+margin_right = 128.0
 margin_bottom = 16.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 custom_constants/separation = 0
-alignment = 2
+
+[node name="GapSlot2" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = false
+margin_left = 0.0
+margin_right = 16.0
+stretch_mode = 1
 
 [node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer"]
 unique_name_in_owner = true
-margin_right = 96.0
+margin_left = 16.0
+margin_right = 112.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 96, 16 )
 
-[node name="0" parent="HBoxContainer" instance=ExtResource( 4 )]
-margin_left = 96.0
-margin_right = 112.0
-texture = ExtResource( 3 )
+[node name="GapSlot" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = false
+margin_left = 112.0
+margin_right = 128.0
 stretch_mode = 1

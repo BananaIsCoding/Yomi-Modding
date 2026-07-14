@@ -25,11 +25,8 @@ func _ready():
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")
 		mainBuffSlot.hint_tooltip = "+1 Frame Advantage"
 		
-		var gapBlock = BoostInfoScene.instance()
-		
 		if player_id == 2:
-			parentContainer.add_child_below_node(gapBlock, boostBoxContainer)
-			$"%HBoxContainer".alignment = BoxContainer.ALIGN_END
+			parentContainer.alignment = BoxContainer.ALIGN_END
 			# could do recursive if it get longer than 5 per row
 			CreateReverseSlotRow()
 #			boostBoxContainer.add_child(mainBuffSlot)
@@ -60,8 +57,16 @@ func ChangeMainBuff():
 		mainBuffSlot.hint_tooltip = "+20% Damage Boost"
 		
 func AddBoost(imagePath, toolTip):
+	print ("Adding: ", toolTip)
 	if createdRows > 0:
-		if amountOfBuff % 5 == 0:
+		if amountOfBuff < listOfBoostInstance.size():
+			print ("1) Ammount of boost:",amountOfBuff)
+			listOfBoostInstance[amountOfBuff].texture = imagePath
+			listOfBoostInstance[amountOfBuff].hint_tooltip = toolTip
+			amountOfBuff += 1
+			return listOfBoostInstance[amountOfBuff - 1]
+		else:
+			print ("2) Ammount of boost:",amountOfBuff)
 			var newBoost = BoostInfoScene.instance()
 			newBoost.texture = imagePath
 			newBoost.hint_tooltip = toolTip
@@ -75,31 +80,37 @@ func AddBoost(imagePath, toolTip):
 			
 			amountOfBuff += 1
 			return newBoost
-		else:
-			listOfBoostInstance[amountOfBuff].texture = imagePath
-			listOfBoostInstance[amountOfBuff].hint_tooltip = toolTip
-			amountOfBuff += 1
-			return listOfBoostInstance[amountOfBuff - 1]
 	else:
 #		if amountOfBuff % 5 == 0:
 #			AddFillerBoxes()
 		var newBoost = BoostInfoScene.instance()
 		newBoost.texture = imagePath
 		newBoost.hint_tooltip = toolTip
-		boostBoxContainer.add_child(newBoost)
 		amountOfBuff += 1
 		return newBoost
 
+# Will remove boost for player 2
 func RemoveBoost(boostInstance):
+	print ("remove start")
 	for index in range(listOfBoostInstance.size()):
 		if listOfBoostInstance[index] == boostInstance:
+			print("Removing: ", listOfBoostInstance[index].hint_tooltip)
+			listOfBoostInstance[index].texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/EmptySlot.png")
+			listOfBoostInstance[index].hint_tooltip = ""
 			for i in range (index, amountOfBuff - 1):
+				
+				var origChildIndex = listOfBoostInstance[i + 1].get_index()
+				
+				boostBoxContainer.move_child(listOfBoostInstance[i + 1], listOfBoostInstance[i].get_index())
+				boostBoxContainer.move_child(listOfBoostInstance[i], origChildIndex)
+				
+				var temp = listOfBoostInstance[i] 
 				listOfBoostInstance[i] = listOfBoostInstance[i + 1]
+				listOfBoostInstance[i + 1] = temp
+			
 			amountOfBuff -= 1
-			listOfBoostInstance[amountOfBuff].texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/EmptySlot.png")
-			listOfBoostInstance[amountOfBuff].hint_tooltip = ""
+			
 			break
-		index += 1
 
 func CreateReverseSlotRow():
 	var forthBox = BoostInfoScene.instance()

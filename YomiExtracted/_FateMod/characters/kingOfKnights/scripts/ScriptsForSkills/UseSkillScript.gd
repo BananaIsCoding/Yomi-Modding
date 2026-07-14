@@ -2,7 +2,7 @@ extends CharacterState
 
 func _enter():
 	if host.is_ghost:
-		print("Ahhh a ghost")
+#		print("Ahhh a ghost")
 		return
 	randomize()
 	var num = randi() % 3

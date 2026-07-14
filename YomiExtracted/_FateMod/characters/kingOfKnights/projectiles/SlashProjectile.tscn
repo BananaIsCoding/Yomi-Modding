@@ -5,7 +5,6 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKAirBladeSlashSS.png" type="Texture" id=3]
 [ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=4]
 
-
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 128, 128 )
@@ -34,6 +33,7 @@ animations = [ {
 gravity = "0"
 ground_friction = "0"
 extra_state_variables = "immunity_susceptible"
+hookable = true
 
 [node name="Sprite" parent="Flip" index="0"]
 frames = SubResource( 1 )
