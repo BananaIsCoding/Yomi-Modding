@@ -19,6 +19,7 @@ func _enter():
 
 func _exit():
 	
+	print(host.opponent.position.y)
 	if host.opponent.position.y > 5:
 		host.state_machine.queue_state("ExcaliburAirVar")
 	else:
