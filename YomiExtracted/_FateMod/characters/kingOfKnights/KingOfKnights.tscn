@@ -100,15 +100,15 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Excalibur.png" type="Texture" id=98]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburScript.gd" type="Script" id=99]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcaliburChargeUp.png" type="Texture" id=100]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/projectilesEffects/ExcaliburChargeUp.tscn" type="PackedScene" id=101]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburChargeUpEffectForCutscene.tscn" type="PackedScene" id=102]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburCutsceneSpriteFrames.tres" type="SpriteFrames" id=103]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CutsceneFillerSpriteFrames.tres" type="SpriteFrames" id=104]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburGroundAttackScript.gd" type="Script" id=105]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundAttackEffect.tscn" type="PackedScene" id=106]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/hitboxScripts/ExcaliburHitBox.gd" type="Script" id=107]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburHitBox.gd" type="Script" id=107]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundHitEffect.tscn" type="PackedScene" id=108]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburAirAttackScript.gd" type="Script" id=109]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburChargeUpEffectsSFs.tres" type="SpriteFrames" id=110]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -1082,8 +1082,7 @@ player_info_scene = ExtResource( 96 )
 material = SubResource( 1 )
 use_parent_material = true
 frames = SubResource( 136 )
-animation = "Thrust"
-frame = 9
+animation = "ExcaliburChargeUp"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -1094,13 +1093,21 @@ visible = false
 material = SubResource( 193 )
 start_enabled = false
 
-[node name="ExcaliburBeam" type="Line2D" parent="Flip" index="2"]
+[node name="ExcaliburSwordSprite" type="AnimatedSprite" parent="Flip" index="2"]
+unique_name_in_owner = true
 visible = false
-points = PoolVector2Array( 15, -15, 0, -15 )
-width = 40.0
+position = Vector2( 0, -18 )
+frames = ExtResource( 110 )
+frame = 2
+speed_scale = 12.0
+
+[node name="ExcaliburBeam" type="Line2D" parent="Flip" index="3"]
+position = Vector2( 25, -20 )
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 50.0
 default_color = Color( 0.992157, 0.984314, 0.392157, 1 )
 
-[node name="CutsceneFiller" type="AnimatedSprite" parent="Flip" index="3"]
+[node name="CutsceneFiller" type="AnimatedSprite" parent="Flip" index="4"]
 unique_name_in_owner = true
 visible = false
 position = Vector2( 92.4999, -141.5 )
@@ -1108,7 +1115,7 @@ scale = Vector2( 2.24896, 2.1463 )
 z_index = 1
 frames = ExtResource( 104 )
 
-[node name="ExcaliburCutscene" type="AnimatedSprite" parent="Flip" index="4"]
+[node name="ExcaliburCutscene" type="AnimatedSprite" parent="Flip" index="5"]
 unique_name_in_owner = true
 visible = false
 position = Vector2( 60, -30 )
@@ -2167,13 +2174,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 127 ): {
-"x": 10,
-"y": 23
-},
 SubResource( 131 ): {
 "x": 9,
 "y": 18
+},
+SubResource( 127 ): {
+"x": 10,
+"y": 23
 }
 }
 title = "Stab Down"
@@ -2197,7 +2204,6 @@ __meta__ = {
 reset_momentum = true
 sprite_animation = "ExcaliburChargeUp"
 anim_length = 273
-projectile_scene = ExtResource( 101 )
 projectile_pos_y = -17
 projectile_match_facing = true
 title = "Excalibur"
@@ -2278,11 +2284,12 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "Excalibur"
-anim_length = 180
+anim_length = 50
 title = "Excalibur Attack (Air)"
 show_in_menu = false
 type = 1
 button_texture = ExtResource( 98 )
+burstable = false
 self_hit_cancellable = false
 self_interruptable = false
 can_feint_if_possible = false
@@ -2292,25 +2299,31 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-hitboxPath = NodePath("Hitbox")
 beamEffectPath = NodePath("../../Flip/ExcaliburBeam")
+beamLengthIncrPerTick = 90
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/ExcaliburAirVar" index="0"]
+position = Vector2( 0, -20 )
 z_index = 1000
 script = ExtResource( 7 )
-x = 21
-y = -25
-width = 14
-height = 15
-damage = 100
+x = 1350
+y = -480
+width = 1500
+height = 500
+damage = 50
 hitstun_ticks = 23
 victim_hitlag = 4
+cancellable = false
 can_counter_hit = false
 sdi_modifier = "0.0"
+can_clash = false
+ignore_projectile_armor = true
 guard_break = true
+parriable = false
 dir_y = "0"
-knockback = "1.5"
+knockback = "0"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 12
-active_ticks = 2
+start_tick = 1
+active_ticks = 30
+looping = true

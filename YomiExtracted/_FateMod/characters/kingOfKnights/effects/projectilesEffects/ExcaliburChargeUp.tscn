@@ -17,7 +17,7 @@ hookable = true
 [node name="Sprite" parent="Flip" index="0"]
 position = Vector2( 0.1, -0.9 )
 frames = ExtResource( 3 )
-frame = 13
+frame = 7
 
 [node name="CollisionBox" parent="." index="2"]
 __meta__ = {

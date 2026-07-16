@@ -4,9 +4,10 @@ extends KokNormalAttackState
 
 var prevHitLag = 0
 var cutscenePlaying
-var projectile
 var tickForCutscene = 0
+var chargeComplete = false
 
+onready var swordChargeUp = $"%ExcaliburSwordSprite"
 onready var excaliburCutscene = $"%ExcaliburCutscene"
 onready var chargeUpEffect = $"%ExcaliburChargeUp"
 onready var cutsceneFiller = $"%CutsceneFiller"
@@ -14,13 +15,22 @@ onready var cutsceneFiller = $"%CutsceneFiller"
 export (int) var cutsceneTPF
 
 func _enter():
-	
 	chargeUpEffect.start_emitting()
+	
+	swordChargeUp.frame = 0
+	swordChargeUp.visible = true
+	swordChargeUp.playing = true
 
 func _exit():
 	
-	print(host.opponent.position.y)
-	if host.opponent.position.y > 5:
+	chargeUpEffect.stop_emitting()
+	swordChargeUp.visible = false
+	swordChargeUp.playing = false
+	
+	if not chargeComplete:
+		return
+
+	if host.opponent.position.y < -50:
 		host.state_machine.queue_state("ExcaliburAirVar")
 	else:
 		host.state_machine.queue_state("ExcaliburGroundVar")
@@ -46,14 +56,11 @@ func _frame_14():
 func _frame_93():
 	host.quick_ui_hider()
 	host.set_camera_zoom(1.0)
-	if (projectile):
-		projectile.disable()
+	swordChargeUp.playing = false
+	swordChargeUp.visible = false
 		
 	var playerPos = host.get_pos()
 	var opponentPos =  host.opponent.get_pos()
-	
-	print(Global.current_game.camera.global_position)
-	print(Global.current_game.camera.position)
 	
 	var midpoint = (Vector2(playerPos.x + opponentPos.x, playerPos.y + opponentPos.y)) / 2
 	var game = Global.current_game
@@ -68,13 +75,5 @@ func _frame_272():
 	excaliburCutscene.hide()
 	cutsceneFiller.hide()
 	host.quick_ui_revealer()
+	chargeComplete = true
 
-## Utility Functions: ##
-
-func spawn_exported_projectile():
-	if projectile_scene:
-		var pos = get_projectile_pos()
-		projectile = host.spawn_object(projectile_scene, pos.x, pos.y, true, get_projectile_data(), projectile_local_pos)
-		if projectile_match_facing:
-			projectile.set_facing(host.get_facing_int())
-		process_projectile(projectile)

@@ -1,30 +1,23 @@
 extends KokNormalAttackState
 
 ## Variables ##
-
 var attackEffect
 var startTick 
 var requiredHiding = false
-var tick
+var tick = 0
 var targetIsHit
 
-var opponentOrginalPos = Vector2.ZERO
-var directionVector
-
 export (PackedScene) var attackParticle
-export (NodePath) var hitboxPath
 export (NodePath) var beamEffectPath
 export (int) var beamLengthIncrPerTick
 
-onready var hitbox =  get_node(hitboxPath)
 onready var beamEffect = get_node(beamEffectPath)
 
-func tick():
+func _tick():
 	tick += 1
-	host.opponent.position = opponentOrginalPos
+	host.opponent.hitlag_ticks += 1
 	
 	beamEffect.points[1].x += beamLengthIncrPerTick
-	#ChangeHitboxSize(hitbox.pos_x + beamLengthIncrPerTick)
 	
 	if not requiredHiding:
 		return
@@ -32,18 +25,19 @@ func tick():
 		beamEffect.visible = false
 		requiredHiding = false
 
-## Hitbox size edit functions ##
-func _ready():
-	beamEffect.visble = true
-	opponentOrginalPos = host.opponent.position
-	directionVector = (opponentOrginalPos - host.position).normalized()
 
-
-func ChangeHitboxSize(width: int):
-	hitbox.pos_x = width + 15
-	hitbox.width = width
+# Resets beam
+func _enter():
 	
-#func _frame_49():
-#	beamEffect.stop_emitting()
-#	startTick = host.current_tick
-#	requiredHiding = true
+	beamEffect.points[0].x = 0
+	beamEffect.points[1].x = 0
+	beamEffect.visible = true
+	
+	var opponentOrginalPos = host.opponent.position
+	opponentOrginalPos.x += host.opponent.collision_box.x
+	opponentOrginalPos.y += host.opponent.collision_box.y
+	
+	beamEffect.look_at(opponentOrginalPos)
+
+func _exit():
+	beamEffect.visible = false
