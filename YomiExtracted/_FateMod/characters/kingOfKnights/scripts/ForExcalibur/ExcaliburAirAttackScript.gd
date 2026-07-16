@@ -1,6 +1,7 @@
 extends KokNormalAttackState
 
 ## Variables ##
+
 var attackEffect
 var startTick 
 var requiredHiding = false
@@ -13,18 +14,15 @@ export (int) var beamLengthIncrPerTick
 
 onready var beamEffect = get_node(beamEffectPath)
 
+## Functions ##
+
+# Enlarge beam effect as it ticks
+# [NOTE] need to add particle dispersal effects
 func _tick():
 	tick += 1
 	host.opponent.hitlag_ticks += 1
 	
 	beamEffect.points[1].x += beamLengthIncrPerTick
-	
-	if not requiredHiding:
-		return
-	if ( host.current_tick - startTick > 30):
-		beamEffect.visible = false
-		requiredHiding = false
-
 
 # Resets beam
 func _enter():

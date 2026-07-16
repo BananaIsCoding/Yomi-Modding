@@ -9,6 +9,7 @@ var requiredHiding = false
 export (PackedScene) var attackParticle
 export (NodePath) var hitboxPath
 export (NodePath) var hitEffectPath
+export (int) var effectLifetimeAfterDeactivated = 30
 
 onready var hitbox =  get_node(hitboxPath)
 onready var hitEffect = get_node(hitEffectPath)
@@ -30,15 +31,17 @@ func _frame_4():
 func ChangeHitboxSize(width: int):
 	hitbox.pos_x = width + 15
 	hitbox.width = width
-	
+
+# Stop the particle from emitting
 func _frame_49():
 	hitEffect.stop_emitting()
 	startTick = host.current_tick
 	requiredHiding = true
 
+# Fully hide particle after x ticks
 func tick():
 	if not requiredHiding:
 		return
-	if ( host.current_tick - startTick > 30):
+	if ( host.current_tick - startTick > effectLifetimeAfterDeactivated):
 		hitEffect.visible = false
 		requiredHiding = false

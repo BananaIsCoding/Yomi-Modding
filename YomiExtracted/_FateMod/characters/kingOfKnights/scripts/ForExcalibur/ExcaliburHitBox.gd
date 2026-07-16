@@ -2,6 +2,8 @@ tool
 
 extends Hitbox
 
+## Variables ##
+
 export (NodePath) var hitEffectPath
 
 onready var hitEffect = get_node(hitEffectPath)
@@ -9,13 +11,18 @@ onready var hitEffect = get_node(hitEffectPath)
 var isEffectAlrSpawned
 var charDistance
 
+## Functions ##
+
+# Getting variables at start so it does not need to fetch it again during game
 func _enter_tree():
 	if not get_parent().host.is_ghost:
 		charDistance = Vector2(Global.current_game.char_distance, 20)
 
+# Overriden function to also spawn the hit effect once
 func hit(obj):
 	.hit(obj)
 	
+	# if not a char e.g. projectile then don't spawn
 	if(!obj.is_in_group("Fighter")):
 		return
 	
