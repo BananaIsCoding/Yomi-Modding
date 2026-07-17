@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://fx/ParticleEffect.tscn" type="PackedScene" id=1]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/particleStuff/scripts/BananaParticleController.gd" type="Script" id=2]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=7]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/particleStuff/emissionShapes/UnfinishedRingsSS.png" type="Texture" id=8]
 
@@ -32,6 +33,10 @@ particles_anim_loop = false
 [node name="ExcaliburHitEffect(G)" instance=ExtResource( 1 )]
 material = SubResource( 6 )
 z_index = 100
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
 free = false
 lifetime = 50.0
 

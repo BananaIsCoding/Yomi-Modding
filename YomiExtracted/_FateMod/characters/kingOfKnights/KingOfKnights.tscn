@@ -1,4 +1,4 @@
-[gd_scene load_steps=274 format=2]
+[gd_scene load_steps=276 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -100,6 +100,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Excalibur.png" type="Texture" id=98]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburScript.gd" type="Script" id=99]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcaliburChargeUp.png" type="Texture" id=100]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburStarHitEffect.tscn" type="PackedScene" id=101]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburChargeUpEffectForCutscene.tscn" type="PackedScene" id=102]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburCutsceneSpriteFrames.tres" type="SpriteFrames" id=103]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CutsceneFillerSpriteFrames.tres" type="SpriteFrames" id=104]
@@ -1058,6 +1059,21 @@ shader_param/super_dim = false
 shader_param/use_outline = false
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
+[sub_resource type="ShaderMaterial" id=194]
+resource_local_to_scene = true
+shader = ExtResource( 2 )
+shader_param/use_extra_color_1 = false
+shader_param/use_extra_color_2 = false
+shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
+shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
+shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
+shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
+shader_param/max_color_distance = 0.01
+shader_param/super_dim = false
+shader_param/use_outline = false
+shader_param/outline_color = Color( 0, 0, 0, 1 )
+
 [node name="King Of Knights" instance=ExtResource( 1 )]
 script = ExtResource( 24 )
 __meta__ = {
@@ -1091,6 +1107,12 @@ material = SubResource( 135 )
 [node name="ExcaliburHitEffect(G)" parent="Flip/Particles" index="1" instance=ExtResource( 108 )]
 visible = false
 material = SubResource( 193 )
+start_enabled = false
+
+[node name="ExcaliburStarHitEffect" parent="Flip/Particles" index="2" instance=ExtResource( 101 )]
+visible = false
+material = SubResource( 194 )
+free = false
 start_enabled = false
 
 [node name="ExcaliburSwordSprite" type="AnimatedSprite" parent="Flip" index="2"]
@@ -2174,13 +2196,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 10,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"
@@ -2300,12 +2322,16 @@ hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 beamEffectPath = NodePath("../../Flip/ExcaliburBeam")
+hitboxPath = NodePath("Hitbox")
 beamLengthIncrPerTick = 90
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/ExcaliburAirVar" index="0"]
 position = Vector2( 0, -20 )
 z_index = 1000
-script = ExtResource( 7 )
+script = ExtResource( 107 )
+__meta__ = {
+"_editor_description_": ""
+}
 x = 1350
 y = -480
 width = 1500
@@ -2327,3 +2353,4 @@ grounded_hit_state = "HurtAerial"
 start_tick = 1
 active_ticks = 30
 looping = true
+hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburStarHitEffect")

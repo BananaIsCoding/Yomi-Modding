@@ -6,7 +6,6 @@ var attackEffect
 var startTick 
 var requiredHiding = false
 
-export (PackedScene) var attackParticle
 export (NodePath) var hitboxPath
 export (NodePath) var hitEffectPath
 export (int) var effectLifetimeAfterDeactivated = 30
@@ -17,6 +16,7 @@ onready var hitEffect = get_node(hitEffectPath)
 ## Hitbox size edit functions ##
 
 func _frame_1():
+	hitbox.isEffectAlrSpawned = false
 	ChangeHitboxSize(460)
 
 func _frame_2():
