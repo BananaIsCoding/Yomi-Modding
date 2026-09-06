@@ -11,7 +11,6 @@ func _enter():
 	ungroundRegisterPeriod = 0
 
 func _frame_0():
-	print(host.rotation_degrees)
 	
 	var twoDirMult = sqrt(projSpeed * projSpeed)
 	

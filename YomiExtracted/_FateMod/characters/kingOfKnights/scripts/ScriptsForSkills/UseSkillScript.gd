@@ -4,6 +4,11 @@ func _enter():
 	if host.is_ghost:
 #		print("Ahhh a ghost")
 		return
+	
+	# Picks a random number and use it to determine what skill will be used
+	# Change the state
+	# And update replay or it will randomise each time it is replayed
+	# (I need to check if that force change made replay 1 tick less accurate)
 	randomize()
 	var num = randi() % 3
 	if num == 0:

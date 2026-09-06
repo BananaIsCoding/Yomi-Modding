@@ -24,6 +24,7 @@ one_shot = false
 [node name="ChargeParticles" type="CPUParticles2D" parent="." index="1"]
 material = SubResource( 8 )
 z_index = 1
+emitting = false
 amount = 75
 lifetime = 45.0
 speed_scale = 2.0

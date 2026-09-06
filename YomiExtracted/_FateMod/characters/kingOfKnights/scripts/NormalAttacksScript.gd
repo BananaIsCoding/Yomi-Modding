@@ -2,6 +2,11 @@ extends CharacterState
 
 class_name KokNormalAttackState
 
+export (String) var normal_StateAnimName
+export (String) var normalArmour_StateAnimName
+export (String) var hiddenArmour_StateAnimName
+export (String) var hidden_StateAnimName
+
 var originalHbDmg = []
 
 # Overriding set_up to also add the original hitbox damage 
@@ -44,7 +49,23 @@ func setup_hitboxes():
 	if earliest_hitbox <= 0 and earliest != 999999999:
 		earliest_hitbox = earliest
 
+func _ready():
+	._ready()
+	if (normal_StateAnimName == ""):
+		normal_StateAnimName == anim_name
+	if (normalArmour_StateAnimName == ""):
+		normalArmour_StateAnimName = normal_StateAnimName + "(Armour)"
+	if (hiddenArmour_StateAnimName == ""):
+		hiddenArmour_StateAnimName = normal_StateAnimName + "(HiddenArmour)"
+	if (hidden_StateAnimName == ""):
+		hidden_StateAnimName = normal_StateAnimName + "(Hidden)"
+		
 func _enter():
+	match host.stance:
+		"Normal":
+			anim_name = normal_StateAnimName
+		"Normal(Armour)":
+			anim_name = normalArmour_StateAnimName
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage += hitbox.damage * host.dmgBoost

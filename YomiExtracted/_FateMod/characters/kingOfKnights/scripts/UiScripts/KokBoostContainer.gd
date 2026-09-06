@@ -49,7 +49,7 @@ func ChangeMainBuff():
 	if currentStance == "Normal":
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")
 		mainBuffSlot.hint_tooltip = "+1 Frame Advantage" 
-	elif currentStance == "Normal(Armored)":
+	elif currentStance == "Normal(Armour)":
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/DefenceBuff.png")
 		mainBuffSlot.hint_tooltip = "+10% Damage Reduction"
 	elif currentStance == "Alter":
@@ -87,6 +87,7 @@ func AddBoost(imagePath, toolTip):
 		newBoost.texture = imagePath
 		newBoost.hint_tooltip = toolTip
 		amountOfBuff += 1
+		boostBoxContainer.add_child(newBoost)
 		return newBoost
 
 # Will remove boost for player 2

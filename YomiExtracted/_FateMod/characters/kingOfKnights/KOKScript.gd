@@ -1,7 +1,9 @@
 extends Fighter
 
+## Variables ##
+
 enum BoostType {DmgBoost, SpecialBoost}
-# adding variable to storing combo cd timer
+
 var comboAttackCD = 0
 var currentExcalCharge = 0
 var skillCd = 0
@@ -9,7 +11,7 @@ var critChance = 0
 var critStar = 0
 var dmgBoost = 0
 var specialBoost = 0
-var armorOn = false
+var armourOn = false
 var damageReduction = 0.0
 
 var cameraTween
@@ -32,7 +34,7 @@ class BoostData:
 const new_modulate_alpha = 0.0
 const fade_speed = 0.30 # Lower number = slower
 
-	
+## Functions ##
 func tick():
 	.tick()
 	# Decrement cd timer
@@ -71,11 +73,16 @@ func tick():
 			BoostToRemove.clear()
 	
 	EmoteHandler()
-# 100% my functions I think (why is there no region in godot)
+
+## 100% my functions I think (why is there no region in godot) ##
+
 func CalcCritChance():
 	return critChance + (critStar * 3)
+
+# Prob need to create a "CreateBoostSlot" function 
+
 func AddDamageBoost(percentage, duration):
-	# will add if statement for alter form
+	# [NOTE] will add if statement for alter form
 	dmgBoost += percentage
 	
 	var newItem = BoostData.new()
@@ -86,6 +93,7 @@ func AddDamageBoost(percentage, duration):
 	newItem.instance = BoostInfoUiInstance.AddBoost(dmgBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
+	
 func AddSpecialBoost(percentage, duration):
 	specialBoost += percentage
 	
@@ -97,17 +105,22 @@ func AddSpecialBoost(percentage, duration):
 	newItem.instance = BoostInfoUiInstance.AddBoost(specialBoostPng, newToolTip)
 	
 	BoostQueue.append(newItem)
+
 func ApplyInstinctSkill():
 	critStar += 15;
 	gain_super_meter_raw(MAX_SUPER_METER)
 	var newToolTip = str(critStar) + " crit Stars"
+	
+	# Checks if there not already another crit icon
 	if CritStartUi == null:
 		CritStartUi = BoostInfoUiInstance.AddBoost(critStarPng, newToolTip)
 	else:
+		# Update it if there is
 		CritStartUi.hint_tooltip = newToolTip
+
 func ToggleArmorMode():
-	armorOn = !armorOn
-	if armorOn:
+	armourOn = !armourOn
+	if armourOn:
 		damageReduction = 0.1
 	else:
 		damageReduction = 0.0

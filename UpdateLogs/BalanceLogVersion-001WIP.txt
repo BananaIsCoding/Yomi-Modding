@@ -1,0 +1,20 @@
+
+Air Slash:
+- Hit frame : 6 -> 7
+- Total frame : 6 -> 18
+
+Air Dash Attack:
+- Hit frame : 3 -> 5
+- Total frame : 10 -> 16
+- Particle Position : (-3, -30) -> (5, 0)
+- Hitbox: Box in front -> Is rotated and covers the player
+- Knockback : (0.6, 1) -> (0.6, -0.1)
+
+Gale Blade:
+- Total frame : 10 -> 20
+
+Heavy Slash (Air):
+- Hit frame : 16 -> 26
+- Total frame : 6 -> 13
+
+

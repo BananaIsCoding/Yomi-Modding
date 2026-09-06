@@ -1,5 +1,7 @@
 extends CharacterState
 
+## Variables ##
+
 export (PackedScene) var SlashProjectile
 # Temp for now (will be replaced by UI Data)
 export var projPosX = 0
@@ -10,6 +12,9 @@ export (String) var diagonalDownAnimName;
 export (String) var directlyUpAnimName;
 export (String) var directlyDownAnimName; 
 
+## Functions ##
+
+# Change animations base on direction given
 func _enter():
 	if data.x == host.get_facing_int():
 		if data.y == -1:
@@ -22,10 +27,10 @@ func _enter():
 	#		elif data.y == 1:
 	#			host.change_state(directlyDownAnimName)
 
+# Spawning the projectile 
+# and rotating it based on the directions (char facing and action data)
 func _frame_7():
 	var projectObject
-	
-	
 	
 	if data.x == host.get_facing_int():
 		if data.y == 0:

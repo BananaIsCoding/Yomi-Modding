@@ -5,18 +5,13 @@ extends Hitbox
 ## Variables ##
 
 export (NodePath) var hitEffectPath
+export (bool) var centreOnOpp = false
 
 onready var hitEffect = get_node(hitEffectPath)
 
 var isEffectAlrSpawned
-var charDistance
 
 ## Functions ##
-
-# Getting variables at start so it does not need to fetch it again during game
-func _enter_tree():
-	if not get_parent().host.is_ghost:
-		charDistance = Vector2(Global.current_game.char_distance, 20)
 
 # Overriden function to also spawn the hit effect once
 func hit(obj):
@@ -28,11 +23,17 @@ func hit(obj):
 	
 	if (!isEffectAlrSpawned):
 		isEffectAlrSpawned = true
+		
+		# Reveal the star effect on opponent
 		hitEffect.visible = true
 		hitEffect.start_emitting()
 		
-		var hitPos = host.opponent.get_center_position_float()
-		if (host.get_facing_int() == -1):
-			hitPos.x *= -1
-
-		hitEffect.position = hitPos + charDistance
+		var hitPos = obj.get_pos()
+		var opponentOrginalPos = Vector2(hitPos.x, hitPos.y)
+		opponentOrginalPos.x += obj.collision_box.x
+		opponentOrginalPos.y += obj.collision_box.y
+		
+		var distance = (opponentOrginalPos - Vector2(host.get_pos().x, host.get_pos().y))
+		distance.x = abs(distance.x)
+		
+		hitEffect.position = distance + Vector2(0, 20)

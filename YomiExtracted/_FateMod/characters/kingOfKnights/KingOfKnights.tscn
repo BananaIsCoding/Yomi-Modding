@@ -1,28 +1,27 @@
-[gd_scene load_steps=276 format=2]
+[gd_scene load_steps=335 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=3]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashUp.png" type="Texture" id=4]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UpSlashState.gd" type="Script" id=5]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/AirDashStrike(Armour).png" type="Texture" id=5]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashDown.png" type="Texture" id=6]
 [ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=7]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Jab.png" type="Texture" id=8]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ThrustScript.gd" type="Script" id=9]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/HeavyGroundAttack.gd" type="Script" id=10]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/AirSlash.png" type="Texture" id=9]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/HorizontalStrike.png" type="Texture" id=11]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/Shirou(KOK).tscn" type="PackedScene" id=12]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/SummonShirouMelee.gd" type="Script" id=13]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Melee).png" type="Texture" id=14]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKJumpAttack.png" type="Texture" id=12]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/JumpAttack.png" type="Texture" id=13]
+[ext_resource path="res://fx/LandingParticle.tscn" type="PackedScene" id=14]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KingOfKnightsIdle.png" type="Texture" id=15]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouHealScript.gd" type="Script" id=16]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Heal).png" type="Texture" id=17]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ManaBurstParticle.tscn" type="PackedScene" id=18]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/ManaBurst.png" type="Texture" id=19]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/KOKTaunt.gd" type="Script" id=20]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Shirou(Combo).png" type="Texture" id=21]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/ComboSlashEffect.tscn" type="PackedScene" id=22]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ShirouComboScript.gd" type="Script" id=23]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKTaunt.gd" type="Script" id=20]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/FollowUpHitbox.gd" type="Script" id=21]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/ActionUIData/JumpAttackActionUIData.tscn" type="PackedScene" id=22]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/JumpAttackScript.gd" type="Script" id=23]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/KOKScript.gd" type="Script" id=24]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ManaBurstScript.gd" type="Script" id=25]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/NormalAttacksScript.gd" type="Script" id=26]
@@ -64,7 +63,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHeavySS.png" type="Texture" id=62]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHoriStrikeSS.png" type="Texture" id=63]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHustle.png" type="Texture" id=64]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKExcalibur.png" type="Texture" id=65]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/ExcaliburStrike.png" type="Texture" id=65]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKVertSlash.png" type="Texture" id=66]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKStabDownSS.png" type="Texture" id=67]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKManaBurstSS.png" type="Texture" id=68]
@@ -82,8 +81,8 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/GaleBladeScript.gd" type="Script" id=80]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeNormalSS.png" type="Texture" id=81]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/SlashProjectile.tscn" type="PackedScene" id=82]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/UIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/UIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/ActionUIData/GaleBladeActionUIData.tscn" type="PackedScene" id=83]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/ActionUIData/GaleBladeAirVariantActionUIData.tscn" type="PackedScene" id=84]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDirUpSS.png" type="Texture" id=85]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDiaUpSS.png" type="Texture" id=86]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKGaleBladeDiaDownSS.png" type="Texture" id=87]
@@ -105,11 +104,16 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburCutsceneSpriteFrames.tres" type="SpriteFrames" id=103]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CutsceneFillerSpriteFrames.tres" type="SpriteFrames" id=104]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburGroundAttackScript.gd" type="Script" id=105]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundAttackEffect.tscn" type="PackedScene" id=106]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/UI/ActionUIData/AirDashAttackActionUIData.tscn" type="PackedScene" id=106]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburHitBox.gd" type="Script" id=107]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/Excalibur/ExcaliburGroundHitEffect.tscn" type="PackedScene" id=108]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/ForExcalibur/ExcaliburAirAttackScript.gd" type="Script" id=109]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/ExcaliburChargeUpEffectsSFs.tres" type="SpriteFrames" id=110]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/ExcaliburStrike 2.png" type="Texture" id=111]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/EffectsSprite/KOKGroundedExcaliburStrikeEffectSS.png" type="Texture" id=112]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/AirDashAttackScript.gd" type="Script" id=113]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKArmourOn.png" type="Texture" id=114]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKCustomWait.gd" type="Script" id=115]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -130,17 +134,93 @@ shader_param/outline_color = Color( 0, 0, 0, 1 )
 atlas = ExtResource( 77 )
 region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=137]
+[sub_resource type="AtlasTexture" id=202]
 atlas = ExtResource( 73 )
 region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=138]
+[sub_resource type="AtlasTexture" id=203]
 atlas = ExtResource( 73 )
 region = Rect2( 128, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=85]
-atlas = ExtResource( 65 )
+[sub_resource type="AtlasTexture" id=204]
+atlas = ExtResource( 73 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=205]
+atlas = ExtResource( 73 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=206]
+atlas = ExtResource( 73 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=207]
+atlas = ExtResource( 73 )
 region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=276]
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=277]
+atlas = ExtResource( 9 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=278]
+atlas = ExtResource( 9 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=279]
+atlas = ExtResource( 9 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=280]
+atlas = ExtResource( 9 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=281]
+atlas = ExtResource( 9 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=265]
+atlas = ExtResource( 114 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=266]
+atlas = ExtResource( 114 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=267]
+atlas = ExtResource( 114 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=268]
+atlas = ExtResource( 114 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=269]
+atlas = ExtResource( 114 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=270]
+atlas = ExtResource( 114 )
+region = Rect2( 0, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=271]
+atlas = ExtResource( 114 )
+region = Rect2( 128, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=272]
+atlas = ExtResource( 114 )
+region = Rect2( 256, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=273]
+atlas = ExtResource( 114 )
+region = Rect2( 384, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=274]
+atlas = ExtResource( 114 )
+region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=156]
 atlas = ExtResource( 87 )
@@ -158,6 +238,18 @@ region = Rect2( 256, 0, 128, 128 )
 atlas = ExtResource( 87 )
 region = Rect2( 384, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=208]
+atlas = ExtResource( 87 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=209]
+atlas = ExtResource( 87 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=210]
+atlas = ExtResource( 87 )
+region = Rect2( 768, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=152]
 atlas = ExtResource( 86 )
 region = Rect2( 0, 0, 128, 128 )
@@ -173,6 +265,18 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=155]
 atlas = ExtResource( 86 )
 region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=211]
+atlas = ExtResource( 86 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=212]
+atlas = ExtResource( 86 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=213]
+atlas = ExtResource( 86 )
+region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=147]
 atlas = ExtResource( 85 )
@@ -194,6 +298,18 @@ region = Rect2( 128, 0, 128, 128 )
 atlas = ExtResource( 85 )
 region = Rect2( 384, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=214]
+atlas = ExtResource( 85 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=215]
+atlas = ExtResource( 85 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=216]
+atlas = ExtResource( 85 )
+region = Rect2( 768, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=143]
 atlas = ExtResource( 81 )
 region = Rect2( 0, 0, 128, 128 )
@@ -209,6 +325,18 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=146]
 atlas = ExtResource( 81 )
 region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=217]
+atlas = ExtResource( 81 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=218]
+atlas = ExtResource( 81 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=219]
+atlas = ExtResource( 81 )
+region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=139]
 atlas = ExtResource( 74 )
@@ -254,99 +382,151 @@ region = Rect2( 384, 0, 128, 128 )
 atlas = ExtResource( 41 )
 region = Rect2( 512, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=248]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=253]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=254]
+atlas = ExtResource( 12 )
+region = Rect2( 128, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=255]
+atlas = ExtResource( 12 )
+region = Rect2( 256, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=256]
+atlas = ExtResource( 12 )
+region = Rect2( 384, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=257]
+atlas = ExtResource( 12 )
+region = Rect2( 512, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=249]
+atlas = ExtResource( 12 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=250]
+atlas = ExtResource( 12 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=251]
+atlas = ExtResource( 12 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=252]
+atlas = ExtResource( 12 )
+region = Rect2( 512, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=97]
 atlas = ExtResource( 68 )
 region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=98]
+[sub_resource type="AtlasTexture" id=220]
+atlas = ExtResource( 68 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=221]
 atlas = ExtResource( 68 )
 region = Rect2( 128, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=99]
+[sub_resource type="AtlasTexture" id=222]
 atlas = ExtResource( 68 )
 region = Rect2( 256, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=100]
+[sub_resource type="AtlasTexture" id=223]
 atlas = ExtResource( 68 )
 region = Rect2( 384, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=101]
+[sub_resource type="AtlasTexture" id=224]
 atlas = ExtResource( 68 )
 region = Rect2( 512, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=102]
+[sub_resource type="AtlasTexture" id=225]
 atlas = ExtResource( 68 )
 region = Rect2( 640, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=103]
+[sub_resource type="AtlasTexture" id=226]
 atlas = ExtResource( 68 )
 region = Rect2( 0, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=104]
+[sub_resource type="AtlasTexture" id=227]
 atlas = ExtResource( 68 )
 region = Rect2( 128, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=105]
+[sub_resource type="AtlasTexture" id=228]
 atlas = ExtResource( 68 )
 region = Rect2( 256, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=106]
+[sub_resource type="AtlasTexture" id=229]
 atlas = ExtResource( 68 )
 region = Rect2( 384, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=107]
+[sub_resource type="AtlasTexture" id=230]
 atlas = ExtResource( 68 )
 region = Rect2( 512, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=108]
+[sub_resource type="AtlasTexture" id=231]
 atlas = ExtResource( 68 )
 region = Rect2( 640, 128, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=109]
+[sub_resource type="AtlasTexture" id=232]
 atlas = ExtResource( 68 )
 region = Rect2( 0, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=110]
+[sub_resource type="AtlasTexture" id=233]
 atlas = ExtResource( 68 )
 region = Rect2( 128, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=111]
+[sub_resource type="AtlasTexture" id=234]
 atlas = ExtResource( 68 )
 region = Rect2( 256, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=112]
+[sub_resource type="AtlasTexture" id=235]
 atlas = ExtResource( 68 )
 region = Rect2( 384, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=113]
+[sub_resource type="AtlasTexture" id=236]
 atlas = ExtResource( 68 )
 region = Rect2( 512, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=114]
+[sub_resource type="AtlasTexture" id=237]
 atlas = ExtResource( 68 )
 region = Rect2( 640, 256, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=115]
+[sub_resource type="AtlasTexture" id=238]
 atlas = ExtResource( 68 )
 region = Rect2( 0, 384, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=116]
+[sub_resource type="AtlasTexture" id=239]
 atlas = ExtResource( 68 )
 region = Rect2( 128, 384, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=117]
+[sub_resource type="AtlasTexture" id=240]
 atlas = ExtResource( 68 )
 region = Rect2( 256, 384, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=119]
+[sub_resource type="AtlasTexture" id=241]
+atlas = ExtResource( 68 )
+region = Rect2( 384, 384, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=242]
 atlas = ExtResource( 68 )
 region = Rect2( 512, 384, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=120]
+[sub_resource type="AtlasTexture" id=243]
 atlas = ExtResource( 68 )
 region = Rect2( 640, 384, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=122]
+[sub_resource type="AtlasTexture" id=244]
+atlas = ExtResource( 68 )
+region = Rect2( 0, 512, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=245]
 atlas = ExtResource( 68 )
 region = Rect2( 128, 512, 128, 128 )
 
@@ -658,21 +838,33 @@ region = Rect2( 384, 0, 128, 128 )
 atlas = ExtResource( 48 )
 region = Rect2( 512, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=133]
+[sub_resource type="AtlasTexture" id=195]
 atlas = ExtResource( 41 )
 region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=196]
 atlas = ExtResource( 41 )
 region = Rect2( 128, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=197]
 atlas = ExtResource( 41 )
 region = Rect2( 256, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=198]
 atlas = ExtResource( 41 )
 region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=199]
+atlas = ExtResource( 41 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=200]
+atlas = ExtResource( 41 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=201]
+atlas = ExtResource( 41 )
+region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=93]
 atlas = ExtResource( 57 )
@@ -710,42 +902,6 @@ region = Rect2( 128, 0, 128, 128 )
 atlas = ExtResource( 64 )
 region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=33]
-atlas = ExtResource( 64 )
-region = Rect2( 128, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 64 )
-region = Rect2( 256, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 64 )
-region = Rect2( 384, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 64 )
-region = Rect2( 512, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 64 )
-region = Rect2( 640, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 64 )
-region = Rect2( 768, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 64 )
-region = Rect2( 896, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 64 )
-region = Rect2( 1024, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 64 )
-region = Rect2( 1152, 0, 128, 128 )
-
 [sub_resource type="AtlasTexture" id=95]
 atlas = ExtResource( 42 )
 region = Rect2( 0, 0, 128, 128 )
@@ -766,16 +922,39 @@ region = Rect2( 128, 0, 128, 128 )
 atlas = ExtResource( 66 )
 region = Rect2( 256, 0, 128, 128 )
 
-[sub_resource type="SpriteFrames" id=136]
+[sub_resource type="AtlasTexture" id=247]
+atlas = ExtResource( 66 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=275]
+atlas = ExtResource( 114 )
+region = Rect2( 512, 128, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=246]
 animations = [ {
 "frames": [ SubResource( 142 ) ],
 "loop": true,
 "name": "AirDashAttack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 137 ), SubResource( 137 ), SubResource( 137 ), SubResource( 138 ) ],
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "AirDashAttack(Armour)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 202 ), SubResource( 202 ), SubResource( 203 ), SubResource( 203 ), SubResource( 203 ), SubResource( 203 ), SubResource( 204 ), SubResource( 204 ), SubResource( 205 ), SubResource( 205 ), SubResource( 206 ), SubResource( 206 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ) ],
 "loop": true,
 "name": "AirSlash",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 276 ), SubResource( 276 ), SubResource( 277 ), SubResource( 277 ), SubResource( 277 ), SubResource( 277 ), SubResource( 278 ), SubResource( 278 ), SubResource( 279 ), SubResource( 279 ), SubResource( 280 ), SubResource( 280 ), SubResource( 281 ), SubResource( 281 ), SubResource( 281 ), SubResource( 281 ), SubResource( 281 ), SubResource( 281 ) ],
+"loop": true,
+"name": "AirSlash(Armour)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 265 ), SubResource( 266 ), SubResource( 267 ), SubResource( 268 ), SubResource( 269 ), SubResource( 270 ), SubResource( 271 ), SubResource( 272 ), SubResource( 273 ), SubResource( 274 ) ],
+"loop": true,
+"name": "ArmourOn",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 37 ) ],
@@ -798,7 +977,7 @@ animations = [ {
 "name": "DoubleJump",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 85 ) ],
+"frames": [ ExtResource( 65 ), ExtResource( 111 ) ],
 "loop": true,
 "name": "Excalibur",
 "speed": 5.0
@@ -813,22 +992,22 @@ animations = [ {
 "name": "ForwardThrow",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 156 ), SubResource( 157 ), SubResource( 158 ), SubResource( 157 ), SubResource( 156 ), SubResource( 157 ), SubResource( 159 ), SubResource( 159 ) ],
+"frames": [ SubResource( 156 ), SubResource( 157 ), SubResource( 158 ), SubResource( 157 ), SubResource( 156 ), SubResource( 157 ), SubResource( 159 ), SubResource( 159 ), SubResource( 208 ), SubResource( 208 ), SubResource( 209 ), SubResource( 209 ), SubResource( 210 ), SubResource( 210 ) ],
 "loop": true,
 "name": "GaleBlade(DiaDown)",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 152 ), SubResource( 153 ), SubResource( 154 ), SubResource( 153 ), SubResource( 152 ), SubResource( 153 ), SubResource( 155 ), SubResource( 155 ) ],
+"frames": [ SubResource( 152 ), SubResource( 153 ), SubResource( 154 ), SubResource( 153 ), SubResource( 152 ), SubResource( 153 ), SubResource( 155 ), SubResource( 155 ), SubResource( 211 ), SubResource( 211 ), SubResource( 212 ), SubResource( 212 ), SubResource( 213 ), SubResource( 213 ) ],
 "loop": true,
 "name": "GaleBlade(DiaUp)",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 147 ), SubResource( 148 ), SubResource( 149 ), SubResource( 150 ), SubResource( 149 ), SubResource( 150 ), SubResource( 151 ), SubResource( 151 ) ],
+"frames": [ SubResource( 147 ), SubResource( 148 ), SubResource( 149 ), SubResource( 150 ), SubResource( 149 ), SubResource( 150 ), SubResource( 151 ), SubResource( 151 ), SubResource( 214 ), SubResource( 214 ), SubResource( 215 ), SubResource( 215 ), SubResource( 216 ), SubResource( 216 ) ],
 "loop": true,
 "name": "GaleBlade(DirUp)",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 144 ), SubResource( 143 ), SubResource( 144 ), SubResource( 146 ), SubResource( 146 ) ],
+"frames": [ SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 144 ), SubResource( 143 ), SubResource( 144 ), SubResource( 146 ), SubResource( 146 ), SubResource( 217 ), SubResource( 217 ), SubResource( 218 ), SubResource( 218 ), SubResource( 219 ), SubResource( 219 ) ],
 "loop": true,
 "name": "GaleBlade(Normal)",
 "speed": 5.0
@@ -848,17 +1027,17 @@ animations = [ {
 "name": "Grabbed",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 141 ) ],
+"frames": [ SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ) ],
 "loop": true,
 "name": "HeavyAirSlash",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 21 ), SubResource( 21 ), SubResource( 92 ) ],
+"frames": [ SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 20 ), SubResource( 21 ), SubResource( 21 ), SubResource( 21 ), SubResource( 21 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ), SubResource( 92 ) ],
 "loop": true,
 "name": "HeavyAttack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 89 ), SubResource( 90 ), SubResource( 91 ) ],
+"frames": [ SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 88 ), SubResource( 89 ), SubResource( 89 ), SubResource( 89 ), SubResource( 89 ), SubResource( 90 ), SubResource( 90 ), SubResource( 91 ), SubResource( 91 ), SubResource( 91 ), SubResource( 91 ), SubResource( 91 ), SubResource( 91 ), SubResource( 91 ) ],
 "loop": true,
 "name": "HoriStrike",
 "speed": 5.0
@@ -893,6 +1072,21 @@ animations = [ {
 "name": "Jump",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 248 ) ],
+"loop": true,
+"name": "JumpAttack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 253 ), SubResource( 253 ), SubResource( 254 ), SubResource( 254 ), SubResource( 255 ), SubResource( 255 ), SubResource( 256 ), SubResource( 256 ), SubResource( 257 ), SubResource( 257 ), SubResource( 257 ), SubResource( 257 ) ],
+"loop": true,
+"name": "JumpAttackInterrupt",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 249 ), SubResource( 249 ), SubResource( 250 ), SubResource( 250 ), SubResource( 251 ), SubResource( 251 ), SubResource( 252 ), SubResource( 252 ), SubResource( 252 ), SubResource( 252 ), SubResource( 252 ), SubResource( 252 ) ],
+"loop": true,
+"name": "JumpAttackLanded",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 55 ) ],
 "loop": true,
 "name": "JumpBack",
@@ -908,7 +1102,7 @@ animations = [ {
 "name": "Landing",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 97 ), SubResource( 98 ), SubResource( 99 ), SubResource( 100 ), SubResource( 101 ), SubResource( 102 ), SubResource( 103 ), SubResource( 104 ), SubResource( 105 ), SubResource( 106 ), SubResource( 107 ), SubResource( 108 ), SubResource( 109 ), SubResource( 110 ), SubResource( 111 ), SubResource( 112 ), SubResource( 113 ), SubResource( 114 ), SubResource( 115 ), SubResource( 116 ), SubResource( 117 ), SubResource( 119 ), SubResource( 120 ), SubResource( 122 ) ],
+"frames": [ SubResource( 97 ), SubResource( 220 ), SubResource( 221 ), SubResource( 222 ), SubResource( 223 ), SubResource( 224 ), SubResource( 225 ), SubResource( 226 ), SubResource( 227 ), SubResource( 228 ), SubResource( 229 ), SubResource( 230 ), SubResource( 231 ), SubResource( 232 ), SubResource( 233 ), SubResource( 234 ), SubResource( 235 ), SubResource( 236 ), SubResource( 237 ), SubResource( 238 ), SubResource( 239 ), SubResource( 240 ), SubResource( 241 ), SubResource( 242 ), SubResource( 243 ), SubResource( 244 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ) ],
 "loop": true,
 "name": "ManaBurst",
 "speed": 5.0
@@ -923,7 +1117,7 @@ animations = [ {
 "name": "ParryLow",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 86 ), SubResource( 86 ), SubResource( 86 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ) ],
+"frames": [ SubResource( 86 ), SubResource( 86 ), SubResource( 86 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 86 ), SubResource( 86 ), SubResource( 86 ) ],
 "loop": true,
 "name": "QuickStab",
 "speed": 5.0
@@ -958,7 +1152,7 @@ animations = [ {
 "name": "Skill1",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 168 ), SubResource( 179 ), SubResource( 169 ), SubResource( 169 ), SubResource( 170 ), SubResource( 170 ), SubResource( 171 ), SubResource( 171 ), SubResource( 172 ), SubResource( 172 ), SubResource( 173 ), SubResource( 173 ), SubResource( 174 ), SubResource( 174 ), SubResource( 175 ), SubResource( 175 ), SubResource( 176 ), SubResource( 176 ), SubResource( 177 ), SubResource( 177 ), SubResource( 178 ), SubResource( 178 ), SubResource( 168 ), SubResource( 168 ) ],
+"frames": [ SubResource( 168 ), SubResource( 179 ), SubResource( 169 ), SubResource( 169 ), SubResource( 170 ), SubResource( 170 ), SubResource( 171 ), SubResource( 171 ), SubResource( 172 ), SubResource( 172 ), SubResource( 173 ), SubResource( 173 ), SubResource( 174 ), SubResource( 174 ), SubResource( 175 ), SubResource( 175 ), SubResource( 176 ), SubResource( 176 ), SubResource( 177 ), SubResource( 177 ), SubResource( 178 ), SubResource( 178 ), SubResource( 168 ), SubResource( 168 ), ExtResource( 15 ) ],
 "loop": true,
 "name": "Skill2",
 "speed": 5.0
@@ -968,22 +1162,22 @@ animations = [ {
 "name": "Skill3",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ) ],
+"frames": [ SubResource( 6 ), SubResource( 6 ), SubResource( 7 ), SubResource( 7 ), SubResource( 8 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ), SubResource( 42 ) ],
 "loop": true,
 "name": "SlashDown",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 133 ), SubResource( 133 ), SubResource( 2 ), SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ), SubResource( 4 ) ],
+"frames": [ SubResource( 195 ), SubResource( 195 ), SubResource( 195 ), SubResource( 195 ), SubResource( 196 ), SubResource( 196 ), SubResource( 197 ), SubResource( 197 ), SubResource( 198 ), SubResource( 198 ), SubResource( 199 ), SubResource( 199 ), SubResource( 200 ), SubResource( 200 ), SubResource( 200 ), SubResource( 201 ) ],
 "loop": true,
 "name": "SlashUp",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ) ],
+"frames": [ SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ) ],
 "loop": true,
 "name": "Stab",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 127 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ) ],
+"frames": [ SubResource( 127 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ) ],
 "loop": true,
 "name": "StabDown",
 "speed": 5.0
@@ -998,7 +1192,7 @@ animations = [ {
 "name": "StabDownStart",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ) ],
+"frames": [ SubResource( 32 ) ],
 "loop": true,
 "name": "Taunt",
 "speed": 5.0
@@ -1008,12 +1202,12 @@ animations = [ {
 "name": "ThrowTech",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), ExtResource( 15 ) ],
+"frames": [ SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ) ],
 "loop": true,
 "name": "Thrust",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 124 ), SubResource( 125 ) ],
+"frames": [ SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ) ],
 "loop": true,
 "name": "VertStrike",
 "speed": 5.0
@@ -1022,6 +1216,11 @@ animations = [ {
 "loop": true,
 "name": "Wait",
 "speed": 30.0
+}, {
+"frames": [ SubResource( 275 ) ],
+"loop": true,
+"name": "Wait(Armour)",
+"speed": 5.0
 }, {
 "frames": [ ExtResource( 45 ) ],
 "loop": true,
@@ -1074,6 +1273,70 @@ shader_param/super_dim = false
 shader_param/use_outline = false
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
+[sub_resource type="AtlasTexture" id=258]
+atlas = ExtResource( 112 )
+region = Rect2( 0, 0, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=259]
+atlas = ExtResource( 112 )
+region = Rect2( 3072, 0, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=260]
+atlas = ExtResource( 112 )
+region = Rect2( 6144, 0, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 112 )
+region = Rect2( 9216, 0, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 112 )
+region = Rect2( 12288, 128, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 112 )
+region = Rect2( 0, 128, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 112 )
+region = Rect2( 3072, 128, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 112 )
+region = Rect2( 6144, 128, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 112 )
+region = Rect2( 9216, 128, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 112 )
+region = Rect2( 0, 256, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=261]
+atlas = ExtResource( 112 )
+region = Rect2( 3072, 256, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 112 )
+region = Rect2( 6144, 256, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=262]
+atlas = ExtResource( 112 )
+region = Rect2( 9216, 256, 3072, 128 )
+
+[sub_resource type="AtlasTexture" id=263]
+atlas = ExtResource( 112 )
+region = Rect2( 12288, 256, 3072, 128 )
+
+[sub_resource type="SpriteFrames" id=264]
+animations = [ {
+"frames": [ SubResource( 258 ), SubResource( 259 ), SubResource( 260 ), SubResource( 10 ), SubResource( 16 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 261 ), SubResource( 19 ), SubResource( 262 ), SubResource( 263 ), null ],
+"loop": false,
+"name": "default",
+"speed": 5.0
+} ]
+
 [node name="King Of Knights" instance=ExtResource( 1 )]
 script = ExtResource( 24 )
 __meta__ = {
@@ -1097,8 +1360,8 @@ player_info_scene = ExtResource( 96 )
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 use_parent_material = true
-frames = SubResource( 136 )
-animation = "ExcaliburChargeUp"
+frames = SubResource( 246 )
+animation = "Wait(Armour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -1110,7 +1373,6 @@ material = SubResource( 193 )
 start_enabled = false
 
 [node name="ExcaliburStarHitEffect" parent="Flip/Particles" index="2" instance=ExtResource( 101 )]
-visible = false
 material = SubResource( 194 )
 free = false
 start_enabled = false
@@ -1124,15 +1386,17 @@ frame = 2
 speed_scale = 12.0
 
 [node name="ExcaliburBeam" type="Line2D" parent="Flip" index="3"]
+visible = false
 position = Vector2( 25, -20 )
-points = PoolVector2Array( 0, 0, 0, 0 )
+rotation = -1.213
+points = PoolVector2Array( 0, 0, 1000, 0 )
 width = 50.0
 default_color = Color( 0.992157, 0.984314, 0.392157, 1 )
 
 [node name="CutsceneFiller" type="AnimatedSprite" parent="Flip" index="4"]
 unique_name_in_owner = true
 visible = false
-position = Vector2( 92.4999, -141.5 )
+position = Vector2( 93, -151.5 )
 scale = Vector2( 2.24896, 2.1463 )
 z_index = 1
 frames = ExtResource( 104 )
@@ -1140,7 +1404,7 @@ frames = ExtResource( 104 )
 [node name="ExcaliburCutscene" type="AnimatedSprite" parent="Flip" index="5"]
 unique_name_in_owner = true
 visible = false
-position = Vector2( 60, -30 )
+position = Vector2( 0, -30 )
 scale = Vector2( 0.665, 0.665 )
 z_index = 2
 frames = ExtResource( 103 )
@@ -1148,39 +1412,311 @@ frame = 27
 
 [node name="ExcaliburCutsceneChargeUp" parent="Flip/ExcaliburCutscene" index="0" instance=ExtResource( 102 )]
 unique_name_in_owner = true
-visible = false
 position = Vector2( 0, 125 )
+
+[node name="ExcaliburGroundHit" type="AnimatedSprite" parent="Flip" index="6"]
+position = Vector2( 983, -15 )
+scale = Vector2( 0.665, 0.665 )
+z_index = 2
+frames = SubResource( 264 )
+frame = 30
+speed_scale = 5.0
+playing = true
+
+[node name="Start" parent="StateMachine" index="0"]
+allowed_stances_string = "All"
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
+allowed_stances_string = "All"
+change_stance_to = ""
+
+[node name="ParryHigh" parent="StateMachine" index="2"]
+change_stance_to = ""
+
+[node name="ParryAfterWhiff" parent="StateMachine" index="3"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ParryAuto" parent="StateMachine" index="4"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ParryLow" parent="StateMachine" index="5"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ParryAir" parent="StateMachine" index="6"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
 
 [node name="Roll" parent="StateMachine" index="7"]
-allowed_stances_string = "Normal
-Normal(Armored)"
+allowed_stances_string = "All
+"
+
+[node name="ShieldHigh" parent="StateMachine" index="8"]
+allowed_stances_string = "All
+"
+
+[node name="ShieldLow" parent="StateMachine" index="9"]
+allowed_stances_string = "All
+"
+
+[node name="ShieldAir" parent="StateMachine" index="10"]
+allowed_stances_string = "All
+"
+
+[node name="Wait" parent="StateMachine" index="11"]
+script = ExtResource( 115 )
+__meta__ = {
+"_editor_description_": ""
+}
+allowed_stances_string = "All
+"
+normal_StateAnimName = "Wait"
+normalArmour_StateAnimName = "Wait(Armour)"
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
+
+[node name="Burst" parent="StateMachine" index="12"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="DefensiveBurst" parent="StateMachine" index="13"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="OffensiveBurst" parent="StateMachine" index="14"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="CounterAttackHi" parent="StateMachine" index="15"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="CounterAttackLow" parent="StateMachine" index="16"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="CounterAttackGrab" parent="StateMachine" index="17"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="Fall" parent="StateMachine" index="18"]
+allowed_stances_string = "All
+"
+
+[node name="SuperFallStartup" parent="StateMachine" index="19"]
+allowed_stances_string = "All
+"
+
+[node name="SuperFall" parent="StateMachine" index="20"]
+allowed_stances_string = "All
+"
+
+[node name="Landing" parent="StateMachine" index="21"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="Knockdown" parent="StateMachine" index="22"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="HardKnockdown" parent="StateMachine" index="23"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="Getup" parent="StateMachine" index="24"]
+allowed_stances_string = "All
+"
+
+[node name="TechRoll" parent="StateMachine" index="25"]
+allowed_stances_string = "All
+"
+
+[node name="CounterAttack" parent="StateMachine" index="26"]
+allowed_stances_string = "All
+"
+
+[node name="DashForward" parent="StateMachine" index="27"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ChargeDashForward" parent="StateMachine" index="28"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="DashBackward" parent="StateMachine" index="29"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="DashBackwardHold" parent="StateMachine" index="30"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="DashStartup" parent="StateMachine" index="31"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="Jump" parent="StateMachine" index="32"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ChargeDash" parent="StateMachine" index="33"]
+allowed_stances_string = "All
+"
+
+[node name="SuperJump" parent="StateMachine" index="34"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="DoubleJump" parent="StateMachine" index="35"]
+allowed_stances_string = "All
+"
+
+[node name="AirDash" parent="StateMachine" index="36"]
+allowed_stances_string = "All
+"
+
+[node name="InstantCancel" parent="StateMachine" index="37"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="WhiffInstantCancel" parent="StateMachine" index="38"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="HurtDizzy" parent="StateMachine" index="39"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="WallSlam" parent="StateMachine" index="40"]
+allowed_stances_string = "All
+"
+
+[node name="HurtAerial" parent="StateMachine" index="41"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="HurtGrounded" parent="StateMachine" index="42"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="Grabbed" parent="StateMachine" index="43"]
+allowed_stances_string = "All
+"
+
+[node name="Hold" parent="StateMachine" index="44"]
+allowed_stances_string = "All
+"
+
+[node name="AirHold" parent="StateMachine" index="45"]
+allowed_stances_string = "All
+"
+
+[node name="Grab" parent="StateMachine" index="46"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="AirGrab" parent="StateMachine" index="47"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="JumpGrab" parent="StateMachine" index="48"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
+
+[node name="ForwardThrow" parent="StateMachine" index="49"]
+allowed_stances_string = "All
+"
+
+[node name="BackThrow" parent="StateMachine" index="50"]
+allowed_stances_string = "All
+"
+
+[node name="AirForwardThrow" parent="StateMachine" index="51"]
+allowed_stances_string = "All
+"
+
+[node name="AirBackThrow" parent="StateMachine" index="52"]
+allowed_stances_string = "All
+"
+
+[node name="AirDownThrow" parent="StateMachine" index="53"]
+allowed_stances_string = "All
+"
+
+[node name="ThrowTech" parent="StateMachine" index="54"]
+allowed_stances_string = "All
+"
+change_stance_to = ""
 
 [node name="Taunt" parent="StateMachine" index="55"]
 script = ExtResource( 20 )
 anim_length = 90
-sprite_anim_length = 10
-ticks_per_frame = 9
+sprite_anim_length = 1
+allowed_stances_string = "All
+"
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
+
+[node name="ForfeitExplosion" parent="StateMachine" index="56"]
+allowed_stances_string = "All
+"
 
 [node name="SlashUp" type="Node2D" parent="StateMachine" index="57"]
-script = ExtResource( 5 )
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
 apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "SlashUp"
-anim_length = 8
+anim_length = 14
 enter_force_dir_x = "1"
 enter_force_speed = "3"
 title = "Up Slash"
 type = 1
 button_texture = ExtResource( 4 )
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/SlashUp" index="0"]
 z_index = 1000
@@ -1188,7 +1724,7 @@ script = ExtResource( 7 )
 x = 11
 y = -21
 width = 19
-height = 25
+height = 24
 damage = 40
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -1211,8 +1747,8 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "QuickStab"
-anim_length = 7
-sprite_anim_length = 7
+anim_length = 14
+sprite_anim_length = 14
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
@@ -1221,11 +1757,15 @@ enter_force_speed = "0.5"
 title = "Jab"
 type = 1
 button_texture = ExtResource( 8 )
+self_interruptable = false
+can_feint_if_possible = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/QuickJab" index="0"]
 z_index = 1000
@@ -1235,15 +1775,11 @@ y = -21
 width = 15
 height = 5
 damage = 40
-hitstun_ticks = 23
-victim_hitlag = 4
 cancellable = false
-can_counter_hit = false
 sdi_modifier = "0.0"
-dir_y = "0"
+dir_y = "-0.5"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
 start_tick = 4
 active_ticks = 3
 
@@ -1256,26 +1792,28 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "Stab"
-anim_length = 10
-sprite_anim_length = 10
+anim_length = 16
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 7
 title = "Stab"
 type = 1
 button_texture = ExtResource( 30 )
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Stab" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
 x = 27
 y = -21
-width = 15
+width = 16
 height = 5
 damage = 40
 hitstun_ticks = 23
@@ -1286,8 +1824,7 @@ sdi_modifier = "0.0"
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 8
+start_tick = 9
 active_ticks = 2
 
 [node name="VertStrike" type="Node2D" parent="StateMachine" index="60"]
@@ -1299,18 +1836,21 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "VertStrike"
-anim_length = 7
+anim_length = 20
 refresh_loop = false
 enter_force_dir_x = "1"
 enter_force_speed = "0.5"
 title = "Vertical Slash"
 type = 1
 button_texture = ExtResource( 31 )
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/VertStrike" index="0"]
 z_index = 1000
@@ -1328,8 +1868,7 @@ sdi_modifier = "0.0"
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 4
+start_tick = 7
 active_ticks = 3
 
 [node name="HoriStrike" type="Node2D" parent="StateMachine" index="61"]
@@ -1341,18 +1880,20 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "HoriStrike"
-anim_length = 7
-sprite_anim_length = 7
+anim_length = 19
 enter_force_dir_x = "1"
 enter_force_speed = "0.5"
 title = "Horizontal Slash"
 type = 1
 button_texture = ExtResource( 11 )
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/HoriStrike" index="0"]
 z_index = 1000
@@ -1370,12 +1911,11 @@ sdi_modifier = "0.0"
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 4
+start_tick = 7
 active_ticks = 3
 
 [node name="Thrust" type="Node2D" parent="StateMachine" index="62"]
-script = ExtResource( 9 )
+script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
 }
@@ -1386,24 +1926,26 @@ custom_x_fric = "0.05"
 apply_custom_limits = true
 custom_max_ground_speed = "25"
 sprite_animation = "Thrust"
-anim_length = 18
+anim_length = 24
 refresh_loop = false
 force_dir_x = "1"
 force_speed = "20"
-force_tick = 9
+force_tick = 11
 timed_particle_scene = ExtResource( 32 )
 timed_particle_position = Vector2( 0, -22 )
-timed_spawn_particle_tick = 10
+timed_spawn_particle_tick = 11
 title = "Thrust"
 type = 1
 button_texture = ExtResource( 28 )
-self_hit_cancellable = false
+self_interruptable = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded
 "
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Thrust" index="0"]
 z_index = 1000
@@ -1420,8 +1962,7 @@ sdi_modifier = "0.0"
 dir_y = "0"
 knockback = "2"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 10
+start_tick = 12
 active_ticks = 8
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Thrust" index="1"]
@@ -1439,12 +1980,11 @@ sdi_modifier = "0.0"
 dir_y = "0"
 knockback = "2"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 10
+start_tick = 12
 active_ticks = 8
 
 [node name="Heavy" type="Node2D" parent="StateMachine" index="63"]
-script = ExtResource( 10 )
+script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
 }
@@ -1452,8 +1992,7 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 sprite_animation = "HeavyAttack"
-anim_length = 14
-sprite_anim_length = 14
+anim_length = 26
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 8
@@ -1467,6 +2006,8 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Heavy" index="0"]
 z_index = 1000
@@ -1484,8 +2025,7 @@ guard_break = true
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 12
+start_tick = 14
 active_ticks = 2
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Heavy" index="1"]
@@ -1504,8 +2044,7 @@ guard_break = true
 dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
-grounded_hit_state = "HurtAerial"
-start_tick = 12
+start_tick = 14
 active_ticks = 2
 
 [node name="SlashDown" type="Node2D" parent="StateMachine" index="64"]
@@ -1520,7 +2059,6 @@ reset_momentum = true
 sprite_animation = "SlashDown"
 anim_length = 18
 sprite_anim_length = 9
-ticks_per_frame = 2
 enter_force_dir_x = "0.25"
 enter_force_dir_y = "1"
 enter_force_speed = "2"
@@ -1529,6 +2067,7 @@ type = 1
 button_texture = ExtResource( 6 )
 air_type = 1
 land_cancel = true
+self_interruptable = false
 interrupt_from_string = "Aerial"
 interrupt_into_string = "Aerial
 Grounded"
@@ -1536,6 +2075,8 @@ hit_cancel_into_string = "Aerial
 GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/SlashDown" index="0"]
 z_index = 1000
@@ -1555,7 +2096,7 @@ dir_y = "2.0"
 knockback = "5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 8
+start_tick = 7
 active_ticks = 8
 
 [node name="AirSlash" type="Node2D" parent="StateMachine" index="65"]
@@ -1566,12 +2107,13 @@ __meta__ = {
 apply_forces = true
 apply_grav = true
 sprite_animation = "AirSlash"
-anim_length = 6
+anim_length = 18
 title = "Air Slash"
 type = 1
 button_texture = ExtResource( 75 )
 air_type = 1
 land_cancel = true
+self_interruptable = false
 interrupt_from_string = "Aerial"
 interrupt_into_string = "Aerial
 Grounded"
@@ -1579,6 +2121,9 @@ hit_cancel_into_string = "Aerial
 GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
+normal_StateAnimName = "AirSlash"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/AirSlash" index="0"]
 z_index = 1000
@@ -1598,8 +2143,8 @@ dir_y = "1.0"
 knockback = "5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 4
-active_ticks = 2
+start_tick = 7
+active_ticks = 4
 
 [node name="HeavyAirSlash" type="Node2D" parent="StateMachine" index="66"]
 script = ExtResource( 26 )
@@ -1609,12 +2154,13 @@ __meta__ = {
 apply_forces = true
 apply_grav = true
 sprite_animation = "HeavyAirSlash"
-anim_length = 16
+anim_length = 26
 title = "Heavy Air Slash"
 type = 1
 button_texture = ExtResource( 76 )
 air_type = 1
 land_cancel = true
+self_interruptable = false
 interrupt_from_string = "Aerial"
 interrupt_into_string = "Aerial
 Grounded"
@@ -1622,6 +2168,8 @@ hit_cancel_into_string = "Aerial
 GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/HeavyAirSlash" index="0"]
 z_index = 1000
@@ -1641,31 +2189,35 @@ dir_y = "1.0"
 knockback = "10"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 6
+start_tick = 13
 active_ticks = 2
 
 [node name="AirDashAttack" type="Node2D" parent="StateMachine" index="67"]
 position = Vector2( 1, 0 )
-script = ExtResource( 26 )
+script = ExtResource( 113 )
 __meta__ = {
 "_editor_description_": ""
 }
 apply_forces = true
-apply_grav = true
+reset_momentum = true
+reset_x_momentum = true
+reset_y_momentum = true
 sprite_animation = "AirDashAttack"
-anim_length = 10
+anim_length = 16
 force_dir_x = "1"
 force_dir_y = "1"
-force_speed = "15"
+force_speed = "10"
 force_tick = 3
 particle_scene = ExtResource( 79 )
-particle_position = Vector2( -3, -30 )
-spawn_particle_on_enter = true
 title = "Dive Attack"
 type = 1
+data_ui_scene = ExtResource( 106 )
 button_texture = ExtResource( 78 )
 air_type = 1
+uses_air_movement = true
 land_cancel = true
+self_interruptable = false
+can_feint_if_possible = false
 interrupt_from_string = "Aerial"
 interrupt_into_string = "Aerial
 Grounded"
@@ -1673,14 +2225,19 @@ hit_cancel_into_string = "Aerial
 GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
+normal_StateAnimName = "AirDashAttack"
+normalArmour_StateAnimName = "AirDashAttack(Armour)"
+bodyHitBoxPath = NodePath("Hitbox")
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/AirDashAttack" index="0"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 17
-y = -18
-width = 11
-height = 28
+x = 2
+y = -16
+width = 28
+height = 11
 damage = 40
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -1688,202 +2245,41 @@ cancellable = false
 can_counter_hit = false
 sdi_modifier = "0.0"
 dir_x = "0.6"
-dir_y = "1.0"
+dir_y = "-0.1"
 knockback = "10"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 3
+start_tick = 5
 active_ticks = 10
 
-[node name="Shirou(ComboStart)" type="Node2D" parent="StateMachine" index="68"]
-position = Vector2( 0, 2 )
-script = ExtResource( 23 )
-apply_forces = true
-apply_fric = true
-apply_grav = true
-reset_momentum = true
-sprite_animation = "ShirouComboStart"
-anim_length = 14
-sprite_anim_length = 7
-ticks_per_frame = 2
-enter_force_dir_x = "1.0"
-enter_force_speed = "10"
-title = "Combo Assist"
-type = 2
-button_texture = ExtResource( 21 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-
-[node name="Hitbox" type="Node2D" parent="StateMachine/Shirou(ComboStart)" index="0"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 12
-y = -16
-width = 13
-height = -16
-damage = 40
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-di_modifier = "0"
-sdi_modifier = "0.0"
-followup_state = "Shirou(Combo)"
-dir_x = "0.2"
-knockback = "5"
-launch_reversible = true
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 12
-active_ticks = 2
-
-[node name="Shirou(Combo)" type="Node2D" parent="StateMachine" index="69"]
-script = ExtResource( 26 )
-__meta__ = {
-"_editor_description_": ""
-}
-apply_forces = true
-apply_fric = true
-apply_grav = true
-reset_momentum = true
-sprite_animation = "ShirouCombo"
-anim_length = 70
-sprite_anim_length = 35
-ticks_per_frame = 2
-force_dir_x = "1"
-force_speed = "20"
-force_tick = 37
-type = 2
-button_texture = ExtResource( 21 )
-selectable = false
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper"
-no_collision_start_frame = 34
-no_collision_end_frame = 44
-
-[node name="Hitbox2" type="Node2D" parent="StateMachine/Shirou(Combo)" index="0"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 25
-y = -50
-width = 13
-height = -16
-damage = 40
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-di_modifier = "0"
-sdi_modifier = "0.0"
-group = 1
-dir_x = "0.2"
-dir_y = "1.0"
-knockback = "5"
-launch_reversible = true
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 6
-active_ticks = 2
-
-[node name="Hitbox3" type="Node2D" parent="StateMachine/Shirou(Combo)" index="1"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 35
-y = -20
-width = 13
-height = -16
-damage = 20
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-di_modifier = "0"
-sdi_modifier = "0.0"
-group = 2
-dir_x = "0"
-dir_y = "0"
-knockback = "0"
-launch_reversible = true
-vacuum = true
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 13
-active_ticks = 24
-looping = true
-loop_inactive_ticks = 6
-
-[node name="Hitbox4" type="Node2D" parent="StateMachine/Shirou(Combo)" index="2"]
-z_index = 1000
-script = ExtResource( 7 )
-x = 20
-y = -20
-width = 13
-height = -16
-damage = 50
-hitstun_ticks = 23
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-di_modifier = "0"
-sdi_modifier = "0"
-group = 3
-dir_x = "0"
-dir_y = "0"
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 37
-active_ticks = 2
-
-[node name="Hitbox5" type="Node2D" parent="StateMachine/Shirou(Combo)" index="3"]
-z_index = 1000
-script = ExtResource( 7 )
-x = -30
-y = -20
-height = -16
-hitstun_ticks = 50
-victim_hitlag = 4
-cancellable = false
-can_counter_hit = false
-group = 4
-hit_particle = ExtResource( 22 )
-replace_hit_particle = true
-dir_x = "0"
-knockback = "5"
-pushback_x = "0"
-grounded_hit_state = "HurtAerial"
-start_tick = 45
-active_ticks = 2
-
-[node name="ManaBurst" type="Node2D" parent="StateMachine" index="70"]
+[node name="ManaBurst" type="Node2D" parent="StateMachine" index="68"]
 script = ExtResource( 25 )
 __meta__ = {
 "_editor_description_": ""
 }
 reset_momentum = true
 sprite_animation = "ManaBurst"
-anim_length = 40
-sprite_anim_length = 24
+anim_length = 42
+sprite_anim_length = 42
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
 timed_particle_scene = ExtResource( 18 )
-timed_particle_position = Vector2( 100, -23 )
+timed_particle_position = Vector2( 132, -23 )
 timed_spawn_particle_tick = 20
 title = "Mana Burst"
 type = 2
 button_texture = ExtResource( 19 )
 air_type = 2
+self_interruptable = false
+can_feint_if_possible = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/ManaBurst" index="0"]
 z_index = 1000
@@ -1902,15 +2298,15 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 20
+start_tick = 21
 active_ticks = 6
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/ManaBurst" index="1"]
 z_index = 1000
 script = ExtResource( 7 )
-x = 99
+x = 128
 y = -21
-width = 65
+width = 95
 height = 11
 damage = 10
 hitstun_ticks = 23
@@ -1922,20 +2318,21 @@ dir_y = "0"
 knockback = "1.5"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 20
+start_tick = 21
 active_ticks = 20
 looping = true
 loop_active_ticks = 1
 loop_inactive_ticks = 1
 
-[node name="AirBlade" type="Node2D" parent="StateMachine" index="71"]
+[node name="AirBlade" type="Node2D" parent="StateMachine" index="69"]
 script = ExtResource( 80 )
 __meta__ = {
 "_editor_description_": ""
 }
 reset_momentum = true
 sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
+anim_length = 20
+sprite_anim_length = 14
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
@@ -1948,6 +2345,8 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 SlashProjectile = ExtResource( 82 )
 projPosX = 22
 projPosY = -25
@@ -1956,7 +2355,7 @@ diagonalDownAnimName = "GaleBlade(DiaDown)"
 directlyUpAnimName = "GaleBlade(DirUp)"
 directlyDownAnimName = "GaleBlade(DirDown)"
 
-[node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="72"]
+[node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="70"]
 script = ExtResource( 80 )
 __meta__ = {
 "_editor_description_": ""
@@ -1964,7 +2363,8 @@ __meta__ = {
 apply_forces = true
 apply_grav = true
 sprite_animation = "GaleBlade(Normal)"
-anim_length = 10
+anim_length = 20
+sprite_anim_length = 14
 force_dir_x = "1"
 force_speed = "1.5"
 force_tick = 14
@@ -1978,6 +2378,8 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 SlashProjectile = ExtResource( 82 )
 projPosX = 22
 projPosY = -25
@@ -1986,7 +2388,7 @@ diagonalDownAnimName = "GaleBlade(DiaDown)"
 directlyUpAnimName = "GaleBlade(DirUp)"
 directlyDownAnimName = "GaleBlade(DirDown)"
 
-[node name="UseSkill" type="Node2D" parent="StateMachine" index="73"]
+[node name="UseSkill" type="Node2D" parent="StateMachine" index="71"]
 script = ExtResource( 88 )
 __meta__ = {
 "_editor_description_": ""
@@ -1999,14 +2401,16 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
-[node name="Skill1" type="Node2D" parent="StateMachine" index="74"]
+[node name="Skill1" type="Node2D" parent="StateMachine" index="72"]
 script = ExtResource( 93 )
 __meta__ = {
 "_editor_description_": ""
 }
 sprite_animation = "Skill1"
-anim_length = 24
+anim_length = 40
 title = "Skill"
 show_in_menu = false
 type = 2
@@ -2016,14 +2420,16 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
-[node name="Skill2" type="Node2D" parent="StateMachine" index="75"]
+[node name="Skill2" type="Node2D" parent="StateMachine" index="73"]
 script = ExtResource( 94 )
 __meta__ = {
 "_editor_description_": ""
 }
 sprite_animation = "Skill2"
-anim_length = 24
+anim_length = 40
 title = "Skill"
 show_in_menu = false
 type = 2
@@ -2033,14 +2439,16 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
-[node name="Skill3" type="Node2D" parent="StateMachine" index="76"]
+[node name="Skill3" type="Node2D" parent="StateMachine" index="74"]
 script = ExtResource( 92 )
 __meta__ = {
 "_editor_description_": ""
 }
 sprite_animation = "Skill3"
-anim_length = 24
+anim_length = 40
 title = "Skill"
 show_in_menu = false
 type = 2
@@ -2050,45 +2458,51 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
-[node name="ArmorOn" type="Node2D" parent="StateMachine" index="77"]
+[node name="ArmorOn" type="Node2D" parent="StateMachine" index="75"]
 script = ExtResource( 95 )
 __meta__ = {
 "_editor_description_": ""
 }
 reset_momentum = true
-sprite_animation = "Skill3"
-anim_length = 24
+sprite_animation = "ArmourOn"
+anim_length = 10
 title = "Armor On"
 type = 2
 button_texture = ExtResource( 97 )
+self_interruptable = false
+can_feint_if_possible = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-change_stance_to = "Normal(Armored)"
-
-[node name="Shirou(Melee)" type="Node2D" parent="StateMachine" index="78"]
-script = ExtResource( 13 )
-projectile_scene = ExtResource( 12 )
-projectile_pos_y = 3
-title = "Strike Assist (WIP)"
-type = 2
-button_texture = ExtResource( 14 )
-air_type = 2
-interrupt_from_string = "Grounded
-Aerial
+allowed_stances_string = "Normal
 "
-interrupt_into_string = "Grounded
-Aerial
-"
-hit_cancel_into_string = "Aerial
-GroundedAttack
-GroundedSpecial
-GroundedSuper"
+change_stance_to = "Normal(Armour)"
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="79"]
+[node name="Hitbox" type="Node2D" parent="StateMachine/ArmorOn" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+y = -16
+width = 50
+height = 50
+damage = 40
+hitbox_type = 6
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+start_tick = 9
+active_ticks = 2
+
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="76"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -2103,24 +2517,19 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="80"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="77"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
 }
 sprite_animation = "StabDownStart"
 anim_length = 4
-refresh_loop = false
 force_dir_y = "1"
 force_speed = "14"
 force_tick = 2
-throw_positions = {
-SubResource( 127 ): {
-"x": 10,
-"y": 21
-}
-}
 title = "Stab Down"
 type = 2
 button_texture = ExtResource( 34 )
@@ -2131,6 +2540,8 @@ GroundedAttack
 GroundedSpecial
 GroundedSuper"
 hit_cancel_into_string = "Aerial"
+allowed_stances_string = "All
+"
 
 [node name="StabDownThrowBox" type="Node2D" parent="StateMachine/StabDownStart" index="0"]
 z_index = 1000
@@ -2142,25 +2553,29 @@ height = 23
 increment_combo = false
 followup_state = "StabDown"
 hit_sound = ExtResource( 36 )
+grounded_hit_state = "Knockdown"
+aerial_hit_state = "Knockdown"
+knockdown_extends_hitstun = false
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="81"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
 }
 apply_forces = true
 apply_grav = true
+reset_x_momentum = true
 sprite_animation = "StabDown"
-anim_length = 20
+anim_length = 100
 loop_animation = true
 enter_force_dir_y = "1"
 enter_force_speed = "10"
 throw_positions = {
 SubResource( 127 ): {
-"x": 10,
-"y": 23
+"x": 4,
+"y": 9
 }
 }
 title = "Stab Down"
@@ -2177,32 +2592,41 @@ interrupt_from_string = "Grounded
 Aerial"
 interrupt_into_string = "Grounded
 Aerial"
-release = true
-release_frame = 20
-knockback = "4"
+allowed_stances_string = "All
+"
+use_start_throw_pos = false
+use_release_throw_pos = false
+knockback = "0"
+dir_x = "0"
+knockdown = false
+knockdown_extends_hitstun = false
+aerial_hit_state = "Knockdown"
+grounded_hit_state = "Knockdown"
 ground_bounce = false
-hard_knockdown = true
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="82"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="79"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
 }
 reset_momentum = true
-sprite_animation = "StabDown"
-anim_length = 20
-loop_animation = true
+sprite_animation = "StabDownEnd"
+anim_length = 25
+sprite_anim_length = 20
+refresh_loop = false
+force_dir_x = "-1"
+force_speed = "4"
 particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 127 ): {
-"x": 10,
-"y": 23
-},
 SubResource( 131 ): {
 "x": 9,
 "y": 18
+},
+SubResource( 127 ): {
+"x": 4,
+"y": 23
 }
 }
 title = "Stab Down"
@@ -2217,8 +2641,14 @@ interrupt_from_string = "Grounded
 Aerial"
 interrupt_into_string = "Grounded
 Aerial"
+allowed_stances_string = "All
+"
+knockdown = false
+knockdown_extends_hitstun = false
+damage = 0
+ground_bounce = false
 
-[node name="Excalibur" type="Node2D" parent="StateMachine" index="83"]
+[node name="Excalibur" type="Node2D" parent="StateMachine" index="80"]
 script = ExtResource( 99 )
 __meta__ = {
 "_editor_description_": ""
@@ -2236,20 +2666,22 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
+super_level_ = 5
+super_freeze_ticks_ = 273
 cutsceneTPF = 5
 
-[node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="84"]
+[node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="81"]
 script = ExtResource( 105 )
 __meta__ = {
 "_editor_description_": ""
 }
+reset_momentum = true
 sprite_animation = "Excalibur"
 anim_length = 50
+sprite_anim_length = 1
 loop_animation = true
-projectile_scene = ExtResource( 106 )
-projectile_pos_x = 925
-projectile_pos_y = 18
-projectile_match_facing = true
 title = "Excalibur Attack"
 show_in_menu = false
 type = 1
@@ -2266,8 +2698,11 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 hitboxPath = NodePath("ExcaliburHitBox")
 hitEffectPath = NodePath("../../Flip/Particles/ExcaliburHitEffect(G)")
+attackEffectPath = NodePath("../../Flip/ExcaliburGroundHit")
 
 [node name="ExcaliburHitBox" type="Node2D" parent="StateMachine/ExcaliburGroundVar" index="0"]
 z_index = 1000
@@ -2297,7 +2732,7 @@ active_ticks = 30
 looping = true
 hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburHitEffect(G)")
 
-[node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="85"]
+[node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="82"]
 script = ExtResource( 109 )
 __meta__ = {
 "_editor_description_": ""
@@ -2307,6 +2742,8 @@ apply_fric = true
 apply_grav = true
 sprite_animation = "Excalibur"
 anim_length = 50
+sprite_anim_length = 1
+loop_animation = true
 title = "Excalibur Attack (Air)"
 show_in_menu = false
 type = 1
@@ -2321,6 +2758,8 @@ interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
+allowed_stances_string = "All
+"
 beamEffectPath = NodePath("../../Flip/ExcaliburBeam")
 hitboxPath = NodePath("Hitbox")
 beamLengthIncrPerTick = 90
@@ -2332,10 +2771,11 @@ script = ExtResource( 107 )
 __meta__ = {
 "_editor_description_": ""
 }
-x = 1350
-y = -480
+x = 1525
+y = -680
 width = 1500
-height = 500
+height = 700
+activated = false
 damage = 50
 hitstun_ticks = 23
 victim_hitlag = 4
@@ -2350,7 +2790,151 @@ dir_y = "0"
 knockback = "0"
 launch_reversible = true
 grounded_hit_state = "HurtAerial"
-start_tick = 1
+start_tick = 2
 active_ticks = 30
 looping = true
 hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburStarHitEffect")
+
+[node name="JumpAttack" type="Node2D" parent="StateMachine" index="83"]
+script = ExtResource( 23 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+reset_momentum = true
+reset_x_momentum = true
+reset_y_momentum = true
+sprite_animation = "JumpAttack"
+anim_length = 45
+refresh_loop = false
+force_dir_x = "1"
+force_dir_y = "-0.65"
+force_speed = "8"
+force_tick = 1
+title = "JumpAttack"
+type = 2
+data_ui_scene = ExtResource( 22 )
+button_texture = ExtResource( 13 )
+land_cancel = true
+land_cancel_state = "JumpAttackEnd"
+self_interruptable = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+allowed_stances_string = "All
+"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/JumpAttack" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 19
+y = -16
+height = 22
+damage = 40
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+followup_state = "JumpAttackInterrupt"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+start_tick = 6
+active_ticks = -1
+always_on = true
+
+[node name="JumpAttackInterrupt" type="Node2D" parent="StateMachine" index="84"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "JumpAttackInterrupt"
+anim_length = 12
+refresh_loop = false
+show_in_menu = false
+type = 2
+self_interruptable = false
+interrupt_from_string = "Aerial"
+interrupt_into_string = "Aerial
+Grounded"
+hit_cancel_into_string = "Aerial
+GroundedAttack
+GroundedSpecial
+GroundedSuper"
+allowed_stances_string = "All
+"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/JumpAttackInterrupt" index="0"]
+z_index = 1000
+script = ExtResource( 21 )
+__meta__ = {
+"_editor_description_": ""
+}
+x = 16
+y = -18
+width = 30
+height = 36
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "2"
+knockback = "1.5"
+launch_reversible = true
+knockdown = true
+start_tick = 1
+active_ticks = 3
+
+[node name="JumpAttackEnd" type="Node2D" parent="StateMachine" index="85"]
+script = ExtResource( 26 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "JumpAttackLanded"
+anim_length = 12
+refresh_loop = false
+timed_particle_scene = ExtResource( 14 )
+show_in_menu = false
+type = 2
+self_interruptable = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+allowed_stances_string = "All
+"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/JumpAttackEnd" index="0"]
+z_index = 1000
+script = ExtResource( 21 )
+__meta__ = {
+"_editor_description_": ""
+}
+x = 16
+y = -18
+width = 30
+height = 36
+damage = 40
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+start_tick = 1
+active_ticks = 3
+
+[node name="Frozen" parent="StateMachine" index="86"]
+allowed_stances_string = "All"
