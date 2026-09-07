@@ -3,29 +3,52 @@ extends CharacterState
 ## Variables ##
 
 export (PackedScene) var SlashProjectile
-# Temp for now (will be replaced by UI Data)
-export var projPosX = 0
-export var projPosY = 0
 
-export (String) var diagonalUpAnimName; 
-export (String) var diagonalDownAnimName;
-export (String) var directlyUpAnimName;
-export (String) var directlyDownAnimName; 
+# Index 0 - Normal Stance
+# Index 1 - Armour Stance
+# Index 2 - Hidden Stance
+# Index 3 - Hidden + Armour Stance
+export (Array, String) var defaultAnimNameArray;
+export (Array, String) var diagonalUpAnimNameArray; 
+export (Array, String) var diagonalDownAnimNameArray;
+export (Array, String) var directlyUpAnimNameArray;
+export (Array, String) var directlyDownAnimNameArray; 
 
 ## Functions ##
+func _ready():
+	._ready()
+	
+	# Ensure the normal animations is set
+	ValidateArraySize(defaultAnimNameArray)
+	if (defaultAnimNameArray[0] == "" or defaultAnimNameArray[0] == null):
+		defaultAnimNameArray[0] = sprite_animation
+	
+	# For each direction, checks if stance-variant animations is set
+	CheckValidAnim(defaultAnimNameArray, 0)
+	CheckValidAnim(diagonalUpAnimNameArray, 1)
+	CheckValidAnim(diagonalDownAnimNameArray, 2)
+	CheckValidAnim(directlyUpAnimNameArray, 3)
+	CheckValidAnim(directlyDownAnimNameArray, 4)
 
 # Change animations base on direction given
 func _enter():
+	
+	var stanceId := 0
+	
+	match host.stance:
+		"Normal":
+			stanceId = 0
+		"Normal(Armour)":
+			stanceId = 1
+	
 	if data.x == host.get_facing_int():
 		if data.y == -1:
-			anim_name = diagonalUpAnimName
+			anim_name = diagonalUpAnimNameArray[stanceId]
 		elif data.y == 1:
-			anim_name = diagonalDownAnimName
+			anim_name = diagonalDownAnimNameArray[stanceId]
 	if data.x == 0:
 		if data.y == -1:
-			anim_name = directlyUpAnimName
-	#		elif data.y == 1:
-	#			host.change_state(directlyDownAnimName)
+			anim_name = directlyUpAnimNameArray[stanceId]
 
 # Spawning the projectile 
 # and rotating it based on the directions (char facing and action data)
@@ -57,3 +80,20 @@ func _frame_7():
 		if (host.id == 2):
 			projectObject.flip.rotation_degrees = 180
 
+func CheckValidAnim(animNameArray:Array, RowInArray):
+	
+	ValidateArraySize(animNameArray)
+	print(animNameArray[0])
+	if (animNameArray[0] == null):
+		return
+	# For each stance
+	for i in range(1,host.stanceAnimKey.size()):
+		# If emtpy attempt to guess the animation name / follow naming convention 
+		if animNameArray[i] == "" or animNameArray[i] == null:
+			animNameArray[i] = animNameArray[0] + host.stanceAnimKey[i]
+
+# Ensures the array is not empty/wrong length
+# So it doesn't get invalid index error
+func ValidateArraySize(animNameArray:Array):
+	if (animNameArray.size() < host.stanceAnimKey.size()):
+		animNameArray.resize(host.stanceAnimKey.size())

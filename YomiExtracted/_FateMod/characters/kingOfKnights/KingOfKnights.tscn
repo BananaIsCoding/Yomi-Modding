@@ -1,4 +1,4 @@
-[gd_scene load_steps=335 format=2]
+[gd_scene load_steps=367 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=7]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Jab.png" type="Texture" id=8]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/AirSlash.png" type="Texture" id=9]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/GaleBladeDiaDown.png" type="Texture" id=10]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/HorizontalStrike.png" type="Texture" id=11]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKJumpAttack.png" type="Texture" id=12]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/JumpAttack.png" type="Texture" id=13]
@@ -114,6 +115,9 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/AirDashAttackScript.gd" type="Script" id=113]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKArmourOn.png" type="Texture" id=114]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKCustomWait.gd" type="Script" id=115]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/GaleBladeDiaUp.png" type="Texture" id=116]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/GaleBladeDirUp.png" type="Texture" id=117]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/GaleBladeNormal.png" type="Texture" id=118]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -250,6 +254,34 @@ region = Rect2( 640, 0, 128, 128 )
 atlas = ExtResource( 87 )
 region = Rect2( 768, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=282]
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=283]
+atlas = ExtResource( 10 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=284]
+atlas = ExtResource( 10 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=285]
+atlas = ExtResource( 10 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=286]
+atlas = ExtResource( 10 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=287]
+atlas = ExtResource( 10 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=288]
+atlas = ExtResource( 10 )
+region = Rect2( 768, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=152]
 atlas = ExtResource( 86 )
 region = Rect2( 0, 0, 128, 128 )
@@ -276,6 +308,34 @@ region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=213]
 atlas = ExtResource( 86 )
+region = Rect2( 768, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=289]
+atlas = ExtResource( 116 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=290]
+atlas = ExtResource( 116 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=291]
+atlas = ExtResource( 116 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=292]
+atlas = ExtResource( 116 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=293]
+atlas = ExtResource( 116 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=294]
+atlas = ExtResource( 116 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=295]
+atlas = ExtResource( 116 )
 region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=147]
@@ -310,6 +370,34 @@ region = Rect2( 640, 0, 128, 128 )
 atlas = ExtResource( 85 )
 region = Rect2( 768, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=296]
+atlas = ExtResource( 117 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=297]
+atlas = ExtResource( 117 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=298]
+atlas = ExtResource( 117 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=299]
+atlas = ExtResource( 117 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=300]
+atlas = ExtResource( 117 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=301]
+atlas = ExtResource( 117 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=302]
+atlas = ExtResource( 117 )
+region = Rect2( 768, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=143]
 atlas = ExtResource( 81 )
 region = Rect2( 0, 0, 128, 128 )
@@ -336,6 +424,34 @@ region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=219]
 atlas = ExtResource( 81 )
+region = Rect2( 768, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=303]
+atlas = ExtResource( 118 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=304]
+atlas = ExtResource( 118 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=305]
+atlas = ExtResource( 118 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=306]
+atlas = ExtResource( 118 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=307]
+atlas = ExtResource( 118 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=308]
+atlas = ExtResource( 118 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=309]
+atlas = ExtResource( 118 )
 region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=139]
@@ -997,9 +1113,19 @@ animations = [ {
 "name": "GaleBlade(DiaDown)",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 282 ), SubResource( 283 ), SubResource( 284 ), SubResource( 282 ), SubResource( 283 ), SubResource( 284 ), SubResource( 285 ), SubResource( 285 ), SubResource( 286 ), SubResource( 286 ), SubResource( 287 ), SubResource( 287 ), SubResource( 288 ), SubResource( 288 ) ],
+"loop": true,
+"name": "GaleBlade(DiaDown)(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 152 ), SubResource( 153 ), SubResource( 154 ), SubResource( 153 ), SubResource( 152 ), SubResource( 153 ), SubResource( 155 ), SubResource( 155 ), SubResource( 211 ), SubResource( 211 ), SubResource( 212 ), SubResource( 212 ), SubResource( 213 ), SubResource( 213 ) ],
 "loop": true,
 "name": "GaleBlade(DiaUp)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 289 ), SubResource( 290 ), SubResource( 291 ), SubResource( 289 ), SubResource( 290 ), SubResource( 291 ), SubResource( 292 ), SubResource( 292 ), SubResource( 293 ), SubResource( 293 ), SubResource( 294 ), SubResource( 294 ), SubResource( 295 ), SubResource( 295 ) ],
+"loop": true,
+"name": "GaleBlade(DiaUp)(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 147 ), SubResource( 148 ), SubResource( 149 ), SubResource( 150 ), SubResource( 149 ), SubResource( 150 ), SubResource( 151 ), SubResource( 151 ), SubResource( 214 ), SubResource( 214 ), SubResource( 215 ), SubResource( 215 ), SubResource( 216 ), SubResource( 216 ) ],
@@ -1007,9 +1133,19 @@ animations = [ {
 "name": "GaleBlade(DirUp)",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 296 ), SubResource( 297 ), SubResource( 298 ), SubResource( 296 ), SubResource( 297 ), SubResource( 298 ), SubResource( 299 ), SubResource( 299 ), SubResource( 300 ), SubResource( 300 ), SubResource( 301 ), SubResource( 301 ), SubResource( 302 ), SubResource( 302 ) ],
+"loop": true,
+"name": "GaleBlade(DirUp)(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 144 ), SubResource( 143 ), SubResource( 144 ), SubResource( 146 ), SubResource( 146 ), SubResource( 217 ), SubResource( 217 ), SubResource( 218 ), SubResource( 218 ), SubResource( 219 ), SubResource( 219 ) ],
 "loop": true,
 "name": "GaleBlade(Normal)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 303 ), SubResource( 304 ), SubResource( 305 ), SubResource( 303 ), SubResource( 304 ), SubResource( 305 ), SubResource( 306 ), SubResource( 306 ), SubResource( 307 ), SubResource( 307 ), SubResource( 308 ), SubResource( 308 ), SubResource( 309 ), SubResource( 309 ) ],
+"loop": true,
+"name": "GaleBlade(Normal)(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 51 ) ],
@@ -1356,12 +1492,13 @@ __meta__ = {
 }
 character_portrait = ExtResource( 15 )
 player_info_scene = ExtResource( 96 )
+stanceAnimKey = [ "", "(Armour)" ]
 
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 use_parent_material = true
 frames = SubResource( 246 )
-animation = "Wait(Armour)"
+animation = "GaleBlade(Normal)(Armour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -2348,12 +2485,10 @@ GroundedSuper"
 allowed_stances_string = "All
 "
 SlashProjectile = ExtResource( 82 )
-projPosX = 22
-projPosY = -25
-diagonalUpAnimName = "GaleBlade(DiaUp)"
-diagonalDownAnimName = "GaleBlade(DiaDown)"
-directlyUpAnimName = "GaleBlade(DirUp)"
-directlyDownAnimName = "GaleBlade(DirDown)"
+defaultAnimNameArray = [ null, null ]
+diagonalUpAnimNameArray = [ "GaleBlade(DiaUp)", null ]
+diagonalDownAnimNameArray = [ "GaleBlade(DiaDown)", null ]
+directlyUpAnimNameArray = [ "GaleBlade(DirUp)", null ]
 
 [node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="70"]
 script = ExtResource( 80 )
@@ -2381,12 +2516,9 @@ GroundedSuper"
 allowed_stances_string = "All
 "
 SlashProjectile = ExtResource( 82 )
-projPosX = 22
-projPosY = -25
-diagonalUpAnimName = "GaleBlade(DiaUp)"
-diagonalDownAnimName = "GaleBlade(DiaDown)"
-directlyUpAnimName = "GaleBlade(DirUp)"
-directlyDownAnimName = "GaleBlade(DirDown)"
+diagonalUpAnimNameArray = [ "GaleBlade(DiaUp)" ]
+diagonalDownAnimNameArray = [ "GaleBlade(DiaDown)" ]
+directlyUpAnimNameArray = [ "GaleBlade(DirUp)" ]
 
 [node name="UseSkill" type="Node2D" parent="StateMachine" index="71"]
 script = ExtResource( 88 )
@@ -2620,13 +2752,13 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 131 ): {
-"x": 9,
-"y": 18
-},
 SubResource( 127 ): {
 "x": 4,
 "y": 23
+},
+SubResource( 131 ): {
+"x": 9,
+"y": 18
 }
 }
 title = "Stab Down"

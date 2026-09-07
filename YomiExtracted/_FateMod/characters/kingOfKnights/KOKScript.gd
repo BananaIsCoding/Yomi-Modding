@@ -1,8 +1,16 @@
 extends Fighter
 
 ## Variables ##
-
+class BoostData:
+	var boostType
+	var instance
+	var tickRemaining : int
+	var strength
+	
 enum BoostType {DmgBoost, SpecialBoost}
+
+# [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
+export (Array, String) var stanceAnimKey = [ "", "(Armour)" ]
 
 var comboAttackCD = 0
 var currentExcalCharge = 0
@@ -25,11 +33,6 @@ var dmgBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprite
 var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/SpecialAttackUp.png")
 var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
 var BoostToRemove = []
-class BoostData:
-	var boostType
-	var instance
-	var tickRemaining : int
-	var strength
 
 const new_modulate_alpha = 0.0
 const fade_speed = 0.30 # Lower number = slower

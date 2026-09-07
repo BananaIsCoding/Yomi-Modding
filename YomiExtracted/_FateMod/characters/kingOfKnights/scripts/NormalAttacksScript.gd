@@ -52,7 +52,7 @@ func setup_hitboxes():
 func _ready():
 	._ready()
 	if (normal_StateAnimName == ""):
-		normal_StateAnimName == anim_name
+		normal_StateAnimName == sprite_animation
 	if (normalArmour_StateAnimName == ""):
 		normalArmour_StateAnimName = normal_StateAnimName + "(Armour)"
 	if (hiddenArmour_StateAnimName == ""):
