@@ -36,8 +36,6 @@ func _enter():
 	var stanceId := 0
 	
 	match host.stance:
-		"Normal":
-			stanceId = 0
 		"Normal(Armour)":
 			stanceId = 1
 	
@@ -46,9 +44,13 @@ func _enter():
 			anim_name = diagonalUpAnimNameArray[stanceId]
 		elif data.y == 1:
 			anim_name = diagonalDownAnimNameArray[stanceId]
-	if data.x == 0:
+		else:
+			anim_name = defaultAnimNameArray[stanceId]
+	elif data.x == 0:
 		if data.y == -1:
 			anim_name = directlyUpAnimNameArray[stanceId]
+		if data.y == 1:
+			anim_name = directlyDownAnimNameArray[stanceId]
 
 # Spawning the projectile 
 # and rotating it based on the directions (char facing and action data)
@@ -83,7 +85,6 @@ func _frame_7():
 func CheckValidAnim(animNameArray:Array, RowInArray):
 	
 	ValidateArraySize(animNameArray)
-	print(animNameArray[0])
 	if (animNameArray[0] == null):
 		return
 	# For each stance

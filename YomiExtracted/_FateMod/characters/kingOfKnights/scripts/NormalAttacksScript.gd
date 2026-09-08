@@ -50,15 +50,16 @@ func setup_hitboxes():
 		earliest_hitbox = earliest
 
 func _ready():
-	._ready()
 	if (normal_StateAnimName == ""):
-		normal_StateAnimName == sprite_animation
+		normal_StateAnimName = sprite_animation
 	if (normalArmour_StateAnimName == ""):
 		normalArmour_StateAnimName = normal_StateAnimName + "(Armour)"
 	if (hiddenArmour_StateAnimName == ""):
 		hiddenArmour_StateAnimName = normal_StateAnimName + "(HiddenArmour)"
 	if (hidden_StateAnimName == ""):
 		hidden_StateAnimName = normal_StateAnimName + "(Hidden)"
+	._ready()
+	
 		
 func _enter():
 	match host.stance:
