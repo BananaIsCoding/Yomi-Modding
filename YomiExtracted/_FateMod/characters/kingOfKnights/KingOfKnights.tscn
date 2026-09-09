@@ -1,4 +1,4 @@
-[gd_scene load_steps=480 format=2]
+[gd_scene load_steps=535 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -128,6 +128,27 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKThrow.gd" type="Script" id=126]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Jab.png" type="Texture" id=127]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/SkillAnimation.png" type="Texture" id=128]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/SlashDown.png" type="Texture" id=129]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/SlashUp.png" type="Texture" id=130]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Stab.png" type="Texture" id=131]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/StabDown.png" type="Texture" id=132]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Thrust.png" type="Texture" id=133]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/VertStrike.png" type="Texture" id=134]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Throw.png" type="Texture" id=135]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Burst.png" type="Texture" id=136]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKBurst.gd" type="Script" id=137]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKOffensiveBurst.gd" type="Script" id=138]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/BackDash.png" type="Texture" id=139]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKDash.gd" type="Script" id=140]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/ForwardDash.png" type="Texture" id=141]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKChargeDash.gd" type="Script" id=142]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Jump.png" type="Texture" id=143]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKJump.gd" type="Script" id=144]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKFall.gd" type="Script" id=145]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKSuperFall.gd" type="Script" id=146]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/JumpBack.png" type="Texture" id=147]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/KnockedDown.png" type="Texture" id=148]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKKnockdown.gd" type="Script" id=149]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -235,6 +256,14 @@ region = Rect2( 384, 128, 128, 128 )
 [sub_resource type="AtlasTexture" id=274]
 atlas = ExtResource( 114 )
 region = Rect2( 512, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=451]
+atlas = ExtResource( 135 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=452]
+atlas = ExtResource( 135 )
+region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=156]
 atlas = ExtResource( 87 )
@@ -599,10 +628,6 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=333]
 atlas = ExtResource( 123 )
 region = Rect2( 384, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 41 )
-region = Rect2( 512, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=248]
 atlas = ExtResource( 12 )
@@ -1376,6 +1401,38 @@ region = Rect2( 384, 0, 128, 128 )
 atlas = ExtResource( 48 )
 region = Rect2( 512, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=415]
+atlas = ExtResource( 129 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=416]
+atlas = ExtResource( 129 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=417]
+atlas = ExtResource( 129 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=418]
+atlas = ExtResource( 129 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=419]
+atlas = ExtResource( 129 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=420]
+atlas = ExtResource( 129 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=421]
+atlas = ExtResource( 129 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=422]
+atlas = ExtResource( 129 )
+region = Rect2( 512, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=195]
 atlas = ExtResource( 41 )
 region = Rect2( 0, 0, 128, 128 )
@@ -1404,6 +1461,58 @@ region = Rect2( 640, 0, 128, 128 )
 atlas = ExtResource( 41 )
 region = Rect2( 768, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=423]
+atlas = ExtResource( 130 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=424]
+atlas = ExtResource( 130 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=425]
+atlas = ExtResource( 130 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=426]
+atlas = ExtResource( 130 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=427]
+atlas = ExtResource( 130 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=428]
+atlas = ExtResource( 130 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=429]
+atlas = ExtResource( 130 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=430]
+atlas = ExtResource( 130 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=431]
+atlas = ExtResource( 130 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=432]
+atlas = ExtResource( 130 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=433]
+atlas = ExtResource( 130 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=434]
+atlas = ExtResource( 130 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=435]
+atlas = ExtResource( 130 )
+region = Rect2( 768, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=93]
 atlas = ExtResource( 57 )
 region = Rect2( 0, 0, 128, 128 )
@@ -1412,13 +1521,21 @@ region = Rect2( 0, 0, 128, 128 )
 atlas = ExtResource( 57 )
 region = Rect2( 128, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=127]
-atlas = ExtResource( 67 )
-region = Rect2( 256, 0, 128, 128 )
+[sub_resource type="AtlasTexture" id=436]
+atlas = ExtResource( 131 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=437]
+atlas = ExtResource( 131 )
+region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=128]
 atlas = ExtResource( 67 )
 region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=439]
+atlas = ExtResource( 132 )
+region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=131]
 atlas = ExtResource( 67 )
@@ -1428,12 +1545,28 @@ region = Rect2( 512, 0, 128, 128 )
 atlas = ExtResource( 67 )
 region = Rect2( 640, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=441]
+atlas = ExtResource( 132 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=442]
+atlas = ExtResource( 132 )
+region = Rect2( 640, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=129]
 atlas = ExtResource( 67 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=130]
 atlas = ExtResource( 67 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=443]
+atlas = ExtResource( 132 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=444]
+atlas = ExtResource( 132 )
 region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=32]
@@ -1447,6 +1580,18 @@ region = Rect2( 0, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=96]
 atlas = ExtResource( 42 )
 region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=445]
+atlas = ExtResource( 133 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=446]
+atlas = ExtResource( 133 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=275]
+atlas = ExtResource( 114 )
+region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=123]
 atlas = ExtResource( 66 )
@@ -1464,11 +1609,23 @@ region = Rect2( 256, 0, 128, 128 )
 atlas = ExtResource( 66 )
 region = Rect2( 384, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=275]
-atlas = ExtResource( 114 )
-region = Rect2( 512, 128, 128, 128 )
+[sub_resource type="AtlasTexture" id=447]
+atlas = ExtResource( 134 )
+region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="SpriteFrames" id=246]
+[sub_resource type="AtlasTexture" id=448]
+atlas = ExtResource( 134 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=449]
+atlas = ExtResource( 134 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=450]
+atlas = ExtResource( 134 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=440]
 animations = [ {
 "frames": [ SubResource( 142 ) ],
 "loop": true,
@@ -1500,9 +1657,19 @@ animations = [ {
 "name": "Burst",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 136 ) ],
+"loop": true,
+"name": "Burst(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 53 ) ],
 "loop": true,
 "name": "DashBackward",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 139 ) ],
+"loop": true,
+"name": "DashBackward(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 38 ) ],
@@ -1510,9 +1677,19 @@ animations = [ {
 "name": "DashForward",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 141 ) ],
+"loop": true,
+"name": "DashForward(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 50 ) ],
 "loop": false,
 "name": "DoubleJump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 143 ) ],
+"loop": true,
+"name": "DoubleJump(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 65 ), ExtResource( 111 ) ],
@@ -1528,6 +1705,11 @@ animations = [ {
 "frames": [ ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 47 ) ],
 "loop": true,
 "name": "ForwardThrow",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 451 ), SubResource( 452 ) ],
+"loop": true,
+"name": "ForwardThrow(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 156 ), SubResource( 157 ), SubResource( 158 ), SubResource( 157 ), SubResource( 156 ), SubResource( 157 ), SubResource( 159 ), SubResource( 159 ), SubResource( 208 ), SubResource( 208 ), SubResource( 209 ), SubResource( 209 ), SubResource( 210 ), SubResource( 210 ) ],
@@ -1645,7 +1827,7 @@ animations = [ {
 "name": "HurtGroundedMid",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 18 ) ],
+"frames": [ ExtResource( 15 ) ],
 "loop": true,
 "name": "InstantCancel",
 "speed": 5.0
@@ -1653,6 +1835,11 @@ animations = [ {
 "frames": [ ExtResource( 50 ) ],
 "loop": true,
 "name": "Jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 143 ) ],
+"loop": true,
+"name": "Jump(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 248 ) ],
@@ -1690,9 +1877,19 @@ animations = [ {
 "name": "JumpBack",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 147 ) ],
+"loop": true,
+"name": "JumpBack(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 52 ) ],
 "loop": true,
 "name": "Knockdown",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 148 ) ],
+"loop": true,
+"name": "Knockdown(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 58 ) ],
@@ -1790,19 +1987,39 @@ animations = [ {
 "name": "SlashDown",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 415 ), SubResource( 415 ), SubResource( 416 ), SubResource( 417 ), SubResource( 418 ), SubResource( 419 ), SubResource( 420 ), SubResource( 421 ), SubResource( 422 ), SubResource( 422 ), SubResource( 422 ), SubResource( 422 ), SubResource( 422 ) ],
+"loop": true,
+"name": "SlashDown(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 195 ), SubResource( 195 ), SubResource( 195 ), SubResource( 195 ), SubResource( 196 ), SubResource( 196 ), SubResource( 197 ), SubResource( 197 ), SubResource( 198 ), SubResource( 198 ), SubResource( 199 ), SubResource( 199 ), SubResource( 200 ), SubResource( 200 ), SubResource( 200 ), SubResource( 201 ) ],
 "loop": true,
 "name": "SlashUp",
 "speed": 10.0
+}, {
+"frames": [ SubResource( 423 ), SubResource( 423 ), SubResource( 423 ), SubResource( 423 ), SubResource( 424 ), SubResource( 425 ), SubResource( 426 ), SubResource( 427 ), SubResource( 428 ), SubResource( 429 ), SubResource( 430 ), SubResource( 431 ), SubResource( 432 ), SubResource( 433 ), SubResource( 434 ), SubResource( 435 ) ],
+"loop": true,
+"name": "SlashUp(Armour)",
+"speed": 5.0
 }, {
 "frames": [ SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 93 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ), SubResource( 94 ) ],
 "loop": true,
 "name": "Stab",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 127 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ) ],
+"frames": [ SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 436 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ), SubResource( 437 ) ],
+"loop": true,
+"name": "Stab(Armour)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ), SubResource( 128 ) ],
 "loop": true,
 "name": "StabDown",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ), SubResource( 439 ) ],
+"loop": true,
+"name": "StabDown(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 131 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ), SubResource( 132 ) ],
@@ -1810,9 +2027,19 @@ animations = [ {
 "name": "StabDownEnd",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 441 ), SubResource( 442 ), SubResource( 442 ), SubResource( 442 ), SubResource( 442 ), SubResource( 442 ) ],
+"loop": true,
+"name": "StabDownEnd(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 129 ), SubResource( 129 ), SubResource( 130 ) ],
 "loop": true,
 "name": "StabDownStart",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 443 ), SubResource( 443 ), SubResource( 444 ) ],
+"loop": true,
+"name": "StabDownStart(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 32 ) ],
@@ -1830,9 +2057,19 @@ animations = [ {
 "name": "Thrust",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 445 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 446 ), SubResource( 275 ), SubResource( 275 ), SubResource( 275 ), SubResource( 275 ), SubResource( 275 ) ],
+"loop": true,
+"name": "Thrust(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ) ],
 "loop": true,
 "name": "VertStrike",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 447 ), SubResource( 447 ), SubResource( 447 ), SubResource( 447 ), SubResource( 447 ), SubResource( 447 ), SubResource( 447 ), SubResource( 448 ), SubResource( 448 ), SubResource( 448 ), SubResource( 448 ), SubResource( 449 ), SubResource( 449 ), SubResource( 449 ), SubResource( 449 ), SubResource( 450 ), SubResource( 450 ), SubResource( 450 ), SubResource( 450 ), SubResource( 450 ) ],
+"loop": true,
+"name": "VertStrike(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 15 ) ],
@@ -1984,9 +2221,8 @@ stanceAnimKey = [ "", "(Armour)" ]
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 use_parent_material = true
-frames = SubResource( 246 )
-animation = "SlashDown"
-frame = 5
+frames = SubResource( 440 )
+animation = "Knockdown(Armour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -2108,19 +2344,43 @@ hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
 
 [node name="Burst" parent="StateMachine" index="12"]
+script = ExtResource( 137 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="DefensiveBurst" parent="StateMachine" index="13"]
+script = ExtResource( 137 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="OffensiveBurst" parent="StateMachine" index="14"]
+script = ExtResource( 138 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="CounterAttackHi" parent="StateMachine" index="15"]
 allowed_stances_string = "All
@@ -2138,16 +2398,29 @@ allowed_stances_string = "All
 change_stance_to = ""
 
 [node name="Fall" parent="StateMachine" index="18"]
+script = ExtResource( 145 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="SuperFallStartup" parent="StateMachine" index="19"]
 allowed_stances_string = "All
 "
 
 [node name="SuperFall" parent="StateMachine" index="20"]
+script = ExtResource( 146 )
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="Landing" parent="StateMachine" index="21"]
 allowed_stances_string = "All
@@ -2155,14 +2428,31 @@ allowed_stances_string = "All
 change_stance_to = ""
 
 [node name="Knockdown" parent="StateMachine" index="22"]
+script = ExtResource( 149 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "Knockdown"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="HardKnockdown" parent="StateMachine" index="23"]
+script = ExtResource( 149 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="Getup" parent="StateMachine" index="24"]
 allowed_stances_string = "All
@@ -2177,24 +2467,59 @@ allowed_stances_string = "All
 "
 
 [node name="DashForward" parent="StateMachine" index="27"]
+script = ExtResource( 140 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "DashForward"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="ChargeDashForward" parent="StateMachine" index="28"]
+script = ExtResource( 140 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="DashBackward" parent="StateMachine" index="29"]
+script = ExtResource( 140 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "DashBackward"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="DashBackwardHold" parent="StateMachine" index="30"]
+script = ExtResource( 140 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "DashBackward"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="DashStartup" parent="StateMachine" index="31"]
 allowed_stances_string = "All
@@ -2202,18 +2527,50 @@ allowed_stances_string = "All
 change_stance_to = ""
 
 [node name="Jump" parent="StateMachine" index="32"]
+script = ExtResource( 144 )
+__meta__ = {
+"_editor_description_": ""
+}
 change_stance_to = ""
+jumpAnimNameArray = [ "Jump" ]
+jumpBackAnimNameArray = [ "JumpBack" ]
+fallAnimNameArray = [ "Fall" ]
+landAnimNameArray = [ "Landing" ]
 
 [node name="ChargeDash" parent="StateMachine" index="33"]
+script = ExtResource( 142 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="SuperJump" parent="StateMachine" index="34"]
+script = ExtResource( 144 )
+__meta__ = {
+"_editor_description_": ""
+}
 change_stance_to = ""
+jumpAnimNameArray = [ "Jump" ]
+jumpBackAnimNameArray = [ "JumpBack" ]
+fallAnimNameArray = [ "Fall" ]
+landAnimNameArray = [ "Landing" ]
 
 [node name="DoubleJump" parent="StateMachine" index="35"]
+script = ExtResource( 144 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
+jumpAnimNameArray = [ "Jump" ]
+jumpBackAnimNameArray = [ "JumpBack" ]
+fallAnimNameArray = [ "Fall" ]
+landAnimNameArray = [ "Landing" ]
 
 [node name="AirDash" parent="StateMachine" index="36"]
 allowed_stances_string = "All
@@ -2327,8 +2684,16 @@ hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
 
 [node name="AirDownThrow" parent="StateMachine" index="53"]
+script = ExtResource( 126 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="ThrowTech" parent="StateMachine" index="54"]
 allowed_stances_string = "All
@@ -3222,13 +3587,22 @@ apply_grav = true
 reset_x_momentum = true
 sprite_animation = "StabDown"
 anim_length = 100
+sprite_anim_length = 1
 loop_animation = true
 enter_force_dir_y = "1"
 enter_force_speed = "10"
 throw_positions = {
-SubResource( 127 ): {
+null: {
 "x": 4,
 "y": 9
+},
+SubResource( 128 ): {
+"x": 9,
+"y": 9
+},
+SubResource( 439 ): {
+"x": 9,
+"y": 7
 }
 }
 title = "Stab Down"
@@ -3273,7 +3647,7 @@ particle_scene = ExtResource( 71 )
 particle_position = Vector2( 5, -20 )
 spawn_particle_on_enter = true
 throw_positions = {
-SubResource( 127 ): {
+null: {
 "x": 4,
 "y": 23
 },

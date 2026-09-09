@@ -24,11 +24,11 @@ func _ready():
 		defaultAnimNameArray[0] = sprite_animation
 	
 	# For each direction, checks if stance-variant animations is set
-	CheckValidAnim(defaultAnimNameArray, 0)
-	CheckValidAnim(diagonalUpAnimNameArray, 1)
-	CheckValidAnim(diagonalDownAnimNameArray, 2)
-	CheckValidAnim(directlyUpAnimNameArray, 3)
-	CheckValidAnim(directlyDownAnimNameArray, 4)
+	CheckValidAnim(defaultAnimNameArray)
+	CheckValidAnim(diagonalUpAnimNameArray)
+	CheckValidAnim(diagonalDownAnimNameArray)
+	CheckValidAnim(directlyUpAnimNameArray)
+	CheckValidAnim(directlyDownAnimNameArray)
 
 # Change animations base on direction given
 func _enter():
@@ -82,7 +82,7 @@ func _frame_7():
 		if (host.id == 2):
 			projectObject.flip.rotation_degrees = 180
 
-func CheckValidAnim(animNameArray:Array, RowInArray):
+func CheckValidAnim(animNameArray:Array):
 	
 	ValidateArraySize(animNameArray)
 	if (animNameArray[0] == null):
