@@ -1,4 +1,4 @@
-[gd_scene load_steps=535 format=2]
+[gd_scene load_steps=538 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -149,21 +149,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/JumpBack.png" type="Texture" id=147]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/KnockedDown.png" type="Texture" id=148]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKKnockdown.gd" type="Script" id=149]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKLanding.gd" type="Script" id=150]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Landing.png" type="Texture" id=151]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKHurtGrounded.gd" type="Script" id=152]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/use_extra_color_1 = false
-shader_param/use_extra_color_2 = false
-shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
-shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
-shader_param/color = Color( 1, 1, 1, 1 )
-shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
-shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
-shader_param/max_color_distance = 0.01
-shader_param/super_dim = false
-shader_param/use_outline = false
-shader_param/outline_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="AtlasTexture" id=142]
 atlas = ExtResource( 77 )
@@ -1897,6 +1888,11 @@ animations = [ {
 "name": "Landing",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 151 ) ],
+"loop": true,
+"name": "Landing(Armour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 97 ), SubResource( 220 ), SubResource( 221 ), SubResource( 222 ), SubResource( 223 ), SubResource( 224 ), SubResource( 225 ), SubResource( 226 ), SubResource( 227 ), SubResource( 228 ), SubResource( 229 ), SubResource( 230 ), SubResource( 231 ), SubResource( 232 ), SubResource( 233 ), SubResource( 234 ), SubResource( 235 ), SubResource( 236 ), SubResource( 237 ), SubResource( 238 ), SubResource( 239 ), SubResource( 240 ), SubResource( 241 ), SubResource( 242 ), SubResource( 243 ), SubResource( 244 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ), SubResource( 245 ) ],
 "loop": true,
 "name": "ManaBurst",
@@ -2219,10 +2215,9 @@ player_info_scene = ExtResource( 96 )
 stanceAnimKey = [ "", "(Armour)" ]
 
 [node name="Sprite" parent="Flip" index="0"]
-material = SubResource( 1 )
-use_parent_material = true
+material = SubResource( 453 )
 frames = SubResource( 440 )
-animation = "Knockdown(Armour)"
+animation = "HurtGroundedMid"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -2423,9 +2418,18 @@ hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
 
 [node name="Landing" parent="StateMachine" index="21"]
+script = ExtResource( 150 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "Landing"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="Knockdown" parent="StateMachine" index="22"]
 script = ExtResource( 149 )
@@ -2601,9 +2605,16 @@ allowed_stances_string = "All
 change_stance_to = ""
 
 [node name="HurtGrounded" parent="StateMachine" index="42"]
+script = ExtResource( 152 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+highAnimNameArray = [ "HurtGroundedHigh" ]
+midBackAnimNameArray = [ "HurtGroundedMid" ]
+lowAnimNameArray = [ "HurtGroundedLow" ]
 
 [node name="Grabbed" parent="StateMachine" index="43"]
 allowed_stances_string = "All
