@@ -1,8 +1,8 @@
-[gd_scene load_steps=538 format=2]
+[gd_scene load_steps=568 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
-[ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=3]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKThrowTech.png" type="Texture" id=3]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashUp.png" type="Texture" id=4]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/AirDashStrike(Armour).png" type="Texture" id=5]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/SlashDown.png" type="Texture" id=6]
@@ -63,7 +63,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHighBlock.png" type="Texture" id=61]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHeavySS.png" type="Texture" id=62]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHoriStrikeSS.png" type="Texture" id=63]
-[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHustle.png" type="Texture" id=64]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKHustleRemake.png" type="Texture" id=64]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/ExcaliburStrike.png" type="Texture" id=65]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKVertSlash.png" type="Texture" id=66]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKStabDownSS.png" type="Texture" id=67]
@@ -152,6 +152,26 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKLanding.gd" type="Script" id=150]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Landing.png" type="Texture" id=151]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKHurtGrounded.gd" type="Script" id=152]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/HurtGroundedHigh.png" type="Texture" id=153]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/HurtGroundedMid.png" type="Texture" id=154]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/HurtGroundedLow.png" type="Texture" id=155]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKInstantCancel.gd" type="Script" id=156]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/GetUp.png" type="Texture" id=157]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKGetup.gd" type="Script" id=158]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Grab.png" type="Texture" id=159]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Grabbed.png" type="Texture" id=160]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKGrabbed.gd" type="Script" id=161]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/HurtAerial.png" type="Texture" id=162]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKHurtAerial.gd" type="Script" id=163]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/HighBlock.png" type="Texture" id=164]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/LowBlock.png" type="Texture" id=165]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKParrySuper.gd" type="Script" id=166]
+[ext_resource path="res://fx/PushblockFreezeEffect.tscn" type="PackedScene" id=167]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKParryAir.gd" type="Script" id=168]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/ThrowTech.png" type="Texture" id=169]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKThrowTech.gd" type="Script" id=170]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/WallSlam.png" type="Texture" id=171]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Excalibur.png" type="Texture" id=172]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -247,6 +267,18 @@ region = Rect2( 384, 128, 128, 128 )
 [sub_resource type="AtlasTexture" id=274]
 atlas = ExtResource( 114 )
 region = Rect2( 512, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=457]
+atlas = ExtResource( 172 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=458]
+atlas = ExtResource( 172 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=456]
+atlas = ExtResource( 172 )
+region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=451]
 atlas = ExtResource( 135 )
@@ -540,6 +572,14 @@ region = Rect2( 640, 0, 128, 128 )
 atlas = ExtResource( 118 )
 region = Rect2( 768, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=454]
+atlas = ExtResource( 159 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=455]
+atlas = ExtResource( 159 )
+region = Rect2( 128, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=139]
 atlas = ExtResource( 74 )
 region = Rect2( 0, 0, 128, 128 )
@@ -619,6 +659,10 @@ region = Rect2( 256, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=333]
 atlas = ExtResource( 123 )
 region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=275]
+atlas = ExtResource( 114 )
+region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=248]
 atlas = ExtResource( 12 )
@@ -1560,9 +1604,29 @@ region = Rect2( 0, 0, 128, 128 )
 atlas = ExtResource( 132 )
 region = Rect2( 128, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=32]
+[sub_resource type="AtlasTexture" id=459]
 atlas = ExtResource( 64 )
 region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=460]
+atlas = ExtResource( 64 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=461]
+atlas = ExtResource( 64 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=462]
+atlas = ExtResource( 64 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=463]
+atlas = ExtResource( 64 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=464]
+atlas = ExtResource( 64 )
+region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=95]
 atlas = ExtResource( 42 )
@@ -1579,10 +1643,6 @@ region = Rect2( 0, 0, 128, 128 )
 [sub_resource type="AtlasTexture" id=446]
 atlas = ExtResource( 133 )
 region = Rect2( 128, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=275]
-atlas = ExtResource( 114 )
-region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=123]
 atlas = ExtResource( 66 )
@@ -1688,9 +1748,19 @@ animations = [ {
 "name": "Excalibur",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 457 ), SubResource( 458 ) ],
+"loop": true,
+"name": "Excalibur(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 100 ) ],
 "loop": true,
 "name": "ExcaliburChargeUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 456 ) ],
+"loop": true,
+"name": "ExcaliburChargeUp(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 54 ), ExtResource( 47 ) ],
@@ -1758,14 +1828,29 @@ animations = [ {
 "name": "Getup",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 157 ) ],
+"loop": true,
+"name": "Getup(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 60 ), ExtResource( 60 ), ExtResource( 60 ), ExtResource( 60 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ), ExtResource( 56 ) ],
 "loop": true,
 "name": "Grab",
 "speed": 60.0
 }, {
+"frames": [ SubResource( 454 ), SubResource( 454 ), SubResource( 454 ), SubResource( 454 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ), SubResource( 455 ) ],
+"loop": true,
+"name": "Grab(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 59 ) ],
 "loop": true,
 "name": "Grabbed",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 160 ) ],
+"loop": true,
+"name": "Grabbed(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 139 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 140 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ), SubResource( 141 ) ],
@@ -1803,9 +1888,19 @@ animations = [ {
 "name": "HurtAerial",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 162 ) ],
+"loop": true,
+"name": "HurtAerial(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 46 ) ],
 "loop": true,
 "name": "HurtGroundedHigh",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 153 ) ],
+"loop": true,
+"name": "HurtGroundedHigh(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 49 ) ],
@@ -1813,14 +1908,29 @@ animations = [ {
 "name": "HurtGroundedLow",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 155 ) ],
+"loop": true,
+"name": "HurtGroundedLow(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 40 ) ],
 "loop": true,
 "name": "HurtGroundedMid",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 154 ) ],
+"loop": true,
+"name": "HurtGroundedMid(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 15 ) ],
 "loop": true,
 "name": "InstantCancel",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 275 ) ],
+"loop": true,
+"name": "InstantCancel(Armour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 50 ) ],
@@ -1908,9 +2018,19 @@ animations = [ {
 "name": "ParryHigh",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 164 ) ],
+"loop": true,
+"name": "ParryHigh(Armour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 43 ) ],
 "loop": true,
 "name": "ParryLow",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 165 ) ],
+"loop": true,
+"name": "ParryLow(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 86 ), SubResource( 86 ), SubResource( 86 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 87 ), SubResource( 86 ), SubResource( 86 ), SubResource( 86 ) ],
@@ -2038,7 +2158,7 @@ animations = [ {
 "name": "StabDownStart(Armour)",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 32 ) ],
+"frames": [ SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ) ],
 "loop": true,
 "name": "Taunt",
 "speed": 5.0
@@ -2046,6 +2166,11 @@ animations = [ {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "ThrowTech",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 169 ) ],
+"loop": true,
+"name": "ThrowTech(Armour)",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 95 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), SubResource( 96 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ) ],
@@ -2081,6 +2206,11 @@ animations = [ {
 "frames": [ ExtResource( 45 ) ],
 "loop": true,
 "name": "WallSlam",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 171 ) ],
+"loop": true,
+"name": "WallSlam(Armour)",
 "speed": 5.0
 } ]
 
@@ -2217,7 +2347,7 @@ stanceAnimKey = [ "", "(Armour)" ]
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 453 )
 frames = SubResource( 440 )
-animation = "HurtGroundedMid"
+animation = "Excalibur(Armour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -2284,31 +2414,67 @@ allowed_stances_string = "All"
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
+script = ExtResource( 166 )
 allowed_stances_string = "All"
 change_stance_to = ""
+highParryAnimNameArray = [ "ParryHigh" ]
+lowParryAnimNameArray = [ "ParryLow" ]
+highShieldAnimNameArray = [ "ShieldHigh" ]
+lowShieldAnimNameArray = [ "ShieldLow" ]
 
 [node name="ParryHigh" parent="StateMachine" index="2"]
+position = Vector2( 0, 1 )
+script = ExtResource( 166 )
+particle_scene = ExtResource( 167 )
+allowed_stances_string = "All"
 change_stance_to = ""
+highParryAnimNameArray = [ "ParryHigh" ]
+lowParryAnimNameArray = [ "ParryLow" ]
+highShieldAnimNameArray = [ "ShieldHigh" ]
+lowShieldAnimNameArray = [ "ShieldLow" ]
 
 [node name="ParryAfterWhiff" parent="StateMachine" index="3"]
+script = ExtResource( 166 )
 allowed_stances_string = "All
 "
 change_stance_to = ""
+highParryAnimNameArray = [ "ParryHigh" ]
+lowParryAnimNameArray = [ "ParryLow" ]
+highShieldAnimNameArray = [ "ShieldHigh" ]
+lowShieldAnimNameArray = [ "ShieldLow" ]
 
 [node name="ParryAuto" parent="StateMachine" index="4"]
+script = ExtResource( 166 )
 allowed_stances_string = "All
 "
 change_stance_to = ""
+highParryAnimNameArray = [ "ParryHigh" ]
+lowParryAnimNameArray = [ "ParryLow" ]
+highShieldAnimNameArray = [ "ShieldHigh" ]
+lowShieldAnimNameArray = [ "ShieldLow" ]
 
 [node name="ParryLow" parent="StateMachine" index="5"]
+script = ExtResource( 166 )
 allowed_stances_string = "All
 "
 change_stance_to = ""
+highParryAnimNameArray = [ "ParryHigh" ]
+lowParryAnimNameArray = [ "ParryLow" ]
+highShieldAnimNameArray = [ "ShieldHigh" ]
+lowShieldAnimNameArray = [ "ShieldLow" ]
 
 [node name="ParryAir" parent="StateMachine" index="6"]
+script = ExtResource( 168 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="Roll" parent="StateMachine" index="7"]
 allowed_stances_string = "All
@@ -2459,8 +2625,17 @@ hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
 
 [node name="Getup" parent="StateMachine" index="24"]
+script = ExtResource( 158 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "Getup"
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="TechRoll" parent="StateMachine" index="25"]
 allowed_stances_string = "All
@@ -2581,9 +2756,18 @@ allowed_stances_string = "All
 "
 
 [node name="InstantCancel" parent="StateMachine" index="37"]
+script = ExtResource( 156 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "InstantCancel"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="WhiffInstantCancel" parent="StateMachine" index="38"]
 allowed_stances_string = "All
@@ -2591,18 +2775,35 @@ allowed_stances_string = "All
 change_stance_to = ""
 
 [node name="HurtDizzy" parent="StateMachine" index="39"]
+script = ExtResource( 152 )
+__meta__ = {
+"_editor_description_": ""
+}
 allowed_stances_string = "All
 "
 change_stance_to = ""
+highAnimNameArray = [ "HurtGroundedHigh" ]
+midBackAnimNameArray = [ "HurtGroundedMid" ]
+lowAnimNameArray = [ "HurtGroundedLow" ]
 
 [node name="WallSlam" parent="StateMachine" index="40"]
 allowed_stances_string = "All
 "
 
 [node name="HurtAerial" parent="StateMachine" index="41"]
+script = ExtResource( 163 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "HurtAerial"
 allowed_stances_string = "All
 "
 change_stance_to = ""
+aerialAnimNameArray = [ "HurtAerial" ]
+highAnimNameArray = [ "HurtGroundedHigh" ]
+midBackAnimNameArray = [ "HurtGroundedMid" ]
+lowAnimNameArray = [ "HurtGroundedLow" ]
+knockdownAnimNameArray = [ "Knockdown" ]
 
 [node name="HurtGrounded" parent="StateMachine" index="42"]
 script = ExtResource( 152 )
@@ -2617,8 +2818,17 @@ midBackAnimNameArray = [ "HurtGroundedMid" ]
 lowAnimNameArray = [ "HurtGroundedLow" ]
 
 [node name="Grabbed" parent="StateMachine" index="43"]
+script = ExtResource( 161 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "Grabbed"
 allowed_stances_string = "All
 "
+normal_StateAnimName = ""
+normalArmour_StateAnimName = ""
+hiddenArmour_StateAnimName = ""
+hidden_StateAnimName = ""
 
 [node name="Hold" parent="StateMachine" index="44"]
 allowed_stances_string = "All
@@ -2707,20 +2917,23 @@ hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
 
 [node name="ThrowTech" parent="StateMachine" index="54"]
+script = ExtResource( 170 )
+__meta__ = {
+"_editor_description_": ""
+}
+sprite_animation = "ThrowTech"
 allowed_stances_string = "All
 "
 change_stance_to = ""
-
-[node name="Taunt" parent="StateMachine" index="55"]
-script = ExtResource( 20 )
-anim_length = 90
-sprite_anim_length = 1
-allowed_stances_string = "All
-"
 normal_StateAnimName = ""
 normalArmour_StateAnimName = ""
 hiddenArmour_StateAnimName = ""
 hidden_StateAnimName = ""
+
+[node name="Taunt" parent="StateMachine" index="55"]
+script = ExtResource( 20 )
+allowed_stances_string = "All
+"
 
 [node name="ForfeitExplosion" parent="StateMachine" index="56"]
 allowed_stances_string = "All

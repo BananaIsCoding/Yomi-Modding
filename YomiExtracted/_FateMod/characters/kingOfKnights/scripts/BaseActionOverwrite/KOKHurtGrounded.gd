@@ -4,16 +4,33 @@ export (Array, String) var highAnimNameArray = ["HurtGroundedHigh"]
 export (Array, String) var midBackAnimNameArray = ["HurtGroundedMid"]
 export (Array, String) var lowAnimNameArray = ["HurtGroundedLow"]
 
+
+func _ready():
+	
+	CheckValidAnim(highAnimNameArray)
+	CheckValidAnim(midBackAnimNameArray)
+	CheckValidAnim(lowAnimNameArray)
+	
+	._ready()
+
 func _enter():
+	
+	var currentStance := 0
+	
+	match host.stance:
+		"Normal(Armour)":
+			currentStance = 1
+	
+	# Overwriting Parent's "_enter" function
 	can_act = false
 	hitbox = data["hitbox"]
 	match hitbox.hit_height:
 		Hitbox.HitHeight.High:
-			anim_name = "HurtGroundedHigh"
+			anim_name = highAnimNameArray[currentStance]
 		Hitbox.HitHeight.Mid:
-			anim_name = "HurtGroundedMid"
+			anim_name = midBackAnimNameArray[currentStance]
 		Hitbox.HitHeight.Low:
-			anim_name = "HurtGroundedLow"
+			anim_name = lowAnimNameArray[currentStance]
 	hitstun = global_hitstun_modifier(hitbox.hitstun_ticks + hitstun_modifier(hitbox))
 	wall_slam = hitbox.wall_slam and host.wall_slams < host.MAX_WALL_SLAMS
 	counter = hitbox.counter_hit
@@ -51,3 +68,17 @@ func _enter():
 	host.apply_force(force_x, force_y)
 	if dizzy:
 		host.start_throw_invulnerability()
+
+## Utility Functions ##
+func CheckValidAnim(animNameArray:Array):
+	
+	if (animNameArray.size() < host.stanceAnimKey.size()):
+		animNameArray.resize(host.stanceAnimKey.size())
+		
+	if (animNameArray[0] == null):
+		return
+	# For each stance
+	for i in range(1,host.stanceAnimKey.size()):
+		# If emtpy attempt to guess the animation name / follow naming convention 
+		if animNameArray[i] == "" or animNameArray[i] == null:
+			animNameArray[i] = animNameArray[0] + host.stanceAnimKey[i]
