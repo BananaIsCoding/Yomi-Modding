@@ -97,6 +97,8 @@ func _frame_93():
 	var opponentPos =  host.opponent.get_pos()
 	
 	var game = Global.current_game
+	
+	
 	excaliburCutscene.show()
 	tickForCutscene = 0
 	excaliburCutscene.frame = 0

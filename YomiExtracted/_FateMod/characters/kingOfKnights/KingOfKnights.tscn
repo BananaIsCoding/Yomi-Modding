@@ -2158,7 +2158,7 @@ animations = [ {
 "name": "StabDownStart(Armour)",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ) ],
+"frames": [ SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 459 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 460 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 461 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 462 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 463 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ), SubResource( 464 ) ],
 "loop": true,
 "name": "Taunt",
 "speed": 5.0
@@ -2932,6 +2932,8 @@ hidden_StateAnimName = ""
 
 [node name="Taunt" parent="StateMachine" index="55"]
 script = ExtResource( 20 )
+anim_length = 135
+loop_animation = true
 allowed_stances_string = "All
 "
 

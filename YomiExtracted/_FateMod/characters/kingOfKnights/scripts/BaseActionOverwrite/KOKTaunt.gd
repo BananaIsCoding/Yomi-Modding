@@ -13,7 +13,6 @@ func _frame_89():
 	host.gain_super_meter_raw(host.MAX_SUPER_METER)
 	host.unlock_achievement("ACH_HUSTLE", true)
 	
-
-#func _tick():
-#	._tick()
-#	host.sprite
+func _frame_134():
+	host.gain_super_meter_raw(host.MAX_SUPER_METER)
+	host.unlock_achievement("ACH_HUSTLE", true)
