@@ -1,4 +1,4 @@
-[gd_scene load_steps=568 format=2]
+[gd_scene load_steps=610 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -172,6 +172,17 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/BaseActionOverwrite/KOKThrowTech.gd" type="Script" id=170]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/WallSlam.png" type="Texture" id=171]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Armoured/Excalibur.png" type="Texture" id=172]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden/Wait.png" type="Texture" id=173]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden/AirDashStrike.png" type="Texture" id=174]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/Wait.png" type="Texture" id=175]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/ArmourOn.png" type="Texture" id=176]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/AirDashStrike.png" type="Texture" id=177]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/AirSlash.png" type="Texture" id=178]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden/AirSlash.png" type="Texture" id=179]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden/BackDash.png" type="Texture" id=180]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/BackDash.png" type="Texture" id=181]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden/ForwardDash.png" type="Texture" id=182]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/Hidden(Armour)/ForwardDash.png" type="Texture" id=183]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -228,6 +239,66 @@ region = Rect2( 512, 0, 128, 128 )
 atlas = ExtResource( 9 )
 region = Rect2( 640, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=487]
+atlas = ExtResource( 179 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=488]
+atlas = ExtResource( 179 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=489]
+atlas = ExtResource( 179 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=490]
+atlas = ExtResource( 179 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=491]
+atlas = ExtResource( 179 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=492]
+atlas = ExtResource( 179 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=493]
+atlas = ExtResource( 179 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=494]
+atlas = ExtResource( 179 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=495]
+atlas = ExtResource( 179 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=481]
+atlas = ExtResource( 178 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=482]
+atlas = ExtResource( 178 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=483]
+atlas = ExtResource( 178 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=484]
+atlas = ExtResource( 178 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=485]
+atlas = ExtResource( 178 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=486]
+atlas = ExtResource( 178 )
+region = Rect2( 640, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=265]
 atlas = ExtResource( 114 )
 region = Rect2( 0, 0, 128, 128 )
@@ -266,6 +337,46 @@ region = Rect2( 384, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=274]
 atlas = ExtResource( 114 )
+region = Rect2( 512, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=471]
+atlas = ExtResource( 176 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=472]
+atlas = ExtResource( 176 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=473]
+atlas = ExtResource( 176 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=474]
+atlas = ExtResource( 176 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=475]
+atlas = ExtResource( 176 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=476]
+atlas = ExtResource( 176 )
+region = Rect2( 0, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=477]
+atlas = ExtResource( 176 )
+region = Rect2( 128, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=478]
+atlas = ExtResource( 176 )
+region = Rect2( 256, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=479]
+atlas = ExtResource( 176 )
+region = Rect2( 384, 128, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=480]
+atlas = ExtResource( 176 )
 region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=457]
@@ -1676,6 +1787,30 @@ region = Rect2( 256, 0, 128, 128 )
 atlas = ExtResource( 134 )
 region = Rect2( 384, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=465]
+atlas = ExtResource( 173 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=466]
+atlas = ExtResource( 173 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=467]
+atlas = ExtResource( 173 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=468]
+atlas = ExtResource( 175 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=469]
+atlas = ExtResource( 175 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=470]
+atlas = ExtResource( 175 )
+region = Rect2( 256, 0, 128, 128 )
+
 [sub_resource type="SpriteFrames" id=440]
 animations = [ {
 "frames": [ SubResource( 142 ) ],
@@ -1688,6 +1823,16 @@ animations = [ {
 "name": "AirDashAttack(Armour)",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 174 ) ],
+"loop": true,
+"name": "AirDashAttack(Hidden)",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 177 ) ],
+"loop": true,
+"name": "AirDashAttack(HiddenArmour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 202 ), SubResource( 202 ), SubResource( 203 ), SubResource( 203 ), SubResource( 203 ), SubResource( 203 ), SubResource( 204 ), SubResource( 204 ), SubResource( 205 ), SubResource( 205 ), SubResource( 206 ), SubResource( 206 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ), SubResource( 207 ) ],
 "loop": true,
 "name": "AirSlash",
@@ -1698,9 +1843,24 @@ animations = [ {
 "name": "AirSlash(Armour)",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 487 ), SubResource( 487 ), SubResource( 488 ), SubResource( 488 ), SubResource( 488 ), SubResource( 488 ), SubResource( 489 ), SubResource( 490 ), SubResource( 491 ), SubResource( 492 ), SubResource( 493 ), SubResource( 494 ), SubResource( 495 ), SubResource( 495 ), SubResource( 495 ), SubResource( 495 ), SubResource( 495 ), SubResource( 495 ) ],
+"loop": true,
+"name": "AirSlash(Hidden)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 481 ), SubResource( 481 ), SubResource( 482 ), SubResource( 482 ), SubResource( 482 ), SubResource( 482 ), SubResource( 483 ), SubResource( 483 ), SubResource( 484 ), SubResource( 484 ), SubResource( 485 ), SubResource( 485 ), SubResource( 486 ), SubResource( 486 ), SubResource( 486 ), SubResource( 486 ), SubResource( 486 ), SubResource( 486 ) ],
+"loop": true,
+"name": "AirSlash(HiddenArmour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 265 ), SubResource( 266 ), SubResource( 267 ), SubResource( 268 ), SubResource( 269 ), SubResource( 270 ), SubResource( 271 ), SubResource( 272 ), SubResource( 273 ), SubResource( 274 ) ],
 "loop": true,
 "name": "ArmourOn",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 471 ), SubResource( 472 ), SubResource( 473 ), SubResource( 474 ), SubResource( 475 ), SubResource( 476 ), SubResource( 477 ), SubResource( 478 ), SubResource( 479 ), SubResource( 480 ) ],
+"loop": true,
+"name": "ArmourOn(Hidden)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 37 ) ],
@@ -1723,6 +1883,16 @@ animations = [ {
 "name": "DashBackward(Armour)",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 180 ) ],
+"loop": true,
+"name": "DashBackward(Hidden)",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 181 ) ],
+"loop": true,
+"name": "DashBackward(HiddenArmour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 38 ) ],
 "loop": true,
 "name": "DashForward",
@@ -1731,6 +1901,16 @@ animations = [ {
 "frames": [ ExtResource( 141 ) ],
 "loop": true,
 "name": "DashForward(Armour)",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 182 ) ],
+"loop": true,
+"name": "DashForward(Hidden)",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 183 ) ],
+"loop": true,
+"name": "DashForward(HiddenArmour)",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 50 ) ],
@@ -2203,6 +2383,16 @@ animations = [ {
 "name": "Wait(Armour)",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 465 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 466 ), SubResource( 467 ), SubResource( 467 ), SubResource( 467 ), SubResource( 467 ), SubResource( 467 ), SubResource( 467 ), SubResource( 467 ) ],
+"loop": true,
+"name": "Wait(Hidden)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 468 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 469 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ), SubResource( 470 ) ],
+"loop": true,
+"name": "Wait(HiddenArmour)",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 45 ) ],
 "loop": true,
 "name": "WallSlam",
@@ -2347,7 +2537,7 @@ stanceAnimKey = [ "", "(Armour)" ]
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 453 )
 frames = SubResource( 440 )
-animation = "Excalibur(Armour)"
+animation = "DashForward(HiddenArmour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -2394,7 +2584,6 @@ position = Vector2( 0, -30 )
 scale = Vector2( 0.665, 0.665 )
 z_index = 2
 frames = ExtResource( 103 )
-frame = 27
 
 [node name="ExcaliburCutsceneChargeUp" parent="Flip/ExcaliburCutscene" index="0" instance=ExtResource( 102 )]
 unique_name_in_owner = true
@@ -2410,7 +2599,9 @@ speed_scale = 5.0
 playing = true
 
 [node name="Start" parent="StateMachine" index="0"]
+sprite_animation = "Wait(Hidden)"
 allowed_stances_string = "All"
+change_stance_to = "Hidden"
 
 [node name="ParrySuper" parent="StateMachine" index="1"]
 position = Vector2( 0, 1 )
@@ -3746,7 +3937,48 @@ launch_reversible = true
 start_tick = 9
 active_ticks = 2
 
-[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="76"]
+[node name="ArmorOn(Hidden)" type="Node2D" parent="StateMachine" index="76"]
+script = ExtResource( 95 )
+__meta__ = {
+"_editor_description_": ""
+}
+reset_momentum = true
+sprite_animation = "ArmourOn(Hidden)"
+anim_length = 10
+title = "Armor On"
+type = 2
+button_texture = ExtResource( 97 )
+self_interruptable = false
+can_feint_if_possible = false
+interrupt_from_string = "Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper"
+allowed_stances_string = "Hidden
+"
+change_stance_to = "Hidden(Armour)"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/ArmorOn(Hidden)" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+y = -16
+width = 50
+height = 50
+damage = 40
+hitbox_type = 6
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+start_tick = 9
+active_ticks = 2
+
+[node name="Shirou(Heal)" type="Node2D" parent="StateMachine" index="77"]
 script = ExtResource( 16 )
 reset_momentum = true
 sprite_animation = "ShirouHeal"
@@ -3764,7 +3996,7 @@ GroundedSuper"
 allowed_stances_string = "All
 "
 
-[node name="StabDownStart" type="Node2D" parent="StateMachine" index="77"]
+[node name="StabDownStart" type="Node2D" parent="StateMachine" index="78"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -3803,7 +4035,7 @@ knockdown_extends_hitstun = false
 start_tick = 3
 active_ticks = 3
 
-[node name="StabDown" type="Node2D" parent="StateMachine" index="78"]
+[node name="StabDown" type="Node2D" parent="StateMachine" index="79"]
 script = ExtResource( 33 )
 __meta__ = {
 "_editor_description_": ""
@@ -3822,13 +4054,13 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 128 ): {
-"x": 9,
-"y": 9
-},
 SubResource( 439 ): {
 "x": 9,
 "y": 7
+},
+SubResource( 128 ): {
+"x": 9,
+"y": 9
 }
 }
 title = "Stab Down"
@@ -3857,7 +4089,7 @@ aerial_hit_state = "Knockdown"
 grounded_hit_state = "Knockdown"
 ground_bounce = false
 
-[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="79"]
+[node name="StabDownEnd" type="Node2D" parent="StateMachine" index="80"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
@@ -3901,7 +4133,7 @@ knockdown_extends_hitstun = false
 damage = 0
 ground_bounce = false
 
-[node name="Excalibur" type="Node2D" parent="StateMachine" index="80"]
+[node name="Excalibur" type="Node2D" parent="StateMachine" index="81"]
 script = ExtResource( 99 )
 __meta__ = {
 "_editor_description_": ""
@@ -3914,18 +4146,43 @@ projectile_match_facing = true
 title = "Excalibur"
 type = 3
 button_texture = ExtResource( 98 )
+end_feint = false
+self_interruptable = false
+can_feint_if_possible = false
 interrupt_from_string = "Grounded"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
-allowed_stances_string = "All
+allowed_stances_string = "Normal
+Normal(Armour)
 "
+can_be_counterhit = false
 super_level_ = 5
 super_freeze_ticks_ = 273
 cutsceneTPF = 5
 
-[node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="81"]
+[node name="Hitbox" type="Node2D" parent="StateMachine/Excalibur" index="0"]
+z_index = 1000
+script = ExtResource( 7 )
+x = 1525
+y = -680
+width = 1500
+height = 700
+damage = 40
+hitbox_type = 6
+hitstun_ticks = 23
+victim_hitlag = 4
+cancellable = false
+can_counter_hit = false
+sdi_modifier = "0.0"
+dir_y = "0"
+knockback = "1.5"
+launch_reversible = true
+start_tick = 272
+active_ticks = 2
+
+[node name="ExcaliburGroundVar" type="Node2D" parent="StateMachine" index="82"]
 script = ExtResource( 105 )
 __meta__ = {
 "_editor_description_": ""
@@ -3964,9 +4221,9 @@ __meta__ = {
 "_editor_description_": ""
 }
 x = 220
-y = -29
+y = -680
 width = 205
-height = 30
+height = 700
 damage = 50
 hitstun_ticks = 40
 cancellable = false
@@ -3975,17 +4232,16 @@ di_modifier = "0"
 meter_gain_modifier = ".8"
 can_clash = false
 ignore_projectile_armor = true
-guard_break = true
 parriable = false
 block_cancel_allowed = false
 dir_x = "0.0"
-knockback = "7.0"
+knockback = "5.5"
 start_tick = 2
 active_ticks = 30
 looping = true
 hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburHitEffect(G)")
 
-[node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="82"]
+[node name="ExcaliburAirVar" type="Node2D" parent="StateMachine" index="83"]
 script = ExtResource( 109 )
 __meta__ = {
 "_editor_description_": ""
@@ -4037,7 +4293,6 @@ can_counter_hit = false
 sdi_modifier = "0.0"
 can_clash = false
 ignore_projectile_armor = true
-guard_break = true
 parriable = false
 dir_y = "0"
 knockback = "0"
@@ -4048,7 +4303,7 @@ active_ticks = 30
 looping = true
 hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburStarHitEffect")
 
-[node name="JumpAttack" type="Node2D" parent="StateMachine" index="83"]
+[node name="JumpAttack" type="Node2D" parent="StateMachine" index="84"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -4100,7 +4355,7 @@ start_tick = 6
 active_ticks = -1
 always_on = true
 
-[node name="JumpAttackInterrupt" type="Node2D" parent="StateMachine" index="84"]
+[node name="JumpAttackInterrupt" type="Node2D" parent="StateMachine" index="85"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -4147,7 +4402,7 @@ knockdown = true
 start_tick = 1
 active_ticks = 3
 
-[node name="JumpAttackEnd" type="Node2D" parent="StateMachine" index="85"]
+[node name="JumpAttackEnd" type="Node2D" parent="StateMachine" index="86"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -4189,5 +4444,5 @@ launch_reversible = true
 start_tick = 1
 active_ticks = 3
 
-[node name="Frozen" parent="StateMachine" index="86"]
+[node name="Frozen" parent="StateMachine" index="87"]
 allowed_stances_string = "All"

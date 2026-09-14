@@ -67,6 +67,10 @@ func _enter():
 			anim_name = normal_StateAnimName
 		"Normal(Armour)":
 			anim_name = normalArmour_StateAnimName
+		"Hidden":
+			anim_name = hidden_StateAnimName
+		"Hidden(Armour)":
+			anim_name = hiddenArmour_StateAnimName
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage += hitbox.damage * host.dmgBoost

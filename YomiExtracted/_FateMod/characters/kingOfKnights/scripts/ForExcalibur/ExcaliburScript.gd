@@ -4,12 +4,9 @@ extends KokNormalAttackState
 
 var prevHitLag = 0
 var cutscenePlaying
+var startStun = false
 var tickForCutscene = 0
-var chargeComplete = false
 var opponentHeight = 0
-var setUpComplete = false
-var prevCamPos
-var cam
 
 onready var swordChargeUp = $"%ExcaliburSwordSprite"
 onready var excaliburCutscene = $"%ExcaliburCutscene"
@@ -21,18 +18,17 @@ export (int) var cutsceneTPF
 
 ## Functions ##
 
-func _enter():
-	._enter()
-	if setUpComplete or host.is_ghost:
-		return
-	setUpComplete = true
-
 func _frame_0():
 	# Starting up the effects
 	chargeUpEffect.start_emitting()
 	swordChargeUp.frame = 0
 	swordChargeUp.visible = true
 	swordChargeUp.playing = true
+	
+func _frame_5():
+	startStun = true
+	host.opponent.state_machine.queue_state("Wait")
+	host.start_invulnerability()
 
 func _exit():
 	._enter()
@@ -43,22 +39,14 @@ func _exit():
 	swordChargeUp.playing = false
 	# Release camera from following player
 	host.release_camera_focus()
-	
-	# If player was hit before move can complete
-	if not chargeComplete:
-		return
-	
-	# switchs the variant based off enemies' altitude
-	if opponentHeight < -50:
-		host.state_machine.queue_state("ExcaliburAirVar")
-	else:
-		host.state_machine.queue_state("ExcaliburGroundVar")
 
 func _tick():
-	if cutscenePlaying:
+	
+	if startStun:
 		# Stops enemy in place
 		host.opponent.hitlag_ticks += 1
 		
+	if cutscenePlaying:
 		# Ensure cutscene is correctly 
 		host.set_camera_zoom(1.0)
 		host.grab_camera_focus()
@@ -83,10 +71,6 @@ func _frame_93():
 	
 	cutsceneChargeParticles.start_emitting()
 	
-	if not host.is_ghost:
-		cam = Network.game.camera
-		prevCamPos = cam.global_position
-	
 	# Set up for cutscene 
 	host.quick_ui_hider()
 	
@@ -98,6 +82,11 @@ func _frame_93():
 	
 	var game = Global.current_game
 	
+	match host.stance:
+		"normal":
+			excaliburCutscene.animation = "default"
+		"Normal(Armour)":
+			excaliburCutscene.animation = "Armour"
 	
 	excaliburCutscene.show()
 	tickForCutscene = 0
@@ -106,12 +95,28 @@ func _frame_93():
 
 func _frame_272():
 	# Stopping the cutscene 
+	EndMove()
+	
+	opponentHeight = host.opponent.position.y
+
+func detect(obj):
+	if obj.is_in_group("Fighter"):
+		
+		EndMove()
+		
+		opponentHeight = host.opponent.position.y
+		if opponentHeight < -50:
+			queue_state_change("ExcaliburAirVar")
+		else:
+			queue_state_change("ExcaliburGroundVar")
+
+func EndMove():
+	startStun = false
+	cutscenePlaying = false
 	chargeUpEffect.stop_emitting()
 	cutsceneChargeParticles.stop_emitting()
-	
 	excaliburCutscene.hide()
 	cutsceneFiller.hide()
 	host.quick_ui_revealer()
-	chargeComplete = true
 	
-	opponentHeight = host.opponent.position.y
+	host.end_invulnerability()

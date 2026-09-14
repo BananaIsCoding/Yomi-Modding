@@ -22,6 +22,11 @@ func ChangeHitboxSize(width: int):
 	hitbox.pos_x = width + 15
 	hitbox.width = width
 
+
+func _enter():
+	._enter()
+	host.opponent.hitlag_ticks += 1
+
 # Fully hide particle after x ticks
 func _tick():
 	currentTick += 1
