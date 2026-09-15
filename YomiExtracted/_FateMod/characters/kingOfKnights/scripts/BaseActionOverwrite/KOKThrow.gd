@@ -2,8 +2,8 @@ extends "res://characters/states/ThrowState.gd"
 
 export (String) var normal_StateAnimName
 export (String) var normalArmour_StateAnimName
-export (String) var hiddenArmour_StateAnimName
 export (String) var hidden_StateAnimName
+export (String) var hiddenArmour_StateAnimName
 
 func _ready():
 	if (normal_StateAnimName == ""):
@@ -22,4 +22,8 @@ func _enter():
 			anim_name = normal_StateAnimName
 		"Normal(Armour)":
 			anim_name = normalArmour_StateAnimName
+		"Hidden":
+			anim_name = hidden_StateAnimName
+		"Hidden(Armour)":
+			anim_name = hiddenArmour_StateAnimName
 	._enter()

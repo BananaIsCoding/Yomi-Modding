@@ -16,6 +16,7 @@ func _ready():
 	
 	._ready()
 
+# Changing Sprite Based On Stance
 func _enter():
 	
 	match host.stance:
@@ -23,6 +24,10 @@ func _enter():
 			currentStance = 0
 		"Normal(Armour)":
 			currentStance = 1
+		"Hidden":
+			currentStance = 2
+		"Hidden(Armour)":
+			currentStance = 3
 	._enter()
 
 func start():

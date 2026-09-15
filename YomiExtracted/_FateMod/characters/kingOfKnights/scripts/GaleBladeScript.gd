@@ -38,6 +38,10 @@ func _enter():
 	match host.stance:
 		"Normal(Armour)":
 			stanceId = 1
+		"Hidden":
+			stanceId = 2
+		"Hidden(Armour)":
+			stanceId = 3
 	
 	if data.x == host.get_facing_int():
 		if data.y == -1:

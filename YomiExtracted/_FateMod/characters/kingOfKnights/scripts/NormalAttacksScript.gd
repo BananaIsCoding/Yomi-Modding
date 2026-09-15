@@ -4,8 +4,8 @@ class_name KokNormalAttackState
 
 export (String) var normal_StateAnimName
 export (String) var normalArmour_StateAnimName
-export (String) var hiddenArmour_StateAnimName
 export (String) var hidden_StateAnimName
+export (String) var hiddenArmour_StateAnimName
 
 var originalHbDmg = []
 

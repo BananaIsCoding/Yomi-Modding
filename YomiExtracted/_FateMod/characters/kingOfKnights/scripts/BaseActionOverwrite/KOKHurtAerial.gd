@@ -25,6 +25,10 @@ func _enter():
 			currentStance = 0
 		"Normal(Armour)":
 			currentStance = 1
+		"Hidden":
+			currentStance = 2
+		"Hidden(Armour)":
+			currentStance = 3
 	
 	# Overwriting Parent Func
 	ground_bounced = false

@@ -23,6 +23,10 @@ func _enter():
 			currentStance = 0
 		"Normal(Armour)":
 			currentStance = 1
+		"Hidden":
+			currentStance = 2
+		"Hidden(Armour)":
+			currentStance = 3
 	
 	# Overriding content of previous "_enter" Func
 	anim_name = landAnimNameArray[currentStance]

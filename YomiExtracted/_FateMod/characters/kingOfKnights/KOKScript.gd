@@ -9,8 +9,7 @@ class BoostData:
 	
 enum BoostType {DmgBoost, SpecialBoost}
 
-# [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
-export (Array, String) var stanceAnimKey = [ "", "(Armour)" ]
+export (Array, String) var stanceAnimKey = [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
 
 var comboAttackCD = 0
 var currentExcalCharge = 0

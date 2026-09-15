@@ -36,7 +36,7 @@ func update_sprite_frame():
 
 func _ready():
 	if (normal_StateAnimName == ""):
-		normal_StateAnimName = sprite_animation
+		normal_StateAnimName = "Wait"
 	if (normalArmour_StateAnimName == ""):
 		normalArmour_StateAnimName = normal_StateAnimName + "(Armour)"
 	if (hiddenArmour_StateAnimName == ""):
