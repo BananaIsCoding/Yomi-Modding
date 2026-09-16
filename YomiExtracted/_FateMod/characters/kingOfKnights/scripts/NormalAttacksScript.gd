@@ -8,6 +8,8 @@ export (String) var hidden_StateAnimName
 export (String) var hiddenArmour_StateAnimName
 
 var originalHbDmg = []
+var originalHbBlockPunishable = []
+var originalHbParriable = []
 
 # Overriding set_up to also add the original hitbox damage 
 # when it loops though the children 
@@ -20,6 +22,8 @@ func setup_hitboxes():
 			all_hitbox_nodes.append(child)
 			host.hitboxes.append(child)
 			originalHbDmg.append(child.damage)
+			originalHbBlockPunishable.append(child.block_punishable)
+			originalHbParriable.append(child.parriable)
 			child.native = native
 			if child.guard_break:
 				is_guard_break = true
@@ -59,8 +63,7 @@ func _ready():
 	if (hidden_StateAnimName == ""):
 		hidden_StateAnimName = normal_StateAnimName + "(Hidden)"
 	._ready()
-	
-		
+
 func _enter():
 	match host.stance:
 		"Normal":
@@ -71,15 +74,31 @@ func _enter():
 			anim_name = hidden_StateAnimName
 		"Hidden(Armour)":
 			anim_name = hiddenArmour_StateAnimName
+	
+	sprite_anim_length = host.sprite.frames.get_frame_count(anim_name)
+	
+	var canPunish := true
+	if host.stance == "Hidden" or host.stance =="Hidden(Armour)":
+		randomize()
+		var num = randi() % 2
+		if num == 0:
+			canPunish = false
+		#print(ReplayManager.frames[host.id][host.current_tick][.keys()])
+	
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage += hitbox.damage * host.dmgBoost
-			
+			if not canPunish:
+				hitbox.parriable = false
+
 func _exit():
 	var index = 0
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage = originalHbDmg[index]
+			hitbox.block_punishable = originalHbBlockPunishable[index]
+			hitbox.parriable = originalHbParriable[index]
+			index += 1
 
 func _frame_1():
 	if host.stance == "Normal":

@@ -20,6 +20,10 @@ func _enter():
 	match host.stance:
 		"Normal(Armour)":
 			currentStance = 1
+		"Hidden":
+			currentStance = 2
+		"Hidden(Armour)":
+			currentStance = 3
 	
 	# Overwriting Parent's "_enter" function
 	can_act = false
