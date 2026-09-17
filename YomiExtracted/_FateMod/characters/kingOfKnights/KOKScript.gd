@@ -33,6 +33,8 @@ var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSp
 var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
 var BoostToRemove = []
 
+var lastAttackLockIn = 0
+
 const new_modulate_alpha = 0.0
 const fade_speed = 0.30 # Lower number = slower
 
@@ -78,10 +80,11 @@ func tick():
 
 ## 100% my functions I think (why is there no region in godot) ##
 
+func SaveTick():
+	lastAttackLockIn = current_tick
+
 func CalcCritChance():
 	return critChance + (critStar * 3)
-
-# Prob need to create a "CreateBoostSlot" function 
 
 func AddDamageBoost(percentage, duration):
 	# [NOTE] will add if statement for alter form
@@ -219,7 +222,7 @@ func quick_ui_revealer():
 		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = 1.0
 		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = 1.0
 
-# overriding to support damage reduction
+# overriding to support damage reduction 
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
 	
 	var combo_ref = self if self_hit else opponent

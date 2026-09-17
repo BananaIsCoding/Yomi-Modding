@@ -7,9 +7,11 @@ export (String) var normalArmour_StateAnimName
 export (String) var hidden_StateAnimName
 export (String) var hiddenArmour_StateAnimName
 
+export (bool) var applyHiddenInstallBuff = true
+
 var originalHbDmg = []
-var originalHbBlockPunishable = []
 var originalHbParriable = []
+var originalHbSize = []
 
 # Overriding set_up to also add the original hitbox damage 
 # when it loops though the children 
@@ -22,8 +24,8 @@ func setup_hitboxes():
 			all_hitbox_nodes.append(child)
 			host.hitboxes.append(child)
 			originalHbDmg.append(child.damage)
-			originalHbBlockPunishable.append(child.block_punishable)
 			originalHbParriable.append(child.parriable)
+			originalHbSize.append(Vector2(child.width, child.height))
 			child.native = native
 			if child.guard_break:
 				is_guard_break = true
@@ -65,6 +67,10 @@ func _ready():
 	._ready()
 
 func _enter():
+	
+	if host.is_ghost:
+		host.stance = Network.game.get_player(host.id).stance
+	
 	match host.stance:
 		"Normal":
 			anim_name = normal_StateAnimName
@@ -77,27 +83,45 @@ func _enter():
 	
 	sprite_anim_length = host.sprite.frames.get_frame_count(anim_name)
 	
-	var canPunish := true
-	if host.stance == "Hidden" or host.stance =="Hidden(Armour)":
-		randomize()
-		var num = randi() % 2
-		if num == 0:
-			canPunish = false
-		#print(ReplayManager.frames[host.id][host.current_tick][.keys()])
+	var canParry := true
+	
+	if applyHiddenInstallBuff:
+		if host.stance == "Hidden" or host.stance =="Hidden(Armour)":
+			if not host.is_ghost: 
+				print(host.stance)
+				if ReplayManager.frames[host.id].has(host.current_tick):
+					host.SaveTick()
+					if ReplayManager.frames[host.id][host.current_tick].has("CanParry"):
+						canParry = ReplayManager.frames[host.id][host.current_tick]["CanParry"]
+					else:
+						randomize()
+						var num = randi() % 2
+						if num == 0:
+							canParry = false
+						ReplayManager.frames[host.id][host.current_tick]["CanParry"] = canParry
+				else:
+					canParry = ReplayManager.frames[host.id][host.lastAttackLockIn]["CanParry"]
+			else:
+				if (Global.current_game.real_tick % anim_length) % 2 == 1:
+					canParry = false
 	
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage += hitbox.damage * host.dmgBoost
-			if not canPunish:
+			if not canParry:
 				hitbox.parriable = false
+				hitbox.width *= 1.3
+				hitbox.height *= 1.3
 
 func _exit():
+	
 	var index = 0
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
 			hitbox.damage = originalHbDmg[index]
-			hitbox.block_punishable = originalHbBlockPunishable[index]
 			hitbox.parriable = originalHbParriable[index]
+			hitbox.width = originalHbSize[index].x
+			hitbox.height = originalHbSize[index].y
 			index += 1
 
 func _frame_1():
