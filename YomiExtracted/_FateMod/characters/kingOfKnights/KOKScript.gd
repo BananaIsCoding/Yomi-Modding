@@ -1,13 +1,6 @@
 extends Fighter
 
 ## Variables ##
-class BoostData:
-	var boostType
-	var instance
-	var tickRemaining : int
-	var strength
-	
-enum BoostType {DmgBoost, SpecialBoost}
 
 export (Array, String) var stanceAnimKey = [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
 
@@ -21,10 +14,23 @@ var specialBoost = 0
 var armourOn = false
 var damageReduction = 0.0
 
+# Camera and emote related variables
+class BoostData:
+	var boostType
+	var instance
+	var tickRemaining : int
+	var strength
+
+enum BoostType {DmgBoost, SpecialBoost}
+
 var cameraTween
 var Emoting = false
 var EmoteTimer = 0
 
+const new_modulate_alpha = 0.0
+const fade_speed = 0.30 # Lower number = slower
+
+# Boost related variables
 var BoostInfoUiInstance
 var BoostQueue = []
 var CritStartUi = null
@@ -33,45 +39,62 @@ var specialBoostPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSp
 var critStarPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CritStar.png")
 var BoostToRemove = []
 
+# Hidden blade related variables
+export var _c_Hidden_Blade_Stuff = 0
+export (int) var hiddenBladePercentChance = 40
+export (int) var ticksUntilDecreaseHidden = 30
+export (int) var hiddenBladeDecreaseRate = 1
 var lastAttackLockIn = 0
 
-const new_modulate_alpha = 0.0
-const fade_speed = 0.30 # Lower number = slower
+var tipToggle = false
 
 ## Functions ##
 func tick():
 	.tick()
+	
 	# Decrement cd timer
 	if comboAttackCD > 0:
 		 comboAttackCD -= 1
 	if skillCd > 0:
 		skillCd -= 1
 	
+	if (stance == "Hidden" or stance == "Hidden(Armour)") and hiddenBladePercentChance > 0:
+		if game_tick % ticksUntilDecreaseHidden == 0:
+			hiddenBladePercentChance -= hiddenBladeDecreaseRate
+	
 	if not is_ghost:
+		# Updating current boosts
 		if (!BoostQueue.empty()):
 			for index in range(BoostQueue.size()):
+				# Update tick for boost
 				BoostQueue[index].tickRemaining -= 1
 				if BoostQueue[index].tickRemaining <= 0:
 					
+					# Remove the boost buff when expired
 					if BoostQueue[index].boostType == BoostType.DmgBoost:
 						dmgBoost -= BoostQueue[index].strength
 					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
 						specialBoost -= BoostQueue[index].strength
 					
+					# Remove from UI
 					if id == 2:
 						BoostInfoUiInstance.RemoveBoost(BoostQueue[index].instance)
 					else:
 						BoostQueue[index].instance.queue_free()
 						#BoostQueue[index].instance.disable()
+					
+					# Save to remove later when all boost been checked
 					BoostToRemove.append(index)
 				else:
+					# Update Boost Info/Tooltip
 					if BoostQueue[index].boostType == BoostType.DmgBoost:
 						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
 						BoostQueue[index].instance.hint_tooltip = newToolTip
 					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
 						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Special Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
 						BoostQueue[index].instance.hint_tooltip = newToolTip
-						
+			
+			# Remove the expired boosts
 			for i in range(BoostToRemove.size()):
 				BoostQueue.remove(BoostToRemove[i])
 			BoostToRemove.clear()
@@ -129,7 +152,7 @@ func ToggleArmorMode():
 		damageReduction = 0.1
 	else:
 		damageReduction = 0.0
-	BoostInfoUiInstance.ChangeMainBuff()
+	BoostInfoUiInstance.ChangeMainBuff(armourOn)
 
 # camera controls functions from guide 
 func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease_type):
@@ -169,6 +192,16 @@ func set_camera_zoom(value):
 	#emit_signal("zoom_changed")
 	game.update_camera_limits()
 	
+
+func ShowHintText(message):
+	$EmoteLabel.clear()
+	$EmoteLabel.append_bbcode("[center]" + message)
+	$EmoteLabel.show()
+
+func HideHintText():
+	$EmoteLabel.clear()
+	$EmoteLabel.hide()
+
 # emote/text functions from guide 
 func emote(message):
 	ReplayManager.emote(message, id, current_tick)
@@ -222,6 +255,15 @@ func quick_ui_revealer():
 		get_node("/root/Main/%HudLayer/%GameUI").modulate.a = 1.0
 		get_node("/root/Main/%HudLayer/%GameUI/%BottomBar").modulate.a = 1.0
 
+# Char Extra Function from guide
+
+func process_extra(extra):
+	.process_extra(extra)
+	if extra.has("Tips"):
+		tipToggle = extra.Tips
+		if not tipToggle and is_ghost:
+			Network.game.get_player(id).HideHintText()
+ 
 # overriding to support damage reduction 
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
 	

@@ -44,18 +44,15 @@ func _process(delta):
 	if is_instance_valid(fighter):
 		pass
 	
-func ChangeMainBuff():
+func ChangeMainBuff(armourOn : bool ):
 	var currentStance = fighter.stance
-	if currentStance == "Normal":
-		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")
-		mainBuffSlot.hint_tooltip = "+1 Frame Advantage" 
-	elif currentStance == "Normal(Armour)":
+	if armourOn:
 		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/DefenceBuff.png")
 		mainBuffSlot.hint_tooltip = "+10% Damage Reduction"
-	elif currentStance == "Alter":
-		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalAttackUp.png")
-		mainBuffSlot.hint_tooltip = "+20% Damage Boost"
-		
+	else:
+		mainBuffSlot.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/AttackSpeedBuff.png")
+		mainBuffSlot.hint_tooltip = "+1 Frame Advantage" 
+
 func AddBoost(imagePath, toolTip):
 	print ("Adding: ", toolTip)
 	if createdRows > 0:

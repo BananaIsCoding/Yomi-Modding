@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ui/ActionSelector/PlayerExtra.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/ActionSelector/ActionUIData/ActionUIDataCheckButton.gd" type="Script" id=2]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/UiScripts/KOKExtra.gd" type="Script" id=3]
+
+[node name="PlayerExtra" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="TipToggle" type="CheckButton" parent="." index="0"]
+margin_top = 320.0
+margin_right = 143.0
+margin_bottom = 360.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+pressed = true
+text = "Show Tips"
+script = ExtResource( 2 )
