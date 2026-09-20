@@ -2,10 +2,12 @@ extends CharacterState
 
 class_name KokNormalAttackState
 
+export var _c_My_Stuff = 0
 export (String) var normal_StateAnimName
 export (String) var normalArmour_StateAnimName
 export (String) var hidden_StateAnimName
 export (String) var hiddenArmour_StateAnimName
+export var _c_Hidden_Blade_Stuff = 0
 
 export (bool) var applyHiddenInstallBuff = true
 

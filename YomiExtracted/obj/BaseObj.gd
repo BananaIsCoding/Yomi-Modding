@@ -529,7 +529,6 @@ func spawn_object(projectile: PackedScene, pos_x: int, pos_y: int, relative = tr
 	obj.creator_name = obj_name
 	obj.objs_map = objs_map
 	obj.is_ghost = is_ghost
-	
 	obj.spawn_data = data
 	obj.stage_width = stage_width
 	var pos = get_pos()
