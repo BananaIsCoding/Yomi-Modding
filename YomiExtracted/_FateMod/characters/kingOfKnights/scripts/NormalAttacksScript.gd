@@ -3,6 +3,7 @@ extends CharacterState
 class_name KokNormalAttackState
 
 export var _c_My_Stuff = 0
+export var ApplySpecialAtkBuff := false
 export (String) var normal_StateAnimName
 export (String) var normalArmour_StateAnimName
 export (String) var hidden_StateAnimName
@@ -90,7 +91,6 @@ func _enter():
 	if applyHiddenInstallBuff:
 		if host.stance == "Hidden" or host.stance =="Hidden(Armour)":
 			if not host.is_ghost: 
-				print(host.stance)
 				if ReplayManager.frames[host.id].has(host.current_tick):
 					host.SaveTick()
 					if ReplayManager.frames[host.id][host.current_tick].has("CanParry"):
@@ -111,7 +111,11 @@ func _enter():
 
 	for hitbox in all_hitbox_nodes:
 		if hitbox is Hitbox:
-			hitbox.damage += hitbox.damage * host.dmgBoost
+			var dmgBoost = host.dmgBoost
+			if ApplySpecialAtkBuff:
+				dmgBoost += host.specialBoost
+			hitbox.damage += hitbox.damage * dmgBoost
+			
 			if not canParry:
 				if not host.is_ghost or host.is_you():
 					hitbox.parriable = false
@@ -121,7 +125,8 @@ func _enter():
 func _exit():
 	
 	if not host.is_ghost:
-		Network.game.get_player(host.id).HideHintText()
+		if (Network.game):
+			Network.game.get_player(host.id).HideHintText()
 	
 	var index = 0
 	for hitbox in all_hitbox_nodes:

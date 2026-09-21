@@ -54,7 +54,7 @@ script = ExtResource( 2 )
 __meta__ = {
 "_editor_description_": ""
 }
-anim_length = 30
+anim_length = 1000
 endless = false
 projSpeed = 5
 

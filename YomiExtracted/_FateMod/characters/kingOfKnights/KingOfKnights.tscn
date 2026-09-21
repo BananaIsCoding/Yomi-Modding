@@ -6433,6 +6433,8 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
+apply_pushback = false
+ApplySpecialAtkBuff = true
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/ManaBurst" index="0"]
 z_index = 1000
@@ -6469,7 +6471,6 @@ can_counter_hit = false
 di_modifier = "0"
 dir_y = "0"
 knockback = "1.5"
-launch_reversible = true
 grounded_hit_state = "HurtAerial"
 start_tick = 21
 active_ticks = 20
@@ -6500,12 +6501,12 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
-SlashProjectile = ExtResource( 82 )
 defaultAnimNameArray = [ null, null ]
 diagonalUpAnimNameArray = [ "GaleBlade(DiaUp)", null ]
 diagonalDownAnimNameArray = [ "GaleBlade(DiaDown)", null ]
 directlyUpAnimNameArray = [ "GaleBlade(DirUp)", null ]
 directlyDownAnimNameArray = [ "GaleBlade(DirDown)", "" ]
+SlashProjectile = ExtResource( 82 )
 
 [node name="AirBlade(Air)" type="Node2D" parent="StateMachine" index="70"]
 script = ExtResource( 80 )
@@ -6532,11 +6533,11 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
-SlashProjectile = ExtResource( 82 )
 diagonalUpAnimNameArray = [ "GaleBlade(DiaUp)" ]
 diagonalDownAnimNameArray = [ "GaleBlade(DiaDown)" ]
 directlyUpAnimNameArray = [ "GaleBlade(DirUp)" ]
 directlyDownAnimNameArray = [ "GaleBlade(DirDown)" ]
+SlashProjectile = ExtResource( 82 )
 
 [node name="UseSkill" type="Node2D" parent="StateMachine" index="71"]
 script = ExtResource( 88 )
@@ -6842,21 +6843,21 @@ null: {
 "x": 4,
 "y": 9
 },
+SubResource( 439 ): {
+"x": 9,
+"y": 7
+},
 SubResource( 128 ): {
 "x": 9,
 "y": 9
-},
-SubResource( 930 ): {
-"x": 9,
-"y": 11
 },
 SubResource( 931 ): {
 "x": 9,
 "y": 10
 },
-SubResource( 439 ): {
+SubResource( 930 ): {
 "x": 9,
-"y": 7
+"y": 11
 }
 }
 title = "Stab Down"
@@ -6956,6 +6957,8 @@ Normal(Armour)
 can_be_counterhit = false
 super_level_ = 5
 super_freeze_ticks_ = 273
+ApplySpecialAtkBuff = true
+applyHiddenInstallBuff = false
 cutsceneTPF = 5
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/Excalibur" index="0"]
@@ -7006,6 +7009,9 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
+apply_pushback = false
+ApplySpecialAtkBuff = true
+applyHiddenInstallBuff = false
 hitboxPath = NodePath("ExcaliburHitBox")
 hitEffectPath = NodePath("../../Flip/Particles/ExcaliburHitEffect(G)")
 attackEffectPath = NodePath("../../Flip/ExcaliburGroundHit")
@@ -7021,6 +7027,7 @@ y = -680
 width = 205
 height = 700
 damage = 50
+chip_damage_modifier = "0.5"
 hitstun_ticks = 40
 cancellable = false
 can_counter_hit = false
@@ -7032,6 +7039,7 @@ parriable = false
 block_cancel_allowed = false
 dir_x = "0.0"
 knockback = "5.5"
+block_pushback_modifier = "0"
 start_tick = 2
 active_ticks = 30
 looping = true
@@ -7065,6 +7073,9 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
+apply_pushback = false
+ApplySpecialAtkBuff = true
+applyHiddenInstallBuff = false
 beamEffectPath = NodePath("../../Flip/ExcaliburBeam")
 hitboxPath = NodePath("Hitbox")
 beamLengthIncrPerTick = 90
@@ -7259,10 +7270,10 @@ anim_length = 19
 enter_force_dir_x = "1"
 enter_force_speed = "0.5"
 projectile_scene = ExtResource( 264 )
-projectile_pos_x = 30
+projectile_pos_x = 45
 projectile_pos_y = -18
 title = "Tornado"
-type = 1
+type = 2
 data_ui_scene = ExtResource( 262 )
 button_texture = ExtResource( 263 )
 self_interruptable = false
@@ -7273,6 +7284,7 @@ GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
+ApplySpecialAtkBuff = true
 applyHiddenInstallBuff = false
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/TornadoStrike" index="0"]

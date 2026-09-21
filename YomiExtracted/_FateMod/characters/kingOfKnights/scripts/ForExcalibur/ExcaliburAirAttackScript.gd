@@ -9,7 +9,9 @@ var tick = 0
 var targetIsHit
 var isEnding = false
 var angleForPrediction
+var playerOrigPos
 
+export var _c_ExcaliburStuff = 0
 export (NodePath) var beamEffectPath
 export (NodePath) var hitboxPath
 export (int) var beamLengthIncrPerTick

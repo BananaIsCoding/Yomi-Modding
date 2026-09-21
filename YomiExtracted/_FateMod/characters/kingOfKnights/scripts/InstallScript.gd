@@ -24,7 +24,7 @@ func _enter():
 		if toggleArmourChange:
 			host.ToggleArmorMode()
 		else:
-			host.dmgBoost += 0.1
+			host.RevealThyBlade()
 	
 func detect(obj):
 	if obj.is_in_group("Fighter"):

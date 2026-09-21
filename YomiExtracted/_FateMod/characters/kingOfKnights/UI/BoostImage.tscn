@@ -8,3 +8,6 @@ margin_left = 20.0
 margin_right = 36.0
 margin_bottom = 16.0
 texture = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": ""
+}

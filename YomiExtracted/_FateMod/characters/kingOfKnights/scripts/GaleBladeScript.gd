@@ -2,7 +2,7 @@ extends CharacterState
 
 ## Variables ##
 
-export (PackedScene) var SlashProjectile
+
 
 # Index 0 - Normal Stance
 # Index 1 - Armour Stance
@@ -13,6 +13,11 @@ export (Array, String) var diagonalUpAnimNameArray;
 export (Array, String) var diagonalDownAnimNameArray;
 export (Array, String) var directlyUpAnimNameArray;
 export (Array, String) var directlyDownAnimNameArray; 
+
+export var _c_ProjectileStuff = 0
+export (PackedScene) var SlashProjectile
+export var projectileSpeed = 5
+export var projectileLifetime = 300
 
 ## Functions ##
 func _ready():
@@ -43,48 +48,24 @@ func _enter():
 		"Hidden(Armour)":
 			stanceId = 3
 	
-	if data.x == host.get_facing_int():
-		if data.y == -1:
-			anim_name = diagonalUpAnimNameArray[stanceId]
-		elif data.y == 1:
+	if data.x >= 90:
+		anim_name = defaultAnimNameArray[stanceId]
+	elif data.x >= 45:
+		if data.y > 0:
 			anim_name = diagonalDownAnimNameArray[stanceId]
 		else:
-			anim_name = defaultAnimNameArray[stanceId]
-	elif data.x == 0:
-		if data.y == -1:
-			anim_name = directlyUpAnimNameArray[stanceId]
-		if data.y == 1:
+			anim_name = diagonalUpAnimNameArray[stanceId]
+	else:
+		if data.y > 0:
 			anim_name = directlyDownAnimNameArray[stanceId]
+		else:
+			anim_name = directlyUpAnimNameArray[stanceId]
 
 # Spawning the projectile 
-# and rotating it based on the directions (char facing and action data)
 func _frame_7():
 	var projectObject
-	
-	if data.x == host.get_facing_int():
-		if data.y == 0:
-			projectObject = host.spawn_object(SlashProjectile, 27, -20)
-			return
-		if data.y == -1:
-			projectObject = host.spawn_object(SlashProjectile, 15, -35)
-			projectObject.rotation_degrees = -45
-			if (host.id == 2):
-				projectObject.flip.rotation_degrees = 90
-		else:
-			projectObject = host.spawn_object(SlashProjectile, 15, -5)
-			projectObject.rotation_degrees = 45
-			if (host.id == 2):
-				projectObject.flip.rotation_degrees = -90
-	
-	if data.x == 0:
-		if data.y == -1:
-			projectObject = host.spawn_object(SlashProjectile, 0, -45)
-			projectObject.rotation_degrees = -90 
-		elif data.y == 1:
-			projectObject = host.spawn_object(SlashProjectile, 0, -5)
-			projectObject.rotation_degrees = 90 
-		if (host.id == 2):
-			projectObject.flip.rotation_degrees = 180
+	var projData = {"dir":xy_to_dir(data.x, data.y, str(projectileSpeed), "100"),"speed":projectileSpeed,"lifetime":projectileLifetime,"dmgBoost": host.dmgBoost + host.specialBoost}
+	projectObject = host.spawn_object(SlashProjectile, data.x / 3 * host.get_facing_int(),  (data.y / 3) - 20, true, projData)
 
 func CheckValidAnim(animNameArray:Array):
 	

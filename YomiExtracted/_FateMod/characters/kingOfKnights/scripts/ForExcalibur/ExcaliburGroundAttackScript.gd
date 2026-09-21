@@ -6,6 +6,7 @@ var attackEffect
 var startTick 
 var requiredHiding = false
 var currentTick = 0
+var opponentOrigPos = null
 
 export (NodePath) var hitboxPath
 export (NodePath) var hitEffectPath
@@ -21,7 +22,6 @@ onready var excailburAttackEffect = get_node(attackEffectPath)
 func ChangeHitboxSize(width: int):
 	hitbox.pos_x = width + 15
 	hitbox.width = width
-
 
 func _enter():
 	._enter()
@@ -53,6 +53,19 @@ func _tick():
 			hitEffect.stop_emitting()
 			startTick = host.current_tick
 			requiredHiding = true
+	
+	if hitEffect.visible:
+		if opponentOrigPos == null:
+			opponentOrigPos = host.opponent.get_pos()
+		# So it does not lift opponent up last frame
+		if not "Parry" in host.opponent.current_state().name:
+			host.opponent.set_pos(opponentOrigPos.x, host.opponent.get_pos().y - 1)
+		else:
+			host.opponent.set_pos(opponentOrigPos.x, host.opponent.get_pos().y )
+		var opponentOrginalPos = Vector2(opponentOrigPos.x, opponentOrigPos.y)
+		opponentOrginalPos.x += host.opponent.collision_box.x
+		
+		hitEffect.position.x = abs(opponentOrginalPos.x - host.get_pos().x)
 	
 	if not requiredHiding:
 		return

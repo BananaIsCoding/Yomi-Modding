@@ -9,8 +9,8 @@ var currentExcalCharge = 0
 var skillCd = 0
 var critChance = 0
 var critStar = 0
-var dmgBoost = 0
-var specialBoost = 0
+var dmgBoost := -0.1
+var specialBoost := 0
 var armourOn = false
 var damageReduction = 0.0
 
@@ -154,6 +154,12 @@ func ToggleArmorMode():
 		damageReduction = 0.0
 	BoostInfoUiInstance.ChangeMainBuff(armourOn)
 
+func RevealThyBlade():
+	dmgBoost += 0.1
+	var instalIcon = BoostInfoUiInstance.installBuffSlot
+	instalIcon.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalMode.png")
+	instalIcon.hint_tooltip = "- 10% Damage Increase\n- Ult Unlocked"
+
 # camera controls functions from guide 
 func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease_type):
 	if is_ghost or ReplayManager.resimulating:
@@ -266,6 +272,8 @@ func process_extra(extra):
  
 # overriding to support damage reduction 
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
+	# apply damage reduction before calc starts
+	damage *= 1 - damageReduction
 	
 	var combo_ref = self if self_hit else opponent
 
@@ -296,9 +304,7 @@ func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_sc
 	damage = fixed.round(fixed.mul(fixed.mul(str(damage), damage_taken_modifier), global_damage_modifier))
 	if not self_hit:
 		opponent.combo_damage += damage
-
-	# if armour state
-	damage *= 1 - damageReduction
+	
 	hp -= damage
 	add_penalty( - 25)
 	if hp < 0:

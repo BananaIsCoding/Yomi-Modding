@@ -44,8 +44,6 @@ func _frame_24():
 	host.tween_camera_zoom(0.40, 0.99, 0.75, Tween.TRANS_QUART, Tween.EASE_OUT)
 
 func _exit():
-	if not host.is_ghost:
-		print(name, ": ", Global.current_game.current_tick)
 	host.release_camera_focus()
 	cutscene = false
 	host.opponent.hitlag_ticks = prevHitLag

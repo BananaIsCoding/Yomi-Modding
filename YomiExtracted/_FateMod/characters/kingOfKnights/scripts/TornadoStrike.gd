@@ -3,7 +3,7 @@ extends KokNormalAttackState
 export var _c_ExtraStuffForProjectile = 0
 export var static_x_dir = 1
 export var static_y_dir = 0
-export var lifetime = 900
+export var lifetime = 200
 export var maxTickPerMove := 5
 
 func spawn_exported_projectile():
@@ -16,9 +16,16 @@ func spawn_exported_projectile():
 		process_projectile(obj)
 
 func get_projectile_data() -> Dictionary:
+	
+	var newLifetime = lifetime
+	
+	if data.x > 1:
+		newLifetime = lifetime / data.x
+	
 	return {
 		"dir" : xy_to_dir(static_x_dir * host.get_facing_int(), static_y_dir, "1.0" , "1.0"),
-		"speed": str(data.x / 5.0),
-		"lifetime":lifetime,
-		"maxTickPerMove": maxTickPerMove
+		"speed": str(data.x / 2.0),
+		"lifetime":newLifetime,
+		"maxTickPerMove": maxTickPerMove,
+		"dmgBoost": host.dmgBoost + host.specialBoost
 	}
