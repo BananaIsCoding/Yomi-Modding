@@ -50,7 +50,7 @@ hookable = true
 
 [node name="Sprite" parent="Flip" index="0"]
 frames = SubResource( 2 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="CollisionBox" parent="." index="2"]
@@ -88,11 +88,13 @@ script = ExtResource( 4 )
 y = -19
 height = 38
 damage = 10
+hitstun_ticks = 10
 cancellable = false
+di_modifier = "0.15"
 sdi_modifier = "0.0"
 parriable = false
-dir_x = "0.28"
-dir_y = ".5"
+dir_x = "0.1"
+dir_y = "0"
 knockback = "2"
 start_tick = 1
 active_ticks = 300

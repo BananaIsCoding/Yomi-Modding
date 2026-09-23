@@ -1,7 +1,6 @@
 extends Fighter
 
 ## Variables ##
-
 export (Array, String) var stanceAnimKey = [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
 
 var comboAttackCD = 0
@@ -157,8 +156,6 @@ func ToggleArmorMode():
 func RevealThyBlade():
 	dmgBoost += 0.1
 	var instalIcon = BoostInfoUiInstance.installBuffSlot
-	instalIcon.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalMode.png")
-	instalIcon.hint_tooltip = "- 10% Damage Increase\n- Ult Unlocked"
 
 # camera controls functions from guide 
 func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease_type):

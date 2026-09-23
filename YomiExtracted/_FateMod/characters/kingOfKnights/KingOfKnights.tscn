@@ -1,4 +1,4 @@
-[gd_scene load_steps=1228 format=2]
+[gd_scene load_steps=1242 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -264,6 +264,7 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/UI/ActionUIData/TornadoAttackActionUIData.tscn" type="PackedScene" id=262]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/TornadoAttack.png" type="Texture" id=263]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/TornadoProjectile.tscn" type="PackedScene" id=264]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKTornadoAttack.png" type="Texture" id=265]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -3936,6 +3937,58 @@ region = Rect2( 0, 0, 128, 128 )
 atlas = ExtResource( 249 )
 region = Rect2( 128, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=1068]
+atlas = ExtResource( 265 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1069]
+atlas = ExtResource( 265 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1070]
+atlas = ExtResource( 265 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1071]
+atlas = ExtResource( 265 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1072]
+atlas = ExtResource( 265 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1073]
+atlas = ExtResource( 265 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1074]
+atlas = ExtResource( 265 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1075]
+atlas = ExtResource( 265 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1076]
+atlas = ExtResource( 265 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1077]
+atlas = ExtResource( 265 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1078]
+atlas = ExtResource( 265 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1079]
+atlas = ExtResource( 265 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1080]
+atlas = ExtResource( 265 )
+region = Rect2( 384, 0, 128, 128 )
+
 [sub_resource type="AtlasTexture" id=123]
 atlas = ExtResource( 66 )
 region = Rect2( 0, 0, 128, 128 )
@@ -5032,6 +5085,26 @@ animations = [ {
 "name": "Thrust(HiddenArmour)",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 1068 ), SubResource( 1068 ), SubResource( 1068 ), SubResource( 1068 ), SubResource( 1069 ), SubResource( 1069 ), SubResource( 1070 ), SubResource( 1071 ), SubResource( 1072 ), SubResource( 1072 ) ],
+"loop": true,
+"name": "TornadoAttack",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "TornadoAttack(Armour)",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 1073 ), SubResource( 1073 ), SubResource( 1073 ), SubResource( 1074 ), SubResource( 1073 ), SubResource( 1073 ), SubResource( 1075 ), SubResource( 1076 ), SubResource( 1077 ), SubResource( 1078 ), SubResource( 1079 ), SubResource( 1080 ) ],
+"loop": true,
+"name": "TornadoAttack(Hidden)",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "TornadoAttack(HiddenArmour)",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 123 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 124 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 125 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ), SubResource( 247 ) ],
 "loop": true,
 "name": "VertStrike",
@@ -5235,7 +5308,7 @@ hiddenBladeDecreaseRate = 1
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 453 )
 frames = SubResource( 936 )
-animation = "ArmourOff"
+animation = "TornadoAttack(HiddenArmour)"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -6843,21 +6916,21 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 439 ): {
-"x": 9,
-"y": 7
-},
 SubResource( 128 ): {
 "x": 9,
 "y": 9
 },
-SubResource( 931 ): {
+SubResource( 439 ): {
 "x": 9,
-"y": 10
+"y": 7
 },
 SubResource( 930 ): {
 "x": 9,
 "y": 11
+},
+SubResource( 931 ): {
+"x": 9,
+"y": 10
 }
 }
 title = "Stab Down"
@@ -7265,11 +7338,12 @@ __meta__ = {
 apply_forces = true
 apply_fric = true
 apply_grav = true
-sprite_animation = "HoriStrike"
+sprite_animation = "TornadoAttack"
 anim_length = 19
 enter_force_dir_x = "1"
 enter_force_speed = "0.5"
 projectile_scene = ExtResource( 264 )
+projectile_tick = 6
 projectile_pos_x = 45
 projectile_pos_y = -18
 title = "Tornado"

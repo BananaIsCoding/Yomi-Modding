@@ -13,12 +13,11 @@ var lastframe := 0
 func _enter():
 	currentTick = 0
 	
-	for stance in forAnimationChange:
+	for stance in stancesToCheckAndChange:
 		if host.stance == stance:
 			anim_name = forAnimationChange[stance]
+			host.stance = stancesToCheckAndChange[stance]
 			break
-	
-	lastframe = anim_length -1
 	
 	if not host.is_ghost:
 		if toggleArmourChange:
@@ -39,14 +38,6 @@ func detect(obj):
 
 		obj.apply_force(str(pushDir.x), str(pushDir.y))
 
-func _tick():
-	currentTick += 1
-	match currentTick:
-		lastframe:
-			for stance in stancesToCheckAndChange:
-				if host.stance == stance:
-					host.stance = stancesToCheckAndChange[stance]
-					break
 
 #func _exit():
 #	for stance in stancesToCheckAndChange:

@@ -8,6 +8,7 @@ func _enter():
 	lifetime = data["lifetime"]
 	for hitbox in all_hitbox_nodes:
 		hitbox.dir_x = str(float(hitbox.dir_x) * float(move_speed))
+		print (hitbox.dir_x)
 		hitbox.damage += hitbox.damage * data["dmgBoost"]
 
 
@@ -74,3 +75,7 @@ func _tick():
 				host.set_vel(clamped_vel.x, clamped_vel.y)
 			host.sprite.rotation = float(fixed.vec_to_angle(fixed.mul(new_vel.x, str(host.get_facing_int())), new_vel.y))
 
+func _on_hit_something(obj, hitbox):
+	if obj.is_in_group("Fighter"):
+		obj.reset_momentum()
+	._on_hit_something(obj, hitbox)
