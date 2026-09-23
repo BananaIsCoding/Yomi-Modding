@@ -1,16 +1,30 @@
 extends DirProjectileDefault
 
 var movePerTick := 0
+var origHitboxKnockback = []
+var hitOpponent := false
 
 func _enter():
 	._enter()
+	
 	move_speed = data["speed"]
 	lifetime = data["lifetime"]
 	for hitbox in all_hitbox_nodes:
-		hitbox.dir_x = str(float(hitbox.dir_x) * float(move_speed))
-		print (hitbox.dir_x)
+		origHitboxKnockback.append(hitbox.dir_x)
+		var speed = float(move_speed)
+		if speed > 1:
+			hitbox.knockback = str(float(hitbox.knockback) * speed * 3)
+		else:
+			hitbox.knockback = str(float(hitbox.knockback) * speed)
+		print(hitbox.knockback)
 		hitbox.damage += hitbox.damage * data["dmgBoost"]
 
+func _exit():
+	._exit()
+	var i := 0
+	for hitbox in all_hitbox_nodes:
+		hitbox.dir_x = origHitboxKnockback[i]
+		i += 1
 
 func _tick():
 	var pos = host.get_pos()
@@ -77,5 +91,7 @@ func _tick():
 
 func _on_hit_something(obj, hitbox):
 	if obj.is_in_group("Fighter"):
-		obj.reset_momentum()
+		if not hitOpponent:
+			hitOpponent = true
+			obj.reset_momentum()
 	._on_hit_something(obj, hitbox)
