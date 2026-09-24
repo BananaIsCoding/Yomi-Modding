@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/CommandSpellUIP1.png-17b343a827a417be9efafa5475bf7d53.stex"
+path="res://.import/P2CommandSpellSS.png-d0db15f81ad8cef1a1c638614015fbdd.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://_FateMod/characters/kingOfKnights/sprites/UiSprites/CommandSpellUIP1.png"
-dest_files=[ "res://.import/CommandSpellUIP1.png-17b343a827a417be9efafa5475bf7d53.stex" ]
+source_file="res://_FateMod/characters/kingOfKnights/sprites/UiSprites/P2CommandSpellSS.png"
+dest_files=[ "res://.import/P2CommandSpellSS.png-d0db15f81ad8cef1a1c638614015fbdd.stex" ]
 
 [params]
 

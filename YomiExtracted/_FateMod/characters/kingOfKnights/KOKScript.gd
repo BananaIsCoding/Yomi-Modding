@@ -12,7 +12,7 @@ var dmgBoost := -0.1
 var specialBoost := 0
 var armourOn = false
 var damageReduction = 0.0
-var commandSpells = 3
+var commandSeals = 3
 
 # Camera and emote related variables
 class BoostData:
