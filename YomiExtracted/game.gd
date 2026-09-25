@@ -262,7 +262,7 @@ func _on_super_started(ticks, player):
 			if state.super_freeze_ticks > ticks:
 				ticks = state.super_freeze_ticks
 	super_freeze_ticks = ticks
-	
+	print("Hello? ", super_freeze_ticks)
 	super_active = true
 	if player == p1:
 		p1_super = true

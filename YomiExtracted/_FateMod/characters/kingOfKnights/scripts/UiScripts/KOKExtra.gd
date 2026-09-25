@@ -6,13 +6,16 @@ onready var commandSealUI = $CommandSealUI
 export var spriteWidth := 35
 export var spriteHeight := 64
 
-var sealAnimateTexture 
-var theSealAtlas
+var currentSpriteRegion
+var nextSpriteRegion
+var previewMode := false
+var isCurrentSprite := true
+var tick = 0
+
 
 func _ready():
 	tips.connect("toggled", self, "_on_tips_toggled")
-	sealAnimateTexture = AnimatedTexture.new()
-	sealAnimateTexture.frames = 2
+	
 	if fighter.id == 2:
 		move_child(commandSealUI, get_child_count() - 1)
 		commandSealUI.flip_h = true
@@ -20,6 +23,9 @@ func _ready():
 		newAtlas.atlas = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/P2CommandSpellSS.png")
 		newAtlas.region = Rect2(spriteWidth * fighter.commandSeals, 0, spriteWidth, spriteHeight)
 		commandSealUI.texture = newAtlas
+	
+	currentSpriteRegion = commandSealUI.texture.region
+	fighter.playerExtra = self
 
 func _on_tips_toggled(_on):
 	emit_signal("data_changed")
@@ -30,20 +36,42 @@ func get_extra():
 	}
 
 func show_options():
-	tips.show() if (fighter.stance == "Hidden" or fighter.stance == "Hidden(Armour)") else tips.hide()
+	tips.show() if (fighter.stance == "Hidden" or fighter.stance == "Hidden(Armour)") and not fighter.busy_interrupt else tips.hide()
 
 func reset():
 	tips.set_pressed_no_signal(tips.pressed)
 
 func PreviewSealUsage():
-	theSealAtlas = commandSealUI.texture
-	commandSealUI.texture = sealAnimateTexture
-	sealAnimateTexture.set_frame_texture(0, theSealAtlas)
-	var newRect = theSealAtlas.region
-	newRect.position.x -= spriteWidth 
-	theSealAtlas.region = newRect
-	sealAnimateTexture.set_frame_texture(1, theSealAtlas)
+	
+	if previewMode:
+		return
+	
+	nextSpriteRegion = currentSpriteRegion
+	nextSpriteRegion.position.x -= spriteWidth 
+	
+	previewMode = true
 
 func UpdateCommandSeals(numOfSeals : int):
-	commandSealUI.texture = theSealAtlas
-	commandSealUI.texture.region = Rect2(spriteWidth * numOfSeals, 0, spriteWidth, spriteWidth)
+	isCurrentSprite = true
+	previewMode = false
+	currentSpriteRegion = Rect2(spriteWidth * numOfSeals, 0, spriteWidth, spriteHeight)
+	commandSealUI.texture.region = currentSpriteRegion
+
+func _process(delta):
+	
+	if previewMode:
+		tick += 1
+		if tick >= 30:
+			tick = 0
+			if isCurrentSprite:
+				commandSealUI.texture.region = nextSpriteRegion
+			else:
+				commandSealUI.texture.region = currentSpriteRegion
+			
+			isCurrentSprite = !isCurrentSprite 
+
+func update_selected_move(move_state):
+	isCurrentSprite = true
+	commandSealUI.texture.region = currentSpriteRegion
+	previewMode = false
+	.update_selected_move(move_state)

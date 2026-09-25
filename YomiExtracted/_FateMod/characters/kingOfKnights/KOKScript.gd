@@ -12,7 +12,9 @@ var dmgBoost := -0.1
 var specialBoost := 0
 var armourOn = false
 var damageReduction = 0.0
-var commandSeals = 3
+var commandSeals := 3
+var playerExtra
+var cutsceneInProgress := false
 
 # Camera and emote related variables
 class BoostData:
@@ -48,8 +50,22 @@ var lastAttackLockIn = 0
 
 var tipToggle = false
 
+func update_property_list():
+	# A full override because I do not want it to check ghost again
+	# (Will check here then in the super function, if I did not overwrite)
+	if not is_ghost:
+		if busy_interrupt and commandSeals > 0:
+			playerExtra.show()
+			playerExtra.show_options()
+		for state in state_machine.states_map:
+			state_machine.states_map[state].update_property_list()
+	
 ## Functions ##
 func tick():
+	if cutsceneInProgress:
+		state_tick()
+		return
+	
 	.tick()
 	
 	# Decrement cd timer
@@ -57,6 +73,7 @@ func tick():
 		 comboAttackCD -= 1
 	if skillCd > 0:
 		skillCd -= 1
+	
 	
 	if (stance == "Hidden" or stance == "Hidden(Armour)") and hiddenBladePercentChance > 0:
 		if game_tick % ticksUntilDecreaseHidden == 0:
@@ -158,6 +175,10 @@ func RevealThyBlade():
 	dmgBoost += 0.1
 	var instalIcon = BoostInfoUiInstance.installBuffSlot
 
+func UseCommandSeal():
+	commandSeals -= 1
+	playerExtra.UpdateCommandSeals(commandSeals)
+
 # camera controls functions from guide 
 func tween_camera_zoom(initial_value, end_value, duration, transition_type, ease_type):
 	if is_ghost or ReplayManager.resimulating:
@@ -195,7 +216,6 @@ func set_camera_zoom(value):
 	game.camera_zoom = value
 	#emit_signal("zoom_changed")
 	game.update_camera_limits()
-	
 
 func ShowHintText(message):
 	$EmoteLabel.clear()

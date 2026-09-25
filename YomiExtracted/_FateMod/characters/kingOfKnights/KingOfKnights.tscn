@@ -1,4 +1,4 @@
-[gd_scene load_steps=1244 format=2]
+[gd_scene load_steps=1250 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -267,6 +267,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/KOKTornadoAttack.png" type="Texture" id=265]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/CommandFight.png" type="Texture" id=266]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/CommandRetreat.png" type="Texture" id=267]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/CommandSpells/CommandRetreat.gd" type="Script" id=268]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/CommandSpells/CommandFight.gd" type="Script" id=269]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/CommandSpells/CommandHeal.gd" type="Script" id=270]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CommandSealsSpriteFrames.tres" type="SpriteFrames" id=271]
+[ext_resource path="res://theme.tres" type="Theme" id=272]
+[ext_resource path="res://_FateMod/characters/KOKFont.tres" type="DynamicFont" id=273]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -5297,6 +5303,7 @@ __meta__ = {
 extra_state_variables = "critStar
 lastAttackLockIn
 hiddenBladePercentChance
+commandSeals
 "
 character_portrait = ExtResource( 15 )
 player_info_scene = ExtResource( 96 )
@@ -5370,6 +5377,29 @@ frames = SubResource( 264 )
 frame = 30
 speed_scale = 5.0
 playing = true
+
+[node name="CommandSealCutscene" type="AnimatedSprite" parent="Flip" index="7"]
+unique_name_in_owner = true
+visible = false
+position = Vector2( 0, -30 )
+scale = Vector2( 0.665, 0.665 )
+z_index = 2
+frames = ExtResource( 271 )
+animation = "ThirdTime"
+
+[node name="CommandEmoteLabel" type="RichTextLabel" parent="Flip/CommandSealCutscene" index="0"]
+unique_name_in_owner = true
+margin_left = -450.0
+margin_top = 147.0
+margin_right = 450.0
+margin_bottom = 236.0
+grow_horizontal = 2
+grow_vertical = 0
+rect_clip_content = false
+theme = ExtResource( 272 )
+custom_fonts/normal_font = ExtResource( 273 )
+fit_content_height = true
+scroll_active = false
 
 [node name="Start" parent="StateMachine" index="0"]
 sprite_animation = "Wait(Hidden)"
@@ -6602,7 +6632,8 @@ data_ui_scene = ExtResource( 84 )
 button_texture = ExtResource( 89 )
 air_type = 1
 interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
+interrupt_into_string = "Aerial
+Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
@@ -6712,7 +6743,8 @@ Hidden"
 toggleArmourChange = true
 forAnimationChange = {
 "Hidden": "ArmourOn(Hidden)",
-"Key = Stance To Check": "Value = Animation To Change Into"
+"Key = Stance To Check": "Value = Animation To Change Into",
+"Normal": "ArmourOn"
 }
 stancesToCheckAndChange = {
 "Hidden": "Hidden(Armour)",
@@ -6763,8 +6795,9 @@ allowed_stances_string = "Normal(Armour)
 Hidden(Armour)"
 toggleArmourChange = true
 forAnimationChange = {
-"ArmourOn(Hidden)": "Hidden",
-"Key = Stance To Check": "Value = Animation To Change Into"
+"Hidden(Armour)": "ArmourOff(Hidden)",
+"Key = Stance To Check": "Value = Animation To Change Into",
+"Normal(Armour)": "ArmourOff"
 }
 stancesToCheckAndChange = {
 "Hidden(Armour)": "Hidden",
@@ -6814,6 +6847,7 @@ Hidden(Armour)
 "
 super_level_ = 2
 forAnimationChange = {
+"Hidden": "RevealBlade",
 "Hidden(Armour)": "RevealBlade(Armour)",
 "Key = Stance To Check": "Value = Animation To Change Into"
 }
@@ -6918,14 +6952,6 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 439 ): {
-"x": 9,
-"y": 7
-},
-SubResource( 128 ): {
-"x": 9,
-"y": 9
-},
 SubResource( 930 ): {
 "x": 9,
 "y": 11
@@ -6933,6 +6959,14 @@ SubResource( 930 ): {
 SubResource( 931 ): {
 "x": 9,
 "y": 10
+},
+SubResource( 128 ): {
+"x": 9,
+"y": 9
+},
+SubResource( 439 ): {
+"x": 9,
+"y": 7
 }
 }
 title = "Stab Down"
@@ -7383,55 +7417,87 @@ start_tick = 7
 active_ticks = 3
 
 [node name="CommandFight" type="Node2D" parent="StateMachine" index="89"]
-script = ExtResource( 88 )
+script = ExtResource( 269 )
 __meta__ = {
 "_editor_description_": ""
 }
-title = "Command : Fight"
+anim_length = 10
+title = "Command : Win"
 type = 3
 button_texture = ExtResource( 266 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
+air_type = 2
+interrupt_from_string = "Grounded
+Aerial"
+interrupt_into_string = "Grounded
+Aerial"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-GroundedSuper"
+GroundedSuper
+Aerial"
 allowed_stances_string = "All
 "
 super_level_ = 1
+super_freeze_ticks_ = 0
 
 [node name="CommandRetreat" type="Node2D" parent="StateMachine" index="90"]
-script = ExtResource( 88 )
+script = ExtResource( 268 )
 __meta__ = {
 "_editor_description_": ""
 }
+apply_forces = true
+reset_momentum = true
+sprite_animation = "RollBackward"
+anim_length = 20
+force_dir_x = "-1.0"
+force_speed = "0"
+force_tick = 1
+enter_force_dir_x = "0"
+enter_force_speed = "0"
 title = "Command : Retreat"
 type = 3
 button_texture = ExtResource( 267 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
+air_type = 2
+busy_interrupt_type = 2
+self_interruptable = false
+interrupt_from_string = "BusyHurt
+Burst
+
+"
+interrupt_into_string = "Grounded
+Aerial"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
 GroundedSuper"
 allowed_stances_string = "All
 "
 super_level_ = 1
+super_freeze_ticks_ = 0
 
 [node name="CommandHeal" type="Node2D" parent="StateMachine" index="91"]
-script = ExtResource( 88 )
+script = ExtResource( 270 )
 __meta__ = {
 "_editor_description_": ""
 }
-title = "Command : Heal"
+anim_length = 10
+title = "Command : Live"
 type = 3
 button_texture = ExtResource( 17 )
-interrupt_from_string = "Grounded"
-interrupt_into_string = "Grounded"
+air_type = 2
+self_hit_cancellable = false
+self_interruptable = false
+can_feint_if_possible = false
+interrupt_from_string = "Grounded
+Aerial"
+interrupt_into_string = "Grounded
+Aerial"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-GroundedSuper"
+GroundedSuper
+Aerial"
 allowed_stances_string = "All
 "
 super_level_ = 1
+super_freeze_ticks_ = 0
 
 [node name="Frozen" parent="StateMachine" index="92"]
 allowed_stances_string = "All"

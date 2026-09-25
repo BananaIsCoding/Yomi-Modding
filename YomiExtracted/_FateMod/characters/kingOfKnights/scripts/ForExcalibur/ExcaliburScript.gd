@@ -27,7 +27,6 @@ func _frame_0():
 	
 func _frame_5():
 	startStun = true
-	print (host.opponent.current_state().name)
 	if not "Parry" in host.opponent.current_state().name:
 		host.opponent.state_machine.queue_state("Wait")
 	host.start_invulnerability()
