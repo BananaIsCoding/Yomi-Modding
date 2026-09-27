@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://projectile/BaseProjectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/EffectsSprite/Avalon.png" type="Texture" id=2]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/projectiles/AvalonFollowScript.gd" type="Script" id=3]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="Avalon" instance=ExtResource( 1 )]
+__meta__ = {
+"_editor_description_": "",
+"limb_data": {
+"Head": {
+},
+"LeftFoot": {
+},
+"LeftHand": {
+},
+"RightFoot": {
+},
+"RightHand": {
+}
+}
+}
+extra_state_variables = "immunity_susceptible"
+roll_immunity_susceptible = true
+hookable = true
+
+[node name="Sprite" parent="Flip" index="0"]
+frames = SubResource( 2 )
+playing = true
+
+[node name="CollisionBox" parent="." index="2"]
+y = -19
+height = 38
+
+[node name="Hurtbox" parent="." index="3"]
+y = -19
+width = 12
+height = 38
+
+[node name="Default" parent="StateMachine" index="0"]
+script = ExtResource( 3 )
+__meta__ = {
+"_editor_description_": ""
+}
+anim_length = 300

@@ -8,7 +8,7 @@ onready var mainBuffSlot
 onready var installBuffSlot
 
 var createdRows = 0
-var amountOfBuff = 1
+var amountOfBuff = 2
 
 var listOfBoostInstance = []
 
@@ -32,6 +32,7 @@ func _ready():
 		mainBuffSlot.hint_tooltip = "+1 Frame Advantage"
 		
 		if player_id == 2:
+			createdRows = 1
 			parentContainer.alignment = BoxContainer.ALIGN_END
 			
 			var thirdBox = BoostInfoScene.instance()

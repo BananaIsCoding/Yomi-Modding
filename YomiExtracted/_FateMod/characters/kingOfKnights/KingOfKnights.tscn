@@ -1,4 +1,4 @@
-[gd_scene load_steps=1250 format=2]
+[gd_scene load_steps=1255 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -272,7 +272,12 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/CommandSpells/CommandHeal.gd" type="Script" id=270]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/spriteFrames/CommandSealsSpriteFrames.tres" type="SpriteFrames" id=271]
 [ext_resource path="res://theme.tres" type="Theme" id=272]
-[ext_resource path="res://_FateMod/characters/KOKFont.tres" type="DynamicFont" id=273]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/KOKFont.tres" type="DynamicFont" id=273]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/CharacterSprites/P1HandForCSCutscene.png" type="Texture" id=274]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/AttackBoostEffectCS.tscn" type="PackedScene" id=275]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/HealEffectCS.tscn" type="PackedScene" id=276]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/AvalonManifestScript.gd" type="Script" id=277]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/AvalonProjectile.tscn" type="PackedScene" id=278]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -5314,10 +5319,40 @@ hiddenBladePercentChance = 40
 ticksUntilDecreaseHidden = 30
 hiddenBladeDecreaseRate = 1
 
+[node name="CommandSealCutscene" type="AnimatedSprite" parent="." index="0"]
+unique_name_in_owner = true
+visible = false
+position = Vector2( 0, -30 )
+scale = Vector2( 0.665, 0.665 )
+z_index = 5
+frames = ExtResource( 271 )
+animation = "ThirdTime"
+
+[node name="CommandEmoteLabel" type="RichTextLabel" parent="CommandSealCutscene" index="0"]
+unique_name_in_owner = true
+margin_left = -450.0
+margin_top = 79.0
+margin_right = 450.0
+margin_bottom = 168.0
+grow_horizontal = 2
+grow_vertical = 0
+rect_clip_content = false
+theme = ExtResource( 272 )
+custom_fonts/normal_font = ExtResource( 273 )
+fit_content_height = true
+scroll_active = false
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="Hand" type="Sprite" parent="CommandSealCutscene" index="1"]
+z_index = -1
+texture = ExtResource( 274 )
+
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 453 )
 frames = SubResource( 936 )
-animation = "TornadoAttack(HiddenArmour)"
+animation = "ArmourOn"
 
 [node name="ExcaliburChargeUp" parent="Flip/Particles" index="0" instance=ExtResource( 29 )]
 unique_name_in_owner = true
@@ -5332,6 +5367,11 @@ start_enabled = false
 material = SubResource( 194 )
 free = false
 start_enabled = false
+
+[node name="CommandSpellAttackBuff" parent="Flip/Particles" index="3" instance=ExtResource( 275 )]
+z_index = 1
+
+[node name="CommandSpellHeal" parent="Flip/Particles" index="4" instance=ExtResource( 276 )]
 
 [node name="ExcaliburSwordSprite" type="AnimatedSprite" parent="Flip" index="2"]
 unique_name_in_owner = true
@@ -5377,29 +5417,6 @@ frames = SubResource( 264 )
 frame = 30
 speed_scale = 5.0
 playing = true
-
-[node name="CommandSealCutscene" type="AnimatedSprite" parent="Flip" index="7"]
-unique_name_in_owner = true
-visible = false
-position = Vector2( 0, -30 )
-scale = Vector2( 0.665, 0.665 )
-z_index = 2
-frames = ExtResource( 271 )
-animation = "ThirdTime"
-
-[node name="CommandEmoteLabel" type="RichTextLabel" parent="Flip/CommandSealCutscene" index="0"]
-unique_name_in_owner = true
-margin_left = -450.0
-margin_top = 147.0
-margin_right = 450.0
-margin_bottom = 236.0
-grow_horizontal = 2
-grow_vertical = 0
-rect_clip_content = false
-theme = ExtResource( 272 )
-custom_fonts/normal_font = ExtResource( 273 )
-fit_content_height = true
-scroll_active = false
 
 [node name="Start" parent="StateMachine" index="0"]
 sprite_animation = "Wait(Hidden)"
@@ -6884,6 +6901,7 @@ anim_length = 80
 sprite_anim_length = 10
 ticks_per_frame = 8
 title = "Heal Assist"
+show_in_menu = false
 type = 2
 button_texture = ExtResource( 17 )
 interrupt_from_string = "Grounded"
@@ -6952,10 +6970,6 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 930 ): {
-"x": 9,
-"y": 11
-},
 SubResource( 931 ): {
 "x": 9,
 "y": 10
@@ -6963,6 +6977,10 @@ SubResource( 931 ): {
 SubResource( 128 ): {
 "x": 9,
 "y": 9
+},
+SubResource( 930 ): {
+"x": 9,
+"y": 11
 },
 SubResource( 439 ): {
 "x": 9,
@@ -7421,8 +7439,8 @@ script = ExtResource( 269 )
 __meta__ = {
 "_editor_description_": ""
 }
-anim_length = 10
-title = "Command : Win"
+anim_length = 3
+title = "Command : Fight"
 type = 3
 button_texture = ExtResource( 266 )
 air_type = 2
@@ -7438,6 +7456,10 @@ allowed_stances_string = "All
 "
 super_level_ = 1
 super_freeze_ticks_ = 0
+buffEffectPath = NodePath("../../Flip/Particles/CommandSpellAttackBuff")
+dialogue = [ "By My Command Seal", "Defeat Your Opponent!" ]
+dialogueDuration = [ 50, 50 ]
+servantDialogue = "Understood"
 
 [node name="CommandRetreat" type="Node2D" parent="StateMachine" index="90"]
 script = ExtResource( 268 )
@@ -7472,14 +7494,16 @@ allowed_stances_string = "All
 "
 super_level_ = 1
 super_freeze_ticks_ = 0
+dialogue = [ "By My Command Seal", "Fallback At Once!" ]
+dialogueDuration = [ 50, 45 ]
 
 [node name="CommandHeal" type="Node2D" parent="StateMachine" index="91"]
 script = ExtResource( 270 )
 __meta__ = {
 "_editor_description_": ""
 }
-anim_length = 10
-title = "Command : Live"
+anim_length = 3
+title = "Command : Recover"
 type = 3
 button_texture = ExtResource( 17 )
 air_type = 2
@@ -7498,6 +7522,40 @@ allowed_stances_string = "All
 "
 super_level_ = 1
 super_freeze_ticks_ = 0
+buffEffectPath = NodePath("../../Flip/Particles/CommandSpellHeal")
+dialogue = [ "By My Command Seal", "Heal Up!" ]
+dialogueDuration = [ 50, 25 ]
+servantDialogue = "Thank You"
 
-[node name="Frozen" parent="StateMachine" index="92"]
+[node name="AvalonManifest" type="Node2D" parent="StateMachine" index="92"]
+script = ExtResource( 277 )
+__meta__ = {
+"_editor_description_": ""
+}
+anim_length = 5
+projectile_scene = ExtResource( 278 )
+projectile_pos_x = -25
+projectile_pos_y = -20
+title = "Avalon"
+type = 3
+button_texture = ExtResource( 17 )
+air_type = 2
+self_hit_cancellable = false
+self_interruptable = false
+can_feint_if_possible = false
+interrupt_from_string = "Grounded
+Aerial"
+interrupt_into_string = "Grounded
+Aerial"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper
+Aerial"
+allowed_stances_string = "Normal
+Normal(Armour)
+"
+super_level_ = 3
+super_freeze_ticks_ = 0
+
+[node name="Frozen" parent="StateMachine" index="93"]
 allowed_stances_string = "All"

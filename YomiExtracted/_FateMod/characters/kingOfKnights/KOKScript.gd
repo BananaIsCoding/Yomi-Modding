@@ -15,6 +15,7 @@ var damageReduction = 0.0
 var commandSeals := 3
 var playerExtra
 var cutsceneInProgress := false
+var avalonObj = null
 
 # Camera and emote related variables
 class BoostData:
@@ -174,6 +175,8 @@ func ToggleArmorMode():
 func RevealThyBlade():
 	dmgBoost += 0.1
 	var instalIcon = BoostInfoUiInstance.installBuffSlot
+	instalIcon.texture = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/NormalMode.png")
+	instalIcon.hint_tooltip = "- Ultimate Unlocked\n- +10% Damage" 
 
 func UseCommandSeal():
 	commandSeals -= 1
