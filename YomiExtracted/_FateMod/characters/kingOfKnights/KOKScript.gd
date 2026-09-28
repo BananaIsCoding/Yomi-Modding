@@ -75,7 +75,6 @@ func tick():
 	if skillCd > 0:
 		skillCd -= 1
 	
-	
 	if (stance == "Hidden" or stance == "Hidden(Armour)") and hiddenBladePercentChance > 0:
 		if game_tick % ticksUntilDecreaseHidden == 0:
 			hiddenBladePercentChance -= hiddenBladeDecreaseRate
@@ -116,6 +115,9 @@ func tick():
 			for i in range(BoostToRemove.size()):
 				BoostQueue.remove(BoostToRemove[i])
 			BoostToRemove.clear()
+	
+	if avalonObj: 
+		hp += 1
 	
 	EmoteHandler()
 
