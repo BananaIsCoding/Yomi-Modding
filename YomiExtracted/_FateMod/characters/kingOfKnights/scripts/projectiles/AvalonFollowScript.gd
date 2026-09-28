@@ -26,7 +26,7 @@ func _tick():
 	
 	# Getting Pos
 	var anchorPos = player.get_pos()
-	anchorPos.x = anchorPos.x + followAnchor.x
+	anchorPos.x = anchorPos.x + (followAnchor.x * player.get_facing_int())
 	anchorPos.y = anchorPos.y + followAnchor.y
 	var selfPos = host.get_pos()
 	
@@ -38,5 +38,6 @@ func _tick():
 		# To later use to delay avalon's movement
 		arriveTime = current_tick
 	elif current_tick > arriveTime + moveDelayTick:
-		var move_vec = fixed.normalized_vec_times(str(dirX), str(dirY), moveSpeed)
-		host.move_directly(move_vec.x, move_vec.y)
+		if int(fixed.vec_dist(str(selfPos.x), str(selfPos.y), str(anchorPos.x), str(anchorPos.y))) > 5:
+			var move_vec = fixed.normalized_vec_times(str(dirX), str(dirY), moveSpeed)
+			host.move_directly(move_vec.x, move_vec.y)

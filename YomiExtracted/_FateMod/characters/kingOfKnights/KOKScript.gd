@@ -24,7 +24,7 @@ class BoostData:
 	var tickRemaining : int
 	var strength
 
-enum BoostType {DmgBoost, SpecialBoost}
+enum BoostType {DmgBoost, SpecialBoost, Avalon}
 
 var cameraTween
 var Emoting = false
@@ -87,11 +87,13 @@ func tick():
 				BoostQueue[index].tickRemaining -= 1
 				if BoostQueue[index].tickRemaining <= 0:
 					
-					# Remove the boost buff when expired
-					if BoostQueue[index].boostType == BoostType.DmgBoost:
-						dmgBoost -= BoostQueue[index].strength
-					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
-						specialBoost -= BoostQueue[index].strength
+					match BoostQueue[index].boostType:
+						BoostType.DmgBoost:
+							dmgBoost -= BoostQueue[index].strength
+						BoostType.SpecialBoost:
+							specialBoost -= BoostQueue[index].strength
+						BoostType.Avalon:
+							avalonObj.disable()
 					
 					# Remove from UI
 					if id == 2:
@@ -104,20 +106,23 @@ func tick():
 					BoostToRemove.append(index)
 				else:
 					# Update Boost Info/Tooltip
-					if BoostQueue[index].boostType == BoostType.DmgBoost:
-						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
-						BoostQueue[index].instance.hint_tooltip = newToolTip
-					elif BoostQueue[index].boostType == BoostType.SpecialBoost:
-						var newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Special Damage Boost ( " + str(BoostQueue[index].tickRemaining) + " ticks )"
-						BoostQueue[index].instance.hint_tooltip = newToolTip
+					var newToolTip
+					match BoostQueue[index].boostType:
+						BoostType.DmgBoost:
+							newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Damage Boost ( "
+						BoostType.SpecialBoost:
+							newToolTip = "+" + str(BoostQueue[index].strength * 100) + "% Special Damage Boost ( " 
+						BoostType.Avalon:
+							newToolTip = "- Passive Regen\n- Chance For Hyper Armour\n( " 
+							hp += 1
+					
+					BoostQueue[index].instance.hint_tooltip = newToolTip + str(BoostQueue[index].tickRemaining) + " ticks )"
+			
 			
 			# Remove the expired boosts
 			for i in range(BoostToRemove.size()):
 				BoostQueue.remove(BoostToRemove[i])
 			BoostToRemove.clear()
-	
-	if avalonObj: 
-		hp += 1
 	
 	EmoteHandler()
 
