@@ -15,7 +15,6 @@ spriteWidth = 35
 spriteHeight = 64
 
 [node name="CommandSealUI" type="TextureRect" parent="." index="0"]
-visible = false
 margin_top = 148.0
 margin_right = 35.0
 margin_bottom = 212.0
@@ -25,8 +24,9 @@ texture = SubResource( 1 )
 stretch_mode = 5
 
 [node name="TipToggle" type="CheckButton" parent="." index="1"]
+margin_left = 39.0
 margin_top = 320.0
-margin_right = 143.0
+margin_right = 182.0
 margin_bottom = 360.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
