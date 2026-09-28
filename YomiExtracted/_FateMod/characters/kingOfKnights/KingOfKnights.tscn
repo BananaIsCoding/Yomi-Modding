@@ -6970,9 +6970,9 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 931 ): {
+SubResource( 439 ): {
 "x": 9,
-"y": 10
+"y": 7
 },
 SubResource( 128 ): {
 "x": 9,
@@ -6982,9 +6982,9 @@ SubResource( 930 ): {
 "x": 9,
 "y": 11
 },
-SubResource( 439 ): {
+SubResource( 931 ): {
 "x": 9,
-"y": 7
+"y": 10
 }
 }
 title = "Stab Down"
@@ -7553,6 +7553,7 @@ GroundedSuper
 Aerial"
 allowed_stances_string = "Normal
 Normal(Armour)
+Hidden
 "
 super_level_ = 3
 super_freeze_ticks_ = 0
