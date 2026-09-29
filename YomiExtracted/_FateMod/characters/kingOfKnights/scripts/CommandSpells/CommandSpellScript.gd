@@ -2,6 +2,8 @@ extends CharacterState
 	
 class_name CommandSpellState
 
+## Variables ## 
+
 onready var cutscene = $"%CommandSealCutscene"
 onready var handImage = $"%CommandSealCutscene/Hand"
 onready var cutsceneFiller = $"%CutsceneFiller"

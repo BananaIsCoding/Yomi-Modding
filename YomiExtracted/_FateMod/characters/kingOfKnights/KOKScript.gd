@@ -16,6 +16,7 @@ var commandSeals := 3
 var playerExtra
 var cutsceneInProgress := false
 var avalonObj = null
+var avalonEvade := false
 
 # Camera and emote related variables
 class BoostData:
@@ -340,3 +341,35 @@ func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_sc
 	if current_state().get("IS_NEW_PARRY") and current_state().push:
 		if hp <= 0:
 			hp = 1
+
+func hit_by(hitbox, force_hit = false):
+	
+	if avalonObj != null:
+		avalonEvade = true
+		hitlag_ticks += 60
+		opponent.hitlag_ticks += 60
+		$"%Particles/AvalonEffect".start_emitting()
+		if not is_ghost:
+			Global.current_game.time += 60
+			for boost in BoostQueue:
+				# Update tick for boost
+				if boost.boostType == BoostType.Avalon:
+					
+					avalonObj.disable()
+					
+					# Remove from UI
+					if id == 2:
+						BoostInfoUiInstance.RemoveBoost(boost.instance)
+					else:
+						boost.instance.queue_free()
+						
+					BoostQueue.erase(boost)
+					break
+		return
+	.hit_by(hitbox, force_hit)
+
+func can_counter_hitbox(hitbox):
+	if avalonEvade:
+		avalonEvade = false
+		return true
+	.can_counter_hitbox(hitbox)

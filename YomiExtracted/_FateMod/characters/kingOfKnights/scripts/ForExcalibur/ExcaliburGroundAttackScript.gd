@@ -51,6 +51,7 @@ func _tick():
 			excailburAttackEffect.playing = false
 		49:
 			hitEffect.stop_emitting()
+			hitbox.isEffectAlrSpawned = false
 			startTick = host.current_tick
 			requiredHiding = true
 	

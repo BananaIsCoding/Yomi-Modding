@@ -1,6 +1,6 @@
 extends CharacterState
 
-export (int) var avalonDurationTick := 60
+export (int) var avalonDurationTick = 200
 
 onready var avalonIconPng = load("res://_FateMod/characters/kingOfKnights/sprites/UiSprites/Avalon.png")
 

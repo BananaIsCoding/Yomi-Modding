@@ -1,4 +1,4 @@
-[gd_scene load_steps=1255 format=2]
+[gd_scene load_steps=1257 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -278,6 +278,8 @@
 [ext_resource path="res://_FateMod/characters/kingOfKnights/effects/HealEffectCS.tscn" type="PackedScene" id=276]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/scripts/AvalonManifestScript.gd" type="Script" id=277]
 [ext_resource path="res://_FateMod/characters/kingOfKnights/projectiles/AvalonProjectile.tscn" type="PackedScene" id=278]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/sprites/icons/Avalon.png" type="Texture" id=279]
+[ext_resource path="res://_FateMod/characters/kingOfKnights/effects/AvalonEffect.tscn" type="PackedScene" id=280]
 
 [sub_resource type="ShaderMaterial" id=453]
 resource_local_to_scene = true
@@ -5373,6 +5375,8 @@ z_index = 1
 
 [node name="CommandSpellHeal" parent="Flip/Particles" index="4" instance=ExtResource( 276 )]
 
+[node name="AvalonEffect" parent="Flip/Particles" index="5" instance=ExtResource( 280 )]
+
 [node name="ExcaliburSwordSprite" type="AnimatedSprite" parent="Flip" index="2"]
 unique_name_in_owner = true
 visible = false
@@ -6970,21 +6974,21 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 439 ): {
-"x": 9,
-"y": 7
-},
 SubResource( 930 ): {
 "x": 9,
 "y": 11
+},
+SubResource( 931 ): {
+"x": 9,
+"y": 10
 },
 SubResource( 128 ): {
 "x": 9,
 "y": 9
 },
-SubResource( 931 ): {
+SubResource( 439 ): {
 "x": 9,
-"y": 10
+"y": 7
 }
 }
 title = "Stab Down"
@@ -7237,7 +7241,38 @@ active_ticks = 30
 looping = true
 hitEffectPath = NodePath("../../../Flip/Particles/ExcaliburStarHitEffect")
 
-[node name="JumpAttack" type="Node2D" parent="StateMachine" index="85"]
+[node name="AvalonManifest" type="Node2D" parent="StateMachine" index="85"]
+script = ExtResource( 277 )
+__meta__ = {
+"_editor_description_": ""
+}
+anim_length = 5
+projectile_scene = ExtResource( 278 )
+projectile_pos_x = -25
+projectile_pos_y = -20
+title = "Avalon"
+type = 3
+button_texture = ExtResource( 279 )
+air_type = 2
+self_hit_cancellable = false
+self_interruptable = false
+can_feint_if_possible = false
+interrupt_from_string = "Grounded
+Aerial"
+interrupt_into_string = "Grounded
+Aerial"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper
+Aerial"
+allowed_stances_string = "Normal
+Normal(Armour)
+Hidden
+"
+super_level_ = 3
+super_freeze_ticks_ = 0
+
+[node name="JumpAttack" type="Node2D" parent="StateMachine" index="86"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -7293,7 +7328,7 @@ start_tick = 6
 active_ticks = -1
 always_on = true
 
-[node name="JumpAttackInterrupt" type="Node2D" parent="StateMachine" index="86"]
+[node name="JumpAttackInterrupt" type="Node2D" parent="StateMachine" index="87"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -7341,7 +7376,7 @@ knockdown = true
 start_tick = 1
 active_ticks = 3
 
-[node name="JumpAttackEnd" type="Node2D" parent="StateMachine" index="87"]
+[node name="JumpAttackEnd" type="Node2D" parent="StateMachine" index="88"]
 script = ExtResource( 26 )
 __meta__ = {
 "_editor_description_": ""
@@ -7384,7 +7419,7 @@ launch_reversible = true
 start_tick = 1
 active_ticks = 3
 
-[node name="TornadoStrike" type="Node2D" parent="StateMachine" index="88"]
+[node name="TornadoStrike" type="Node2D" parent="StateMachine" index="89"]
 script = ExtResource( 261 )
 __meta__ = {
 "_editor_description_": ""
@@ -7434,7 +7469,7 @@ launch_reversible = true
 start_tick = 7
 active_ticks = 3
 
-[node name="CommandFight" type="Node2D" parent="StateMachine" index="89"]
+[node name="CommandFight" type="Node2D" parent="StateMachine" index="90"]
 script = ExtResource( 269 )
 __meta__ = {
 "_editor_description_": ""
@@ -7461,7 +7496,7 @@ dialogue = [ "By My Command Seal", "Defeat Your Opponent!" ]
 dialogueDuration = [ 50, 50 ]
 servantDialogue = "Understood"
 
-[node name="CommandRetreat" type="Node2D" parent="StateMachine" index="90"]
+[node name="CommandRetreat" type="Node2D" parent="StateMachine" index="91"]
 script = ExtResource( 268 )
 __meta__ = {
 "_editor_description_": ""
@@ -7497,7 +7532,7 @@ super_freeze_ticks_ = 0
 dialogue = [ "By My Command Seal", "Fallback At Once!" ]
 dialogueDuration = [ 50, 45 ]
 
-[node name="CommandHeal" type="Node2D" parent="StateMachine" index="91"]
+[node name="CommandHeal" type="Node2D" parent="StateMachine" index="92"]
 script = ExtResource( 270 )
 __meta__ = {
 "_editor_description_": ""
@@ -7526,37 +7561,6 @@ buffEffectPath = NodePath("../../Flip/Particles/CommandSpellHeal")
 dialogue = [ "By My Command Seal", "Heal Up!" ]
 dialogueDuration = [ 50, 25 ]
 servantDialogue = "Thank You"
-
-[node name="AvalonManifest" type="Node2D" parent="StateMachine" index="92"]
-script = ExtResource( 277 )
-__meta__ = {
-"_editor_description_": ""
-}
-anim_length = 5
-projectile_scene = ExtResource( 278 )
-projectile_pos_x = -25
-projectile_pos_y = -20
-title = "Avalon"
-type = 3
-button_texture = ExtResource( 17 )
-air_type = 2
-self_hit_cancellable = false
-self_interruptable = false
-can_feint_if_possible = false
-interrupt_from_string = "Grounded
-Aerial"
-interrupt_into_string = "Grounded
-Aerial"
-hit_cancel_into_string = "GroundedAttack
-GroundedSpecial
-GroundedSuper
-Aerial"
-allowed_stances_string = "Normal
-Normal(Armour)
-Hidden
-"
-super_level_ = 3
-super_freeze_ticks_ = 0
 
 [node name="Frozen" parent="StateMachine" index="93"]
 allowed_stances_string = "All"
