@@ -5315,7 +5315,10 @@ commandSeals
 character_portrait = ExtResource( 15 )
 player_info_scene = ExtResource( 96 )
 player_extra_params_scene = ExtResource( 258 )
+_c_stanceRelatedStuff = 0
 stanceAnimKey = [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
+_c_avalonRelatedStuff = 0
+avalonEvadeChance = 30
 _c_Hidden_Blade_Stuff = 0
 hiddenBladePercentChance = 40
 ticksUntilDecreaseHidden = 30
@@ -6974,10 +6977,6 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 930 ): {
-"x": 9,
-"y": 11
-},
 SubResource( 931 ): {
 "x": 9,
 "y": 10
@@ -6989,6 +6988,10 @@ SubResource( 128 ): {
 SubResource( 439 ): {
 "x": 9,
 "y": 7
+},
+SubResource( 930 ): {
+"x": 9,
+"y": 11
 }
 }
 title = "Stab Down"
