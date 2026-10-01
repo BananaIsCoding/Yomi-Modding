@@ -11,6 +11,7 @@ var nextSpriteRegion
 var previewMode := false
 var isCurrentSprite := true
 var tick = 0
+var isAvalon := false
 
 
 func _ready():
@@ -36,7 +37,7 @@ func get_extra():
 	}
 
 func show_options():
-	tips.show() if (fighter.stance == "Hidden" or fighter.stance == "Hidden(Armour)") and not fighter.busy_interrupt else tips.hide()
+	tips.show() if (fighter.stance == "Hidden" or fighter.stance == "Hidden(Armour)" or isAvalon or fighter.avalonObj != null) and not fighter.busy_interrupt else tips.hide()
 
 func reset():
 	tips.set_pressed_no_signal(tips.pressed)
@@ -74,4 +75,6 @@ func update_selected_move(move_state):
 	isCurrentSprite = true
 	commandSealUI.texture.region = currentSpriteRegion
 	previewMode = false
+	isAvalon = false
+	fighter.HideHintText()
 	.update_selected_move(move_state)

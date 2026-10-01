@@ -105,7 +105,7 @@ func _enter():
 					canParry = ReplayManager.frames[host.id][host.lastAttackLockIn]["CanParry"]
 			else:
 				if host.is_you() and host.tipToggle:
-					Network.game.get_player(host.id).ShowHintText( str(host.hiddenBladePercentChance) + "% unparriable + increase hitbox" )
+					host.theMainChar.ShowHintText( str(host.theMainChar.hiddenBladePercentChance) + "% unparriable + increase hitbox" )
 				if (Global.current_game.real_tick % anim_length) % 2 == 1:
 					canParry = false
 
@@ -125,8 +125,7 @@ func _enter():
 func _exit():
 	
 	if not host.is_ghost:
-		if (Network.game):
-			Network.game.get_player(host.id).HideHintText()
+		host.HideHintText()
 	
 	var index = 0
 	for hitbox in all_hitbox_nodes:

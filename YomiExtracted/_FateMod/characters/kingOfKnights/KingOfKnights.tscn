@@ -5311,7 +5311,8 @@ extra_state_variables = "critStar
 lastAttackLockIn
 hiddenBladePercentChance
 commandSeals
-"
+avalonObj
+theMainChar"
 character_portrait = ExtResource( 15 )
 player_info_scene = ExtResource( 96 )
 player_extra_params_scene = ExtResource( 258 )
@@ -6977,10 +6978,6 @@ null: {
 "x": 4,
 "y": 9
 },
-SubResource( 931 ): {
-"x": 9,
-"y": 10
-},
 SubResource( 128 ): {
 "x": 9,
 "y": 9
@@ -6988,6 +6985,10 @@ SubResource( 128 ): {
 SubResource( 439 ): {
 "x": 9,
 "y": 7
+},
+SubResource( 931 ): {
+"x": 9,
+"y": 10
 },
 SubResource( 930 ): {
 "x": 9,

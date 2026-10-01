@@ -21,5 +21,8 @@ func spawn_exported_projectile():
 			var newToolTip = "- Passive Regen\n- Chance For Hyper Armour\n( " + str(avalonDurationTick) + " ticks )"
 			newItem.instance = host.BoostInfoUiInstance.AddBoost(avalonIconPng, newToolTip)
 			host.BoostQueue.append(newItem)
+		else:
+			host.tipToggle = host.theMainChar.playerExtra.tips.pressed
+			host.theMainChar.playerExtra.tips.show()
 		
 		host.avalonObj = obj

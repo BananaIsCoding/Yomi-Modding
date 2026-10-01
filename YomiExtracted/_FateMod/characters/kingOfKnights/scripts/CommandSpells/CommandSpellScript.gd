@@ -8,9 +8,10 @@ onready var cutscene = $"%CommandSealCutscene"
 onready var handImage = $"%CommandSealCutscene/Hand"
 onready var cutsceneFiller = $"%CutsceneFiller"
 onready var textBox = $"%CommandEmoteLabel"
-onready var buffEffect = get_node(buffEffectPath) if buffEffectPath != null else null
+onready var buffEffect = get_node(buffEffectPath) if hasEffect else null
 
 export var _c_CustomParticles = 0
+export (bool) var hasEffect = false
 export (NodePath) var buffEffectPath
 
 export var _c_StanceStuff = 0

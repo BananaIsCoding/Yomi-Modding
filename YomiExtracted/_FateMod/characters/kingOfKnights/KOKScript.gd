@@ -1,6 +1,8 @@
 extends Fighter
 
 ## Variables ##
+onready var theMainChar = self
+
 export var _c_stanceRelatedStuff = 0
 export (Array, String) var stanceAnimKey = [ "", "(Armour)", "(Hidden)", "(HiddenArmour)" ]
 
@@ -16,11 +18,14 @@ var damageReduction = 0.0
 var commandSeals := 3
 var playerExtra
 var cutsceneInProgress := false
+var prevHint := "" 
 
 export var _c_avalonRelatedStuff = 0
 export (int) var avalonEvadeChance = 30
 var avalonObj = null
+var avalonGhost = null
 var avalonEvade := false
+var avalonPredictPreview = false
 
 # Camera and emote related variables
 class BoostData:
@@ -233,11 +238,14 @@ func set_camera_zoom(value):
 	game.update_camera_limits()
 
 func ShowHintText(message):
-	$EmoteLabel.clear()
+	if message == prevHint:
+		return
+	prevHint = message
 	$EmoteLabel.append_bbcode("[center]" + message)
 	$EmoteLabel.show()
 
 func HideHintText():
+	prevHint = ""
 	$EmoteLabel.clear()
 	$EmoteLabel.hide()
 
@@ -301,7 +309,7 @@ func process_extra(extra):
 	if extra.has("Tips"):
 		tipToggle = extra.Tips
 		if not tipToggle and is_ghost:
-			Network.game.get_player(id).HideHintText()
+			theMainChar.HideHintText()
  
 # overriding to support damage reduction 
 func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_scaling_offset = 0, damage_taken_meter_gain_modifier = "1.0", self_hit = false, armor_block = false):
@@ -347,10 +355,9 @@ func take_damage(damage: int, minimum = 0, meter_gain_modifier = "1.0", combo_sc
 			hp = 1
 
 func hit_by(hitbox, force_hit = false):
-	
 	if avalonObj != null:
-		# Remove avalon effect after hit
 		if not is_ghost:
+			# Remove avalon effect after hit
 			for boost in BoostQueue:
 				# Update tick for boost
 				if boost.boostType == BoostType.Avalon:
@@ -365,34 +372,24 @@ func hit_by(hitbox, force_hit = false):
 						
 					BoostQueue.erase(boost)
 					break
-		# Chance for user to evade attack
-		var num
-		if ReplayManager.replaying_ingame:
-			var searchTick = current_tick
-			while not ReplayManager.frames[id].has(searchTick):
-				searchTick -= 1
-			
-			num = -1 if ReplayManager.frames[id][searchTick].has("AvalonActivated") else 100
-		elif is_ghost:
-			print ("oppo: ", opponent.current_state().anim_length)
-			print ("Game tick: ",Global.current_game.real_tick)
-			if (Global.current_game.real_tick % opponent.current_state().anim_length) % 2 == 1:
-					.hit_by(hitbox, force_hit)
-					return
-			num = -1
-		else:
-			randomize()
-			num = randi() % 100
-			
-		
-		if num <= avalonEvadeChance:
-			avalonEvade = true
-			hitlag_ticks += 60
-			opponent.hitlag_ticks += 60
-			
-			$"%Particles/AvalonEffect".start_emitting()
-			
-			if not is_ghost:
+			# Chance for user to evade attack
+			var num
+			if ReplayManager.replaying_ingame:
+				var searchTick = current_tick
+				while not ReplayManager.frames[id].has(searchTick):
+					searchTick -= 1
+				
+				num = -1 if ReplayManager.frames[id][searchTick].has("AvalonActivated") else 100
+			else:
+				randomize()
+				num = randi() % 100
+				
+			if num <= avalonEvadeChance:
+				avalonEvade = true
+				hitlag_ticks += 60
+				opponent.hitlag_ticks += 60
+				
+				$"%Particles/AvalonEffect".start_emitting()
 				Global.current_game.time += 60
 				
 				if num >= 0:
@@ -403,8 +400,15 @@ func hit_by(hitbox, force_hit = false):
 						searchTick -= 1
 					
 					ReplayManager.frames[id][searchTick]["AvalonActivated"] = true
-			
-			return
+				return
+		elif is_you():
+			if tipToggle:
+				print("hi")
+				ShowHintText(str(avalonEvadeChance) + "% chance to negate damage")
+			theMainChar.avalonPredictPreview = !theMainChar.avalonPredictPreview
+			if theMainChar.avalonPredictPreview:
+				$"%Particles/AvalonEffect".start_emitting()
+				return
 	.hit_by(hitbox, force_hit)
 
 func can_counter_hitbox(hitbox):

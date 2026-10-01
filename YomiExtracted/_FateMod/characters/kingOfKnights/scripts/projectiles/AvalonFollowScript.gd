@@ -22,6 +22,7 @@ func _frame_0():
 	if data != null:
 		player = data["Character"]
 		followAnchor = data["AnchorPos"]
+		Global.current_game.get_player(player.id).avalonGhost = self
 
 func _tick():
 	# If player character disappear, therefore this is a prediction so I should go too
